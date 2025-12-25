@@ -151,7 +151,7 @@ The portfolio is configured for GitHub Pages deployment with custom domain:
 
 ## 🗒️ Updates
 
-- Updated CTA resume icon to point to hosted PDF: [Resume](https://notquitethereyet.github.io/resume/resumeml.pdf)
+- Updated CTA resume icon to point to hosted PDF: [Resume](https://notquite28.github.io/resume/resumeml.pdf)
 
 ## 📝 License
 
