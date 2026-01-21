@@ -28,6 +28,16 @@ const defaultProjects: Project[] = [
     githubUrl: "https://github.com/notquite28/bedtime.ai"
   },
   {
+    title: "Abliteration: LLM Uncensoring via Weight Modification",
+    description: "Implemented abliteration techniques to remove censorship from LiquidAI/LFM2.5-1.2B-Instruct by identifying and orthogonalizing refusal directions in residual stream activations. Developed inference-time intervention and direct weight modification approaches, successfully uncensoring content while preserving model capabilities.",
+    icon: "fa-flask",
+    iconColor: "text-purple-600",
+    bgColor: "bg-purple-50",
+    textColor: "text-purple-800",
+    tags: ["Research", "LLM", "Python", "Neural Networks", "Model Architecture", "TransformerLens"],
+    githubUrl: "https://github.com/notquite28/abliteration"
+  },
+  {
     "title": "Agentic Job Tracker & Helper",
     "description": "Engineered a stateful AI agent using LangGraph to automate the entire job application workflow. The agent uses natural language to manage application statuses in a Supabase database, parse job descriptions, and automatically tailor a user's resume by generating targeted modifications.",
     "icon": "fa-briefcase",
@@ -66,17 +76,17 @@ const defaultProjects: Project[] = [
     textColor: "text-blue-800",
     tags: ["AI Agent", "Enterprise", "Automation", "Legal Tech", "Cost Optimization"],
     githubUrl: ""
-  },
-  {
-    title: "Therapist Dashboard with GPT Integration",
-    description: "Built and deployed a full-stack dashboard used by 20+ therapists for schedule management and progress tracking. Integrated a GPT-powered API with custom-engineered prompts to perform NLP tasks on unstructured clinical notes, achieving 92% data accuracy and improving performance compliance by 35%.",
-    icon: "fa-user-md",
-    iconColor: "text-blue-600",
-    bgColor: "bg-blue-50",
-    textColor: "text-blue-800",
-    tags: ["React", "GPT API", "Healthcare", "CRM", "NLP", "Performance"],
-    githubUrl: ""
   }
+  // {
+  //   title: "Therapist Dashboard with GPT Integration",
+  //   description: "Built and deployed a full-stack dashboard used by 20+ therapists for schedule management and progress tracking. Integrated a GPT-powered API with custom-engineered prompts to perform NLP tasks on unstructured clinical notes, achieving 92% data accuracy and improving performance compliance by 35%.",
+  //   icon: "fa-user-md",
+  //   iconColor: "text-blue-600",
+  //   bgColor: "bg-blue-50",
+  //   textColor: "text-blue-800",
+  //   tags: ["React", "GPT API", "Healthcare", "CRM", "NLP", "Performance"],
+  //   githubUrl: ""
+  // }
 ];
 
 const { projects = defaultProjects } = Astro.props;
