@@ -5,20 +5,14 @@
     
     function initBoidSimulation() {
         const canvas = document.getElementById('boidCanvas');
-        if (!canvas) {
-            console.error('Boid canvas not found');
-            return;
-        }
+        if (!canvas) return;
         
         // Mark as initialized
         window.__boidSimulationInitialized = true;
         canvas.__boidInitialized = true;
         
         const ctx = canvas.getContext('2d');
-        if (!ctx) {
-            console.error('Could not get canvas context');
-            return;
-        }
+        if (!ctx) return;
 
         // Set canvas to window size
         function resizeCanvas() {
@@ -330,7 +324,12 @@
         }
         
         // Animation loop
+        let animationId = null;
+        let isPaused = false;
+        
         function animate() {
+            if (isPaused) return;
+            
             // Clear canvas with semi-transparent background for trail effect
             ctx.fillStyle = getBackgroundColor();
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -343,8 +342,22 @@
             }
             
             // Request next frame
-            requestAnimationFrame(animate);
+            animationId = requestAnimationFrame(animate);
         }
+        
+        // Pause/resume based on page visibility
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                isPaused = true;
+                if (animationId) {
+                    cancelAnimationFrame(animationId);
+                    animationId = null;
+                }
+            } else {
+                isPaused = false;
+                animate();
+            }
+        });
         
         // Start animation
         animate();

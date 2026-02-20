@@ -33,9 +33,13 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://notquite
     <meta property="og:url" content={canonicalURL}>
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content={title}>
+    <meta name="twitter:description" content={description}>
+    <meta name="twitter:image" content={buildUrl(image)}>
     <link rel="canonical" href={canonicalURL}>
     <title>{title}</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
     <link rel="icon" type="image/svg+xml" href={buildUrl('favicon.svg')} />
 </head>
 <body class="font-sans text-gray-800">
@@ -59,7 +63,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://notquite
             
             const script = document.createElement('script');
             script.src = `${baseUrl}js/boid-simulation.js`;
-            script.onerror = () => console.error('Failed to load boid simulation');
             document.body.appendChild(script);
         }
 
