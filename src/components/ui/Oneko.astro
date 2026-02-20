@@ -20,16 +20,14 @@ const positionClasses = {
 const onekoUrl = buildUrl('oneko.gif');
 ---
 
-<div id="oneko" class={`fixed ${positionClasses[position]} z-50 cursor-pointer`} aria-hidden="true"></div>
+<div id="oneko" class={`fixed ${positionClasses[position]} z-50 cursor-pointer`} aria-hidden="true" style={`background-image: url('${onekoUrl}')`}></div>
 
-<style define:vars={{ onekoUrl }}>
+<style>
   #oneko {
-    content: "";
     display: inline-block;
     width: 32px;
     height: 32px;
     image-rendering: pixelated;
-    background-image: url(var(--onekoUrl));
     background-repeat: no-repeat;
     background-position: 0 0;
     animation: sleep 1s infinite;
@@ -78,13 +76,3 @@ const onekoUrl = buildUrl('oneko.gif');
     }
   }
 </style>
-
-<script define:vars={{ onekoUrl }}>
-  document.addEventListener('DOMContentLoaded', function() {
-    const onekoElement = document.getElementById('oneko');
-    if (!onekoElement) return;
-    
-    // Directly set the background image with the full URL
-    onekoElement.style.backgroundImage = `url('${onekoUrl}')`;
-  });
-</script>

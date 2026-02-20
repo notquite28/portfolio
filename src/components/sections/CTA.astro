@@ -1,9 +1,10 @@
 ---
-// Define the shape of a social link object for TypeScript
+import Icon from '../ui/Icon.astro';
+
 interface SocialLink {
   href: string;
   label: string;
-  icon: string; // e.g., "fab fa-github"
+  icon: string;
 }
 
 interface Props {
@@ -14,16 +15,23 @@ interface Props {
   socials?: SocialLink[];
 }
 
+const iconMap: Record<string, string> = {
+  'fab fa-github': 'github',
+  'fab fa-linkedin': 'linkedin',
+  'fas fa-file-pdf': 'file-pdf',
+  'fas fa-envelope': 'envelope',
+};
+
 const {
   title = "Connect With Me",
   description = "I'm always interested in new opportunities and exciting projects. Let's connect!",
-  buttonText, // No default value, so it's undefined unless passed
-  buttonLink, // No default value
+  buttonText,
+  buttonLink,
   socials = [
-    { href: "https://github.com/notquite28", label: "GitHub", icon: "fab fa-github" },
-    { href: "https://www.linkedin.com/in/arnav-panigrahi/", label: "LinkedIn", icon: "fab fa-linkedin" },
-    { href: "https://notquite28.github.io/resume/resumeml.pdf", label: "Portfolio", icon: "fas fa-file-pdf" },
-    { href: "mailto:arnav.panigrahi@gmail.com", label: "Email", icon: "fas fa-envelope" }
+    { href: "https://github.com/notquite28", label: "GitHub", icon: "github" },
+    { href: "https://www.linkedin.com/in/arnav-panigrahi/", label: "LinkedIn", icon: "linkedin" },
+    { href: "https://notquite28.github.io/resume/resumeml.pdf", label: "Resume", icon: "file-pdf" },
+    { href: "mailto:arnav.panigrahi@gmail.com", label: "Email", icon: "envelope" }
   ]
 } = Astro.props;
 ---
@@ -44,12 +52,12 @@ const {
           {socials.map(social => (
             <a 
               href={social.href}
-              class="text-[--color-brand-500] hover:text-[--color-accent-500] transition text-2xl"
+              class="text-[--color-brand-500] hover:text-[--color-accent-500] transition"
               aria-label={social.label}
               target="_blank"
               rel="noopener noreferrer"
             >
-              <i class={social.icon}></i>
+              <Icon name={iconMap[social.icon] || social.icon} class="w-6 h-6" />
             </a>
           ))}
         </div>

@@ -1,7 +1,7 @@
 ---
 import '../../styles/global.css';
 import Oneko from '../ui/Oneko.astro';
-import { getBaseUrl, buildUrl } from '../../utils/paths';
+import { buildUrl } from '../../utils/paths';
 
 interface Props {
   title?: string;
@@ -15,7 +15,6 @@ const {
   image = "mumei.jpg"
 } = Astro.props;
 
-const baseUrl = getBaseUrl();
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://notquite28.github.io/portfolio/');
 ---
 
@@ -38,7 +37,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://notquite
     <meta name="twitter:image" content={buildUrl(image)}>
     <link rel="canonical" href={canonicalURL}>
     <title>{title}</title>
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
     <link rel="icon" type="image/svg+xml" href={buildUrl('favicon.svg')} />
 </head>
@@ -52,25 +51,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://notquite
         <slot />
     </main>
     
-    <!-- Optimized Boid Simulation Script -->
-    <script is:inline define:vars={{ baseUrl }}>
-        // Single initialization function
-        function initBoidSimulation() {
-            const canvas = document.getElementById('boidCanvas');
-            if (!canvas || canvas.__boidInitialized) return;
-            
+    <script>
+        const canvas = document.getElementById('boidCanvas');
+        if (canvas && !canvas.__boidInitialized) {
             canvas.__boidInitialized = true;
             
             const script = document.createElement('script');
-            script.src = `${baseUrl}js/boid-simulation.js`;
+            script.src = `${import.meta.env.BASE_URL}js/boid-simulation.js`;
             document.body.appendChild(script);
-        }
-
-        // Initialize when DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initBoidSimulation);
-        } else {
-            initBoidSimulation();
         }
     </script>
     

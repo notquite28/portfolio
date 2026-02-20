@@ -26,7 +26,9 @@ const { links = defaultLinks } = Astro.props;
       <div class="glass-specular"></div>
       <div class="glass-content flex items-center justify-between w-full">
         <a href="#" class="text-xl text-white/80 hover:text-white transition-colors" aria-label="Home">
-          <i class="fas fa-home"></i>
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+          </svg>
         </a>
         
         <ul class="hidden md:flex items-center gap-6">
@@ -42,20 +44,24 @@ const { links = defaultLinks } = Astro.props;
           ))}
         </ul>
         
-        <button 
-          id="nav-toggle" 
-          class="md:hidden text-white/80 hover:text-white transition-colors"
+        <label 
+          for="nav-toggle" 
+          class="md:hidden text-white/80 hover:text-white transition-colors cursor-pointer"
           aria-label="Toggle navigation menu"
-          aria-expanded="false"
         >
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          <svg class="w-6 h-6 nav-icon-menu" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
           </svg>
-        </button>
+          <svg class="w-6 h-6 nav-icon-close hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </label>
       </div>
     </div>
     
-    <div id="nav-mobile" class="md:hidden hidden mt-2 glass-container rounded-2xl p-4" data-glass-interactive data-glass-random>
+    <input type="checkbox" id="nav-toggle" class="sr-only peer" />
+    
+    <div class="md:hidden hidden peer-checked:block mt-2 glass-container rounded-2xl p-4" data-glass-interactive data-glass-random>
       <div class="glass-filter"></div>
       <div class="glass-overlay"></div>
       <div class="glass-specular"></div>
@@ -77,20 +83,26 @@ const { links = defaultLinks } = Astro.props;
   </div>
 </nav>
 
+<style>
+  #nav-toggle:checked ~ div .nav-icon-menu {
+    display: none;
+  }
+  #nav-toggle:checked ~ div .nav-icon-close {
+    display: block;
+  }
+  
+  #nav-toggle:checked ~ div .glass-content a[href^="#"] {
+    scroll-behavior: smooth;
+  }
+</style>
+
 <script>
   const nav = document.getElementById('nav');
-  const navToggle = document.getElementById('nav-toggle');
-  const navMobile = document.getElementById('nav-mobile');
-  const menuIcon = document.getElementById('menu-icon');
   
-  let isMenuOpen = false;
-
   window.addEventListener('scroll', () => {
     if (!nav) return;
     
-    const currentScrollY = window.scrollY;
-    
-    if (currentScrollY > 100) {
+    if (window.scrollY > 100) {
       nav.classList.add('opacity-100', 'translate-y-0');
       nav.classList.remove('opacity-0', '-translate-y-full');
     } else {
@@ -99,33 +111,12 @@ const { links = defaultLinks } = Astro.props;
     }
   });
 
-  navToggle?.addEventListener('click', () => {
-    isMenuOpen = !isMenuOpen;
-    
-    if (navMobile) {
-      navMobile.classList.toggle('hidden', !isMenuOpen);
-    }
-    
-    if (menuIcon) {
-      menuIcon.setAttribute(
-        'd', 
-        isMenuOpen 
-          ? 'M6 18L18 6M6 6l12 12' 
-          : 'M4 6h16M4 12h16M4 18h16'
-      );
-    }
-    
-    navToggle.setAttribute('aria-expanded', String(isMenuOpen));
-  });
-
-  navMobile?.querySelectorAll('a').forEach(link => {
+  const navToggle = document.getElementById('nav-toggle');
+  document.querySelectorAll('#nav-toggle ~ div .glass-content a[href^="#"]').forEach(link => {
     link.addEventListener('click', () => {
-      isMenuOpen = false;
-      navMobile.classList.add('hidden');
-      if (menuIcon) {
-        menuIcon.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+      if (navToggle) {
+        (navToggle as HTMLInputElement).checked = false;
       }
-      navToggle?.setAttribute('aria-expanded', 'false');
     });
   });
 </script>
