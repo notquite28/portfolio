@@ -6,7 +6,7 @@ import Skills from '../components/sections/Skills.astro';
 import Projects from '../components/sections/Projects.astro';
 import CTA from '../components/sections/CTA.astro';
 import Footer from '../components/sections/Footer.astro';
-import Oneko from '../components/ui/Oneko.astro';
+import Nav from '../components/sections/Nav.astro';
 
 // SEO metadata
 const title = "Arnav Panigrahi - Software Developer & AI/ML Enthusiast";
@@ -61,17 +61,14 @@ const structuredData = {
 <BaseLayout title={title} description={description} image={image}>
   <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   
-  <main>
-    <Hero />
-    <About />
-    <Skills />
-    <Projects />
-    <CTA />
-    <Footer 
-      copyright="Arnav Panigrahi. All Rights Reserved."
-      tagline="Built with <i class='fas fa-heart text-red-500'></i> and lots of coffee"
-    />
-  </main>
-  
-  <Oneko />
+  <Nav />
+  <Hero />
+  <About />
+  <Skills />
+  <Projects />
+  <CTA />
+  <Footer 
+    copyright="Arnav Panigrahi. All Rights Reserved."
+    tagline="Built with <i class='fas fa-heart text-red-500'></i> and lots of coffee"
+  />
 </BaseLayout>

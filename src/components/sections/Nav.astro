@@ -1,0 +1,131 @@
+---
+interface NavLink {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  links?: NavLink[];
+}
+
+const defaultLinks: NavLink[] = [
+  { label: 'About', href: '#about' },
+  { label: 'Skills', href: '#skills' },
+  { label: 'Projects', href: '#projects' },
+  { label: 'Contact', href: '#cta' },
+];
+
+const { links = defaultLinks } = Astro.props;
+---
+
+<nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 opacity-0 -translate-y-full" id="nav">
+  <div class="max-w-6xl mx-auto px-4 py-3">
+    <div class="glass-container rounded-full px-6 py-2 flex items-center justify-between" data-glass-interactive data-glass-random>
+      <div class="glass-filter"></div>
+      <div class="glass-overlay"></div>
+      <div class="glass-specular"></div>
+      <div class="glass-content flex items-center justify-between w-full">
+        <a href="#" class="text-xl text-white/80 hover:text-white transition-colors" aria-label="Home">
+          <i class="fas fa-home"></i>
+        </a>
+        
+        <ul class="hidden md:flex items-center gap-6">
+          {links.map((link) => (
+            <li>
+              <a 
+                href={link.href} 
+                class="text-white/80 hover:text-white transition-colors duration-200 text-sm font-medium"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+        
+        <button 
+          id="nav-toggle" 
+          class="md:hidden text-white/80 hover:text-white transition-colors"
+          aria-label="Toggle navigation menu"
+          aria-expanded="false"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    
+    <div id="nav-mobile" class="md:hidden hidden mt-2 glass-container rounded-2xl p-4" data-glass-interactive data-glass-random>
+      <div class="glass-filter"></div>
+      <div class="glass-overlay"></div>
+      <div class="glass-specular"></div>
+      <div class="glass-content">
+        <ul class="flex flex-col gap-4">
+          {links.map((link) => (
+            <li>
+              <a 
+                href={link.href} 
+                class="block text-white/80 hover:text-white transition-colors duration-200 text-center py-2"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script>
+  const nav = document.getElementById('nav');
+  const navToggle = document.getElementById('nav-toggle');
+  const navMobile = document.getElementById('nav-mobile');
+  const menuIcon = document.getElementById('menu-icon');
+  
+  let isMenuOpen = false;
+
+  window.addEventListener('scroll', () => {
+    if (!nav) return;
+    
+    const currentScrollY = window.scrollY;
+    
+    if (currentScrollY > 100) {
+      nav.classList.add('opacity-100', 'translate-y-0');
+      nav.classList.remove('opacity-0', '-translate-y-full');
+    } else {
+      nav.classList.remove('opacity-100', 'translate-y-0');
+      nav.classList.add('opacity-0', '-translate-y-full');
+    }
+  });
+
+  navToggle?.addEventListener('click', () => {
+    isMenuOpen = !isMenuOpen;
+    
+    if (navMobile) {
+      navMobile.classList.toggle('hidden', !isMenuOpen);
+    }
+    
+    if (menuIcon) {
+      menuIcon.setAttribute(
+        'd', 
+        isMenuOpen 
+          ? 'M6 18L18 6M6 6l12 12' 
+          : 'M4 6h16M4 12h16M4 18h16'
+      );
+    }
+    
+    navToggle.setAttribute('aria-expanded', String(isMenuOpen));
+  });
+
+  navMobile?.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      isMenuOpen = false;
+      navMobile.classList.add('hidden');
+      if (menuIcon) {
+        menuIcon.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+      }
+      navToggle?.setAttribute('aria-expanded', 'false');
+    });
+  });
+</script>

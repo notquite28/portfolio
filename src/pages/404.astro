@@ -13,7 +13,10 @@ const baseUrl = getBaseUrl();
     <h2 class="text-2xl md:text-3xl mb-8 text-white/90 text-shadow-md">I forgor to develop this page</h2>
 
     <div class="mb-8 glass-liquid shadow-glass w-64 h-64 rounded-full overflow-hidden mx-auto flex items-center justify-center" data-glass-interactive data-glass-random>
-      <img src={buildUrl('bwaa.gif')} alt="404 Error" class="w-full h-full object-cover">
+      <video autoplay loop muted playsinline class="w-full h-full object-cover" aria-hidden="true">
+        <source src={buildUrl('bwaa.webm')} type="video/webm">
+        <source src={buildUrl('bwaa.mp4')} type="video/mp4">
+      </video>
     </div>
 
     <p class="max-w-lg mb-8 text-lg text-white/80">Page no workey! Let's put you back home!</p>
