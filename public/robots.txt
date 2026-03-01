@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-# Sitemap location
-Sitemap: https://notquite28.github.io/portfolio/sitemap.xml
+Sitemap: https://arnavpanigrahi.com/sitemap-index.xml
