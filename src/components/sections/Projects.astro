@@ -2,93 +2,103 @@
 import Icon from '../ui/Icon.astro';
 
 interface Project {
-  title: string;
-  description: string;
-  icon?: string;
-  iconColor?: string;
-  bgColor?: string;
-  textColor?: string;
-  tags: string[];
-  link?: string;
-  githubUrl?: string;
-  imageUrl?: string;
+title: string;
+description: string;
+icon?: string;
+iconColor?: string;
+bgColor?: string;
+textColor?: string;
+tags: string[];
+link?: string;
+githubUrl?: string;
+imageUrl?: string;
 }
 
 interface Props {
-  projects?: Project[];
+projects?: Project[];
 }
 
 const defaultProjects: Project[] = [
-  {
-    title: "bedtime.ai – Multi-Modal AI Storytelling Platform",
-    description: "Architected a multi-modal AI pipeline that transforms children's drawings into personalized stories narrated in a cloned parent's voice. Engineered the full-stack solution, integrating a fine-tuned phi-3 LLM with EfficientNet for image analysis and coqui-ai for voice synthesis. The system is containerized with Docker and delivers complete stories in under 30 seconds.",
-    icon: "fa-book-reader",
-    iconColor: "text-blue-600", 
-    bgColor: "bg-blue-50", 
-    textColor: "text-blue-800",
-    tags: ["Lead Developer", "React", "FastAPI", "AI/ML", "Computer Vision", "Voice Synthesis"],
-    githubUrl: "https://github.com/notquite28/bedtime.ai"
-  },
-  {
-    title: "Abliteration: LLM Uncensoring via Weight Modification",
-    description: "Implemented abliteration techniques to remove censorship from LiquidAI/LFM2.5-1.2B-Instruct by identifying and orthogonalizing refusal directions in residual stream activations. Developed inference-time intervention and direct weight modification approaches, successfully uncensoring content while preserving model capabilities.",
-    icon: "fa-flask",
-    iconColor: "text-purple-600",
-    bgColor: "bg-purple-50",
-    textColor: "text-purple-800",
-    tags: ["Research", "LLM", "Python", "Neural Networks", "Model Architecture", "TransformerLens"],
-    githubUrl: "https://github.com/notquite28/abliteration"
-  },
-  {
-    "title": "Agentic Job Tracker & Helper",
-    "description": "Engineered a stateful AI agent using LangGraph to automate the entire job application workflow. The agent uses natural language to manage application statuses in a Supabase database, parse job descriptions, and automatically tailor a user's resume by generating targeted modifications.",
-    "icon": "fa-briefcase",
-    "iconColor": "text-teal-600",
-    "bgColor": "bg-teal-50",
-    "textColor": "text-teal-800",
-    "tags": ["AI Agent", "LangGraph", "Python", "FastAPI", "LangChain", "Postgres", "Supabase"],
-    "githubUrl": ""
-  },
-  {
-    title: "Rethink BH Automation – FastAPI + Cloud Run Backend",
-    description: "Built a production FastAPI service to sync real-time appointment and authorization data from Rethink BH to Supabase by emulating secure user login. Achieved 90% cost savings and reduced sync latency from 24-48h to real-time. Deployed with Docker, Secret Manager, and full observability stack on Google Cloud Platform.",
-    icon: "fa-cloud",
-    iconColor: "text-blue-600",
-    bgColor: "bg-blue-50",
-    textColor: "text-blue-800",
-    tags: ["System Architecture", "FastAPI", "Cloud Run", "Google Cloud", "DevOps", "Automation"],
-    githubUrl: ""
-  },
-  {
-    title: "RAG for Document Intelligence",
-    description: "Architected a high-throughput RAG system for semantic search over PDF datasets. The system leverages Pinecone for vector storage and Groq for accelerated inference, achieving a 35% improvement in search relevance over traditional keyword-based methods while maintaining sub-second response times. Implemented custom data chunking strategies to optimize retrieval accuracy.",
-    icon: "fa-brain",
-    iconColor: "text-blue-600", 
-    bgColor: "bg-blue-50", 
-    textColor: "text-blue-800", 
-    tags: ["System Design", "AI/ML", "Vector Search", "RAG", "Performance Optimization"],
-    githubUrl: "https://github.com/notquite28/simpleRAG"
-  },
-  {
-    title: "Enterprise ROI System with AI Agent",
-    description: "Led the re-engineering of a manual Release of Information (ROI) workflow into a fully automated, AI-driven system. The AI agent I developed manages the entire document lifecycle with enterprise-grade security, directly resulting in a $20K annual cost saving and a 60% reduction in processing time while adhering to HIPAA compliance.",
-    icon: "fa-robot",
-    iconColor: "text-blue-600",
-    bgColor: "bg-blue-50",
-    textColor: "text-blue-800",
-    tags: ["AI Agent", "Enterprise", "Automation", "Legal Tech", "Cost Optimization"],
-    githubUrl: ""
-  }
-  // {
-  //   title: "Therapist Dashboard with GPT Integration",
-  //   description: "Built and deployed a full-stack dashboard used by 20+ therapists for schedule management and progress tracking. Integrated a GPT-powered API with custom-engineered prompts to perform NLP tasks on unstructured clinical notes, achieving 92% data accuracy and improving performance compliance by 35%.",
-  //   icon: "fa-user-md",
-  //   iconColor: "text-blue-600",
-  //   bgColor: "bg-blue-50",
-  //   textColor: "text-blue-800",
-  //   tags: ["React", "GPT API", "Healthcare", "CRM", "NLP", "Performance"],
-  //   githubUrl: ""
-  // }
+{
+title: "bedtime.ai – Multi-Modal AI Storytelling Platform",
+description: "A multi-modal AI pipeline that transforms children's drawings into personalized stories narrated in a cloned parent's voice. Integrates a fine-tuned phi-3 LLM, EfficientNet for image analysis, and coqui-ai for voice synthesis. Containerized with Docker; delivers complete stories in under 30 seconds.",
+icon: "fa-book-reader",
+iconColor: "text-blue-600",
+bgColor: "bg-blue-50",
+textColor: "text-blue-800",
+tags: ["Lead Developer", "React", "FastAPI", "AI/ML", "Computer Vision", "Voice Synthesis"],
+githubUrl: "https://github.com/notquite28/bedtime.ai"
+},
+{
+title: "Abliteration: LLM Uncensoring via Weight Modification",
+description: "Techniques for removing censorship from LiquidAI/LFM2.5-1.2B-Instruct by identifying and orthogonalizing refusal directions in residual stream activations. Includes inference-time intervention and direct weight modification approaches that successfully uncensor content while preserving model capabilities.",
+icon: "fa-flask",
+iconColor: "text-purple-600",
+bgColor: "bg-purple-50",
+textColor: "text-purple-800",
+tags: ["Research", "LLM", "Python", "Neural Networks", "Model Architecture", "TransformerLens"],
+githubUrl: "https://github.com/notquite28/abliteration"
+},
+{
+title: "Edge-Native Real-Time Web Platform",
+description: "A real-time cursor sharing platform with YoRHa-inspired aesthetics from NieR: Automata. Uses Cloudflare Durable Objects to coordinate WebSocket connections across edge nodes, enabling visitors to see each other's cursors live. Built with SvelteKit and deployed entirely on Cloudflare's edge network.",
+icon: "fa-network-wired",
+iconColor: "text-stone-600",
+bgColor: "bg-stone-50",
+textColor: "text-stone-800",
+tags: ["Distributed Systems", "SvelteKit", "Cloudflare", "Real-Time Systems", "Web Architecture"],
+githubUrl: "https://github.com/notquite28/nier-archive-site"
+},
+// {
+// "title": "Agentic Job Tracker & Helper",
+// "description": "A stateful AI agent using LangGraph to automate the entire job application workflow. The agent uses natural language to manage application statuses in a Supabase database, parse job descriptions, and automatically tailor a user's resume by generating targeted modifications.",
+// "icon": "fa-briefcase",
+// "iconColor": "text-teal-600",
+// "bgColor": "bg-teal-50",
+// "textColor": "text-teal-800",
+// "tags": ["AI Agent", "LangGraph", "Python", "FastAPI", "LangChain", "Postgres", "Supabase"],
+// "githubUrl": ""
+// },
+{
+title: "Rethink BH Automation – FastAPI + Cloud Run Backend",
+description: "A production FastAPI service syncing real-time appointment and authorization data from Rethink BH to Supabase via secure user login emulation. Achieves 90% cost savings and reduces sync latency from 24-48h to real-time; deployed with Docker, Secret Manager, and full observability on Google Cloud Platform.",
+icon: "fa-cloud",
+iconColor: "text-blue-600",
+bgColor: "bg-blue-50",
+textColor: "text-blue-800",
+tags: ["System Architecture", "FastAPI", "Cloud Run", "Google Cloud", "DevOps", "Automation"],
+githubUrl: ""
+},
+{
+title: "RAG for Document Intelligence",
+description: "A high-throughput RAG system for semantic search over PDF datasets. Uses Pinecone for vector storage and Groq for accelerated inference, achieving 35% improved search relevance over keyword-based methods with sub-second response times. Custom chunking strategies optimize retrieval accuracy.",
+icon: "fa-brain",
+iconColor: "text-blue-600",
+bgColor: "bg-blue-50",
+textColor: "text-blue-800",
+tags: ["System Design", "AI/ML", "Vector Search", "RAG", "Performance Optimization"],
+githubUrl: "https://github.com/notquite28/simpleRAG"
+},
+{
+title: "Enterprise ROI System with AI Agent",
+description: "A fully automated, AI-driven system that re-engineers manual Release of Information (ROI) workflows. The AI agent manages the entire document lifecycle with enterprise-grade security, delivering $20K annual savings and 60% reduction in processing time while adhering to HIPAA compliance.",
+icon: "fa-robot",
+iconColor: "text-blue-600",
+bgColor: "bg-blue-50",
+textColor: "text-blue-800",
+tags: ["AI Agent", "Enterprise", "Automation", "Legal Tech", "Cost Optimization"],
+githubUrl: ""
+}
+// {
+// title: "Therapist Dashboard with GPT Integration",
+// description: "Built and deployed a full-stack dashboard used by 20+ therapists for schedule management and progress tracking. Integrated a GPT-powered API with custom-engineered prompts to perform NLP tasks on unstructured clinical notes, achieving 92% data accuracy and improving performance compliance by 35%.",
+// icon: "fa-user-md",
+// iconColor: "text-blue-600",
+// bgColor: "bg-blue-50",
+// textColor: "text-blue-800",
+// tags: ["React", "GPT API", "Healthcare", "CRM", "NLP", "Performance"],
+// githubUrl: ""
+// }
 ];
 
 const { projects = defaultProjects } = Astro.props;
@@ -97,48 +107,47 @@ const { projects = defaultProjects } = Astro.props;
 <section id="projects" class="py-16 px-4 section-transition">
   <div class="max-w-6xl mx-auto">
     <h2 class="text-3xl font-bold mb-8 text-center text-gradient">My Projects</h2>
-    
+
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       {projects.slice(0, 6).map((project) => (
-        <div class={`glass-container shadow-glass transform hover:-translate-y-1 transition duration-300 h-full flex flex-col`}
-          data-glass-interactive data-glass-random>
-          <div class="glass-filter"></div>
-          <div class="glass-overlay"></div>
-          <div class="glass-specular"></div>
-          <div class="glass-content p-6 flex flex-col h-full">
-            <div class="flex items-start mb-4">
-              <div class={`w-10 h-10 flex items-center justify-center mr-4`}>
-                <i class={`fas ${project.icon || 'fa-code'} text-2xl text-[--color-brand-500]`}></i>
-              </div>
-              <div>
-                <h3 class={`text-xl font-bold mb-2 text-accent text-shadow-md`}>{project.title}</h3>
-                <p class="text-white/80 mb-4">{project.description}</p>
-              </div>
+      <div class="glass-container shadow-glass transform hover:-translate-y-1 transition duration-300 h-full flex flex-col" data-glass-interactive data-glass-random>
+        <div class="glass-filter"></div>
+        <div class="glass-overlay"></div>
+        <div class="glass-specular"></div>
+        <div class="glass-content p-6 flex flex-col h-full">
+          <div class="flex items-start mb-4">
+            <div class={`w-10 h-10 flex items-center justify-center mr-4`}>
+              <i class={`fas ${project.icon || 'fa-code' } text-2xl text-[--color-brand-500]`}></i>
             </div>
-            <div class="flex flex-wrap gap-2 mt-auto">
-              {project.tags.map((tag) => (
-                <span class={`text-xs px-2 py-1 rounded-full bg-white/15 text-white/90 ring-1 ring-white/20` }>
-                  {tag}
-                </span>
-              ))}
-            </div>
-            <div class="mt-4 flex gap-4">
-              {project.link && (
-                <a href={project.link} class={`text-sm text-[--color-brand-500] hover:underline transition-colors duration-200 flex items-center gap-1`} target="_blank" rel="noopener noreferrer">
-                  <Icon name="external-link" class="w-3 h-3" /> Live Demo
-                </a>
-              )}
-              {project.githubUrl && (
-                <a href={project.githubUrl} class={`text-sm text-[--color-brand-500] hover:underline transition-colors duration-200 flex items-center gap-1`} target="_blank" rel="noopener noreferrer">
-                  <Icon name="github" class="w-3 h-3" /> View Code
-                </a>
-              )}
-              {!project.link && !project.githubUrl && (
-                <span class="text-sm text-white/50 italic">Closed Source</span>
-              )}
+            <div>
+              <h3 class={`text-xl font-bold mb-2 text-accent text-shadow-md`}>{project.title}</h3>
+              <p class="text-white/80 mb-4">{project.description}</p>
             </div>
           </div>
+          <div class="flex flex-wrap gap-2 mt-auto">
+            {project.tags.map((tag) => (
+            <span class={`text-xs px-2 py-1 rounded-full bg-white/15 text-white/90 ring-1 ring-white/20` }>
+              {tag}
+            </span>
+            ))}
+          </div>
+          <div class="mt-4 flex gap-4">
+            {project.link && (
+            <a href={project.link} class="text-sm text-[--color-brand-500] hover:underline transition-colors duration-200 flex items-center gap-1" target="_blank" rel="noopener noreferrer">
+              <Icon name="external-link" class="w-3 h-3" /> Live Demo
+            </a>
+            )}
+            {project.githubUrl && (
+            <a href={project.githubUrl} class="text-sm text-[--color-brand-500] hover:underline transition-colors duration-200 flex items-center gap-1" target="_blank" rel="noopener noreferrer">
+              <Icon name="github" class="w-3 h-3" /> View Code
+            </a>
+            )}
+            {!project.link && !project.githubUrl && (
+            <span class="text-sm text-white/50 italic">Closed Source</span>
+            )}
+          </div>
         </div>
+      </div>
       ))}
     </div>
   </div>

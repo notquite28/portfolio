@@ -17,80 +17,61 @@ interface Props {
 }
 
 const defaultCategories: SkillCategory[] = [
-  {
-    title: "Languages & Core Technologies",
-    skills: [
-      { name: "Python", icon: "fa-python", prefix: "fab" },
-      { name: "JavaScript", icon: "fa-js-square", prefix: "fab" },
-      { name: "TypeScript", icon: "fa-js", prefix: "fab" },
-      { name: "HTML5", icon: "fa-html5", prefix: "fab" },
-      { name: "CSS3", icon: "fa-css3-alt", prefix: "fab" },
-      { name: "SQL", icon: "fa-database", prefix: "fas" },
-      { name: "JSON", icon: "fa-code", prefix: "fas" },
-      { name: "YAML", icon: "fa-file-code", prefix: "fas" },
-    ],
-  },
-  {
-    title: "AI & Machine Learning",
-    skills: [
-      { name: "LangChain", icon: "fa-link", prefix: "fas" },
-      { name: "LangGraph", icon: "fa-project-diagram", prefix: "fas" },
-      { name: "LLMs", icon: "fa-robot", prefix: "fas" },
-      { name: "RAG", icon: "fa-search", prefix: "fas" },
-      { name: "PyTorch", icon: "fa-fire", prefix: "fas" },
-      { name: "TensorFlow", icon: "fa-cubes", prefix: "fas" },
-      { name: "Scikit-learn", icon: "fa-brain", prefix: "fas" },
-      { name: "NumPy", icon: "fa-calculator", prefix: "fas" },
-      { name: "Pandas", icon: "fa-table", prefix: "fas" },
-    ],
-  },
-  {
-    title: "Backend Development",
-    skills: [
-      { name: "FastAPI", icon: "fa-server", prefix: "fas" },
-      { name: "Flask", icon: "fa-flask", prefix: "fas" },
-      { name: "Node.js", icon: "fa-node-js", prefix: "fab" },
-      { name: "Express.js", icon: "fa-server", prefix: "fas" },
-      { name: "RESTful APIs", icon: "fa-exchange-alt", prefix: "fas" },
-    ],
-  },
-  {
-    title: "Frontend Development",
-    skills: [
-      { name: "React", icon: "fa-react", prefix: "fab" },
-      { name: "Astro", icon: "fa-rocket", prefix: "fas" },
-      { name: "Angular", icon: "fa-angular", prefix: "fab" },
-      { name: "Next.js", icon: "fa-arrow-right", prefix: "fas" },
-      { name: "Tailwind CSS", icon: "fa-wind", prefix: "fas" },
-      {
-        name: "WCAG Accessibility",
-        icon: "fa-universal-access",
-        prefix: "fas",
-      },
-    ],
-  },
-    {
-    title: "Cloud & DevOps",
-    skills: [
-      { name: "AWS", icon: "fa-aws", prefix: "fab" },
-      { name: "GCP", icon: "fa-google", prefix: "fab" },
-      { name: "Azure", icon: "fa-microsoft", prefix: "fab" },
-      { name: "Docker", icon: "fa-docker", prefix: "fab" },
-      { name: "Kubernetes", icon: "fa-cubes", prefix: "fas" },
-      { name: "CI/CD", icon: "fa-sync", prefix: "fas" },
-      { name: "Git", icon: "fa-git-alt", prefix: "fab" },
-    ],
-  },
-  {
-    title: "Databases & Vector Stores",
-    skills: [
-      { name: "PostgreSQL", icon: "fa-database", prefix: "fas" },
-      { name: "MongoDB", icon: "fa-database", prefix: "fas" },
-      { name: "MySQL", icon: "fa-database", prefix: "fas" },
-      { name: "Redis", icon: "fa-database", prefix: "fas" },
-      { name: "Pinecone", icon: "fa-vector-square", prefix: "fas" },
-    ],
-  },
+{
+title: "Languages",
+skills: [
+{ name: "Python", icon: "fa-python", prefix: "fab" },
+{ name: "JavaScript", icon: "fa-js-square", prefix: "fab" },
+{ name: "TypeScript", icon: "fa-js", prefix: "fab" },
+],
+},
+{
+title: "AI & Machine Learning",
+skills: [
+{ name: "LangChain", icon: "fa-link", prefix: "fas" },
+{ name: "LangGraph", icon: "fa-project-diagram", prefix: "fas" },
+{ name: "LLMs", icon: "fa-robot", prefix: "fas" },
+{ name: "RAG", icon: "fa-search", prefix: "fas" },
+{ name: "PyTorch", icon: "fa-fire", prefix: "fas" },
+],
+},
+{
+title: "Backend",
+skills: [
+{ name: "FastAPI", icon: "fa-server", prefix: "fas" },
+{ name: "Flask", icon: "fa-flask", prefix: "fas" },
+{ name: "Node.js", icon: "fa-node-js", prefix: "fab" },
+{ name: "Express.js", icon: "fa-server", prefix: "fas" },
+{ name: "REST APIs", icon: "fa-exchange-alt", prefix: "fas" },
+],
+},
+{
+title: "Frontend",
+skills: [
+{ name: "React", icon: "fa-react", prefix: "fab" },
+{ name: "Astro", icon: "fa-rocket", prefix: "fas" },
+{ name: "Angular", icon: "fa-angular", prefix: "fab" },
+{ name: "Tailwind CSS", icon: "fa-wind", prefix: "fas" },
+],
+},
+{
+title: "Cloud & DevOps",
+skills: [
+{ name: "GCP", icon: "fa-google", prefix: "fab" },
+{ name: "Docker", icon: "fa-docker", prefix: "fab" },
+{ name: "CI/CD", icon: "fa-sync", prefix: "fas" },
+{ name: "Git", icon: "fa-git-alt", prefix: "fab" },
+],
+},
+{
+title: "Databases & Vector Stores",
+skills: [
+{ name: "PostgreSQL", icon: "fa-database", prefix: "fas" },
+{ name: "MongoDB", icon: "fa-database", prefix: "fas" },
+{ name: "Redis", icon: "fa-database", prefix: "fas" },
+{ name: "Pinecone", icon: "fa-vector-square", prefix: "fas" },
+],
+},
 ];
 
 const { categories = defaultCategories } = Astro.props;

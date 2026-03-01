@@ -1,21 +1,18 @@
 ---
 interface Props {
-  name?: string;
-  title?: string;
-  description?: string;
+name?: string;
+title?: string;
 }
 
 const { 
-  name = "Arnav Panigrahi",
-  title = "Software Developer, AI/ML Enthusiast",
-  description = "Building ethical AI systems that solve real-world problems"
+name = "Arnav Panigrahi",
+title = "Software Developer, AI/ML Enthusiast",
 } = Astro.props;
 ---
 
 <section class="hero-section min-h-screen flex flex-col justify-center items-center text-center p-8 section-transition">
   <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-[1.15] text-gradient text-shadow-lg">{name}</h1>
-  <h2 class="text-2xl md:text-3xl mb-4 text-comment text-shadow-md">{title}</h2>
-  <p class="text-xl mb-10 text-white/80 max-w-2xl">{description}</p>
+<h2 class="text-2xl md:text-3xl mb-10 text-comment text-shadow-md">{title}</h2>
   <div class="flex flex-wrap justify-center btn-row">
     <div class="btn-wrap">
       <a href="#about" class="btn-fancy" data-glass-interactive data-glass-random>
