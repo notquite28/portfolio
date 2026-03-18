@@ -21,32 +21,32 @@ projects?: Project[];
 const defaultProjects: Project[] = [
 {
 title: "bedtime.ai – Multi-Modal AI Storytelling Platform",
-description: "A multi-modal AI pipeline that transforms children's drawings into personalized stories narrated in a cloned parent's voice. Integrates a fine-tuned phi-3 LLM, EfficientNet for image analysis, and coqui-ai for voice synthesis. Containerized with Docker; delivers complete stories in under 30 seconds.",
+description: "A multi-modal AI storytelling system that turns children's drawings and preferences into personalized narrated stories. Combines a fine-tuned Phi-3 model for story generation, EfficientNet for drawing analysis, Coqui TTS-style voice cloning, and a FastAPI + React/Vite application layer.",
 icon: "fa-book-reader",
 iconColor: "text-blue-600",
 bgColor: "bg-blue-50",
 textColor: "text-blue-800",
-tags: ["Lead Developer", "React", "FastAPI", "AI/ML", "Computer Vision", "Voice Synthesis"],
+tags: ["React", "FastAPI", "Phi-3", "Computer Vision", "Voice Cloning", "Docker"],
 githubUrl: "https://github.com/notquite28/bedtime.ai"
 },
 {
-title: "Abliteration: LLM Uncensoring via Weight Modification",
-description: "Techniques for removing censorship from LiquidAI/LFM2.5-1.2B-Instruct by identifying and orthogonalizing refusal directions in residual stream activations. Includes inference-time intervention and direct weight modification approaches that successfully uncensor content while preserving model capabilities.",
+title: "Abliteration for LFM2.5",
+description: "An interpretability-focused project for LiquidAI/LFM2.5-1.2B-Instruct that identifies refusal directions in residual stream activations and applies weight orthogonalization plus inference-time intervention. Built with manual PyTorch hooks adapted to LFM2's architecture, since TransformerLens does not support the model.",
 icon: "fa-flask",
 iconColor: "text-purple-600",
 bgColor: "bg-purple-50",
 textColor: "text-purple-800",
-tags: ["Research", "LLM", "Python", "Neural Networks", "Model Architecture", "TransformerLens"],
+tags: ["Research", "LLM Interpretability", "PyTorch", "Hugging Face", "Residual Streams", "Inference Intervention"],
 githubUrl: "https://github.com/notquite28/abliteration"
 },
 {
 title: "Edge-Native Real-Time Web Platform",
-description: "A real-time cursor sharing platform with YoRHa-inspired aesthetics from NieR: Automata. Uses Cloudflare Durable Objects to coordinate WebSocket connections across edge nodes, enabling visitors to see each other's cursors live. Built with SvelteKit and deployed entirely on Cloudflare's edge network.",
+description: "A real-time collaborative personal site with YoRHa-inspired aesthetics where visitors can see each other's cursors live. Built with SvelteKit 5 and a Cloudflare Workers + Durable Objects WebSocket backend, with Cloudflare Pages for edge deployment, KV-backed analytics, and a custom Vite plugin for build-time markdown ingestion.",
 icon: "fa-network-wired",
 iconColor: "text-stone-600",
 bgColor: "bg-stone-50",
 textColor: "text-stone-800",
-tags: ["Distributed Systems", "SvelteKit", "Cloudflare", "Real-Time Systems", "Web Architecture"],
+tags: ["SvelteKit 5", "Cloudflare Workers", "Durable Objects", "WebSockets", "Cloudflare KV", "Vite Plugin"],
 githubUrl: "https://github.com/notquite28/nier-archive-site"
 },
 // {
