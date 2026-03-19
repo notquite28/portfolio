@@ -62,12 +62,28 @@ const isProd = import.meta.env.PROD;
     
     {showBoids && <script>
         const canvas = document.getElementById('boidCanvas');
-        if (canvas instanceof HTMLCanvasElement && canvas.dataset.boidInitialized !== 'true') {
-            canvas.dataset.boidInitialized = 'true';
-            
-            const script = document.createElement('script');
-            script.src = `${import.meta.env.BASE_URL}js/boid-simulation.js`;
-            document.body.appendChild(script);
+        const navigatorWithHints = navigator as Navigator & {
+            connection?: { saveData?: boolean };
+            mozConnection?: { saveData?: boolean };
+            webkitConnection?: { saveData?: boolean };
+            deviceMemory?: number;
+        };
+        const reduceMotionPreference = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const networkConnection = navigatorWithHints.connection || navigatorWithHints.mozConnection || navigatorWithHints.webkitConnection;
+        const saveDataPreference = Boolean(networkConnection && networkConnection.saveData);
+        const lowPowerDevice = (navigatorWithHints.deviceMemory && navigatorWithHints.deviceMemory <= 4) || window.innerWidth < 768;
+
+        if (canvas instanceof HTMLCanvasElement) {
+            if (reduceMotionPreference || saveDataPreference || lowPowerDevice) {
+                canvas.remove();
+            } else if (canvas.dataset.boidInitialized !== 'true') {
+                canvas.dataset.boidInitialized = 'true';
+
+                const script = document.createElement('script');
+                script.src = `${import.meta.env.BASE_URL}js/boid-simulation.js`;
+                script.defer = true;
+                document.body.appendChild(script);
+            }
         }
     </script>}
 
