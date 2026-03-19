@@ -1,4 +1,6 @@
 ---
+import { buildUrl } from '../../utils/paths';
+
 interface NavLink {
   label: string;
   href: string;
@@ -10,113 +12,254 @@ interface Props {
 
 const defaultLinks: NavLink[] = [
   { label: 'About', href: '#about' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Projects', href: '#projects' },
+  { label: 'Capabilities', href: '#skills' },
+  { label: 'Work', href: '#projects' },
   { label: 'Contact', href: '#cta' },
 ];
 
 const { links = defaultLinks } = Astro.props;
+const avatarUrl = buildUrl('mumei.webp');
 ---
 
-<nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 opacity-0 -translate-y-full" id="nav">
-  <div class="max-w-6xl mx-auto px-4 py-3">
-    <div class="glass-container rounded-full px-6 py-2 flex items-center justify-between" data-glass-interactive data-glass-random>
-      <div class="glass-filter"></div>
-      <div class="glass-overlay"></div>
-      <div class="glass-specular"></div>
-      <div class="glass-content flex items-center justify-between w-full">
-        <a href="#" class="text-xl text-white/80 hover:text-white transition-colors" aria-label="Home">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
-          </svg>
-        </a>
-        
-        <ul class="hidden md:flex items-center gap-6">
-          {links.map((link) => (
-            <li>
-              <a 
-                href={link.href} 
-                class="text-white/80 hover:text-white transition-colors duration-200 text-sm font-medium"
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-        
-        <label 
-          for="nav-toggle" 
-          class="md:hidden text-white/80 hover:text-white transition-colors cursor-pointer"
-          aria-label="Toggle navigation menu"
-        >
-          <svg class="w-6 h-6 nav-icon-menu" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-          </svg>
-          <svg class="w-6 h-6 nav-icon-close hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </label>
-      </div>
-    </div>
-    
-    <input type="checkbox" id="nav-toggle" class="sr-only peer" />
-    
-    <div class="md:hidden hidden peer-checked:block mt-2 glass-container rounded-2xl p-4" data-glass-interactive data-glass-random>
-      <div class="glass-filter"></div>
-      <div class="glass-overlay"></div>
-      <div class="glass-specular"></div>
-      <div class="glass-content">
-        <ul class="flex flex-col gap-4">
-          {links.map((link) => (
-            <li>
-              <a 
-                href={link.href} 
-                class="block text-white/80 hover:text-white transition-colors duration-200 text-center py-2"
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+<nav class="site-nav" id="site-nav" aria-label="Primary">
+  <div class="site-nav-inner">
+    <a href="#" class="site-nav-brand" aria-label="Home">
+      <img src={avatarUrl} alt="Arnav Panigrahi" class="site-nav-avatar" loading="eager" />
+      <span class="site-nav-name">Arnav Panigrahi</span>
+    </a>
+
+    <ul class="site-nav-links" aria-label="Section links">
+      {links.map((link) => (
+        <li>
+          <a href={link.href} class="site-nav-link">{link.label}</a>
+        </li>
+      ))}
+    </ul>
+
+    <button
+      type="button"
+      class="site-nav-toggle"
+      id="site-nav-toggle"
+      aria-expanded="false"
+      aria-controls="site-nav-mobile"
+      aria-label="Open navigation menu"
+    >
+      <span class="site-nav-toggle-line"></span>
+      <span class="site-nav-toggle-line"></span>
+      <span class="site-nav-toggle-line"></span>
+    </button>
+  </div>
+
+  <div class="site-nav-mobile" id="site-nav-mobile" hidden>
+    {links.map((link) => (
+      <a href={link.href} class="site-nav-mobile-link">{link.label}</a>
+    ))}
   </div>
 </nav>
 
 <style>
-  #nav-toggle:checked ~ div .nav-icon-menu {
+  .site-nav {
+    position: fixed;
+    inset-inline: 0;
+    top: 0;
+    z-index: 50;
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 1rem;
+    opacity: 0;
+    transform: translateY(-1rem);
+    pointer-events: none;
+    transition: opacity 220ms ease, transform 220ms ease;
+  }
+
+  .site-nav.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .site-nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    background: rgba(16, 18, 26, 0.82);
+    box-shadow: 0 20px 40px -28px rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(18px) saturate(1.1);
+    -webkit-backdrop-filter: blur(18px) saturate(1.1);
+  }
+
+  .site-nav-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    min-width: 0;
+    color: rgba(248, 248, 242, 0.96);
+    text-decoration: none;
+  }
+
+  .site-nav-avatar {
+    width: 2.2rem;
+    height: 2.2rem;
+    flex: 0 0 auto;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    object-fit: cover;
+    box-shadow: 0 8px 18px -12px rgba(0, 0, 0, 0.75);
+  }
+
+  .site-nav-name {
+    font-size: 0.94rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+
+  .site-nav-links {
     display: none;
+    align-items: center;
+    gap: 1.35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
-  #nav-toggle:checked ~ div .nav-icon-close {
+
+  .site-nav-link,
+  .site-nav-mobile-link {
+    color: rgba(248, 248, 242, 0.72);
+    text-decoration: none;
+    font-size: 0.92rem;
+    transition: color 180ms ease;
+  }
+
+  .site-nav-link:hover,
+  .site-nav-mobile-link:hover {
+    color: rgba(248, 248, 242, 1);
+  }
+
+  .site-nav-toggle {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .site-nav-toggle-line {
+    position: absolute;
+    width: 1.1rem;
+    height: 1.5px;
+    border-radius: 999px;
+    background: rgba(248, 248, 242, 0.92);
+    transition: transform 180ms ease, opacity 180ms ease;
+  }
+
+  .site-nav-toggle-line:nth-child(1) {
+    transform: translateY(-0.28rem);
+  }
+
+  .site-nav-toggle-line:nth-child(3) {
+    transform: translateY(0.28rem);
+  }
+
+  .site-nav-toggle[aria-expanded='true'] .site-nav-toggle-line:nth-child(1) {
+    transform: rotate(45deg);
+  }
+
+  .site-nav-toggle[aria-expanded='true'] .site-nav-toggle-line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .site-nav-toggle[aria-expanded='true'] .site-nav-toggle-line:nth-child(3) {
+    transform: rotate(-45deg);
+  }
+
+  .site-nav-mobile {
+    display: grid;
+    gap: 0.15rem;
+    margin-top: 0.7rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.25rem;
+    background: rgba(16, 18, 26, 0.9);
+    box-shadow: 0 20px 40px -28px rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(18px) saturate(1.1);
+    -webkit-backdrop-filter: blur(18px) saturate(1.1);
+  }
+
+  .site-nav-mobile-link {
     display: block;
+    padding: 0.55rem 0;
+    text-align: center;
   }
-  
-  #nav-toggle:checked ~ div .glass-content a[href^="#"] {
-    scroll-behavior: smooth;
+
+  @media (min-width: 768px) {
+    .site-nav-inner {
+      padding-inline: 1.15rem;
+    }
+
+    .site-nav-links {
+      display: flex;
+    }
+
+    .site-nav-toggle,
+    .site-nav-mobile {
+      display: none;
+    }
   }
 </style>
 
 <script>
-  const nav = document.getElementById('nav');
-  
-  window.addEventListener('scroll', () => {
-    if (!nav) return;
-    
-    if (window.scrollY > 100) {
-      nav.classList.add('opacity-100', 'translate-y-0');
-      nav.classList.remove('opacity-0', '-translate-y-full');
-    } else {
-      nav.classList.remove('opacity-100', 'translate-y-0');
-      nav.classList.add('opacity-0', '-translate-y-full');
-    }
-  });
+  const nav = document.getElementById('site-nav');
+  const toggle = document.getElementById('site-nav-toggle');
+  const mobileMenu = document.getElementById('site-nav-mobile');
+  const mobileLinks = document.querySelectorAll('.site-nav-mobile-link');
 
-  const navToggle = document.getElementById('nav-toggle');
-  document.querySelectorAll('#nav-toggle ~ div .glass-content a[href^="#"]').forEach(link => {
+  const closeMenu = () => {
+    if (!(toggle instanceof HTMLButtonElement) || !mobileMenu) return;
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Open navigation menu');
+    mobileMenu.hidden = true;
+  };
+
+  const updateNavVisibility = () => {
+    if (!nav) return;
+    if (window.scrollY > 80) {
+      nav.classList.add('is-visible');
+    } else {
+      nav.classList.remove('is-visible');
+      closeMenu();
+    }
+  };
+
+  if (toggle instanceof HTMLButtonElement && mobileMenu) {
+    toggle.addEventListener('click', () => {
+      const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!isExpanded));
+      toggle.setAttribute('aria-label', isExpanded ? 'Open navigation menu' : 'Close navigation menu');
+      mobileMenu.hidden = isExpanded;
+    });
+  }
+
+  mobileLinks.forEach((link) => {
     link.addEventListener('click', () => {
-      if (navToggle) {
-        (navToggle as HTMLInputElement).checked = false;
-      }
+      closeMenu();
     });
   });
+
+  window.addEventListener('scroll', updateNavVisibility, { passive: true });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 768) closeMenu();
+  });
+
+  updateNavVisibility();
 </script>

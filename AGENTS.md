@@ -1,179 +1,161 @@
 # AGENTS.md
+Guidance for coding agents working in `/home/quiet/Workspace/portfolio`.
 
-Guidelines for AI coding agents working in this repository.
+## Project Snapshot
+- Personal portfolio built with Astro 5, Tailwind CSS 4, and TypeScript.
+- Static output; `astro.config.mjs` sets `output: 'static'`.
+- Main page: `src/pages/index.astro`.
+- Shared layout: `src/components/layouts/BaseLayout.astro`.
+- Global styles: `src/styles/global.css`.
+- Static assets: `public/`.
 
-## Project Overview
-
-This is a personal portfolio website built with **Astro 5** and **Tailwind CSS 4**. It's a statically generated site deployed to GitHub Pages with a custom domain.
-
-## Build Commands
-
+## Commands
+### Install
 ```bash
-pnpm install          # Install dependencies
-pnpm dev              # Start development server (localhost:4321)
-pnpm build            # Build for production (outputs to ./dist)
-pnpm preview          # Preview production build locally
-pnpm deploy           # Build, commit, and push
+pnpm install
+```
+### Development
+```bash
+pnpm dev
+```
+- Starts Astro dev server, usually at `http://localhost:4321`.
+
+### Validation
+```bash
+pnpm astro check
+pnpm build
+```
+- Use `pnpm astro check` for fast type-aware validation.
+- Use `pnpm build` as the main pre-handoff verification step.
+- Build output goes to `dist/`.
+
+### Preview
+```bash
+pnpm preview
+```
+### Deploy
+```bash
+pnpm deploy
+```
+- Runs `pnpm build && git add . && git commit ... && git push`.
+- Do not run unless the user explicitly requests deployment.
+
+## Lint / Test Status
+- No lint script is configured in `package.json`.
+- No dedicated test runner or `test` script is configured.
+- No `*.test.*` or `*.spec.*` files are present.
+- Preferred verification order:
+  1. `pnpm astro check`
+  2. `pnpm build`
+
+### Running a single test
+- Not currently supported because no test framework is installed.
+- If a test runner is added later, update this file with the exact single-test command.
+
+## Rule Files
+- No `.cursor/rules/` files found.
+- No `.cursorrules` file found.
+- No `.github/copilot-instructions.md` file found.
+- Treat this file as the main agent guidance for the repo.
+
+## Repository Layout
+```text
+src/components/layouts/   Base layout and document shell
+src/components/sections/  Homepage sections
+src/components/ui/        Reusable UI pieces
+src/pages/                Route files (`index.astro`, `404.astro`)
+src/styles/               Global CSS and theme tokens
+src/utils/                Utilities such as `paths.ts`
+public/                   Static assets served as-is
 ```
 
-**Note:** This project does not have configured lint, typecheck, or test commands. Astro's built-in type checking runs during build.
+## Architecture Notes
+- `src/pages/index.astro` composes the homepage from section components.
+- `BaseLayout.astro` owns metadata, global CSS import, external stylesheets, and page-level scripts.
+- Most UI is server-rendered Astro; client-side JS is light and defensive.
+- Use helpers from `src/utils/paths.ts` when building site-relative or asset URLs.
 
-## Project Structure
+## Code Style
+### General
+- Keep changes small and aligned with existing patterns.
+- Prefer focused Astro components over large multi-purpose files.
+- Preserve the established visual language unless asked to redesign.
+- Prefer ASCII unless the file already uses Unicode intentionally.
 
-```
-src/components/     # layouts/, sections/, ui/
-src/pages/          # Route pages (index.astro, 404.astro)
-src/styles/         # Global CSS (global.css)
-src/utils/          # Utility functions (paths.ts)
-public/             # Static assets (images, favicon, js)
-```
+### Imports
+- Keep imports at the top of Astro frontmatter.
+- Existing code mostly uses relative imports; aliases are also available.
+- Supported aliases from `tsconfig.json`: `@/*`, `@components/*`, `@utils/*`, `@styles/*`.
+- Import order:
+  1. CSS imports (layout files only)
+  2. External packages
+  3. Internal components/modules
+  4. Utilities
+  5. Type-only imports with `import type`
 
-## Code Style Guidelines
+### Astro Conventions
+- Define a `Props` interface near the top when props exist.
+- Destructure `Astro.props` immediately and provide inline defaults.
+- Use semantic HTML: `<main>`, `<section>`, `<nav>`, `<footer>`, `<button>`.
+- Import global CSS only in `src/components/layouts/BaseLayout.astro`.
 
 ### TypeScript
+- The project extends `astro/tsconfigs/strict`.
+- `verbatimModuleSyntax` is enabled; use explicit `import type` when needed.
+- `noUncheckedIndexedAccess` is enabled; treat indexed access as possibly `undefined`.
+- Prefer explicit return types for exported utilities.
+- Prefer narrow types and optional props over `any`.
 
-- **Strict mode:** Project extends `astro/tsconfigs/strict`
-- **Module syntax:** Uses `verbatimModuleSyntax: true` - explicit type imports required
-- **Array access:** `noUncheckedIndexedAccess: true` - always handle undefined
+### Formatting
+- Match surrounding formatting instead of reformatting unrelated code.
+- Keep objects and arrays compact unless expansion improves readability.
+- Avoid comments unless the logic is non-obvious.
+- Keep line length reasonable, but consistency with nearby code matters more.
 
-```typescript
-// Correct - explicit type import
-import type { SomeType } from 'module';
-import { someValue } from 'module';
+### Naming
+- Components: PascalCase, e.g. `SkillCard.astro`.
+- Utilities: short lowercase names, e.g. `paths.ts`.
+- Variables/functions: camelCase.
+- Interfaces/types: PascalCase.
+- Constants: SCREAMING_SNAKE_CASE only for true constants.
+- Custom CSS classes: kebab-case.
 
-// Handle potentially undefined array access
-const item = array[0];
-if (item) {
-  // use item
-}
-```
+### Styling
+- Tailwind CSS 4 is the primary styling tool.
+- Reuse tokens and utilities from `src/styles/global.css` before adding new ones.
+- Existing reusable classes include `.glass`, `.glass-liquid`, `.glass-container`, `.section-transition`, `.text-gradient`, `.text-accent`, and `.text-comment`.
+- Preserve responsive behavior on mobile and desktop.
 
-### Astro Components
+### Client Scripts and Error Handling
+- Keep browser scripts minimal and defensive.
+- Check DOM queries before attaching listeners or mutating elements.
+- Prefer early returns over nested conditionals.
+- Use optional chaining and nullish coalescing where appropriate.
+- Prefer graceful degradation over runtime failures.
 
-**Frontmatter pattern:**
-```astro
----
-import Component from '../path';
-import { utility } from '../../utils/paths';
+## Content and SEO
+- Use `BaseLayout` for pages so metadata remains consistent.
+- Pass `title`, `description`, and `image` props when page-level SEO matters.
+- Use `buildUrl()` for absolute asset URLs.
+- Keep project descriptions and claims accurate to the actual repo or documented implementation.
 
-interface Props {
-  title: string;
-  optional?: string;
-}
-
-const { title, optional = 'default' } = Astro.props;
----
-
-<section class="...">
-  <!-- Template -->
-</section>
-```
-
-**Key conventions:**
-- Define `Props` interface at the top of frontmatter
-- Destructure props with defaults immediately after interface
-- Use relative imports (../../path)
-- Import global CSS only in BaseLayout
-
-### Path Aliases
-
-Configured in tsconfig.json:
-```typescript
-import Component from '@components/ui/Component.astro';
-import { buildUrl } from '@utils/paths';
-import '@styles/global.css';
-```
-
-### Styling (Tailwind CSS 4)
-
-- Uses **Dracula color palette** defined in `@theme` block in global.css
-- Custom glass effects: `.glass`, `.glass-liquid`, `.glass-container`
-- Custom buttons: `.btn-fancy` with `.btn-wrap` wrapper
-- Animation: `.section-transition` for fade-up entrance
-- Text utilities: `.text-gradient`, `.text-accent`, `.text-comment`
-- Key colors: `--color-brand-500` (purple), `--color-accent-500` (pink), `--color-surface` (dark bg)
-
-### Import Organization
-
-1. CSS imports (only in layouts)
-2. External library imports
-3. Internal component imports (use aliases)
-4. Utility imports
-5. Type imports (with `type` keyword)
-
-### Component Patterns
-
-**Section components** (`src/components/sections/`):
-- Accept props with sensible defaults
-- Use semantic HTML (`<section>`, `<main>`, etc.)
-- Include `section-transition` class for animations
-
-**UI components** (`src/components/ui/`):
-- Highly reusable, minimal assumptions about context
-- Accept className prop for customization
-
-### Error Handling
-
-- For static site, prefer graceful degradation over errors
-- Use optional chaining and nullish coalescing
-- Check for DOM elements before manipulating
-
-```typescript
-const element = document.getElementById('id');
-if (!element) return;
-// proceed with element
-```
-
-### Naming Conventions
-
-- **Files:** PascalCase for components (`SkillCard.astro`)
-- **Functions:** camelCase (`getBaseUrl`, `buildUrl`)
-- **Interfaces:** PascalCase (`Props`, `Skill`)
-- **CSS classes:** kebab-case (`glass-container`, `btn-fancy`)
-- **Constants:** SCREAMING_SNAKE_CASE for true constants
-
-### Scripts in Astro
-
-Client-side scripts use `<script>` tags within components. TypeScript is supported.
-
-For scripts needing server variables, use `define:vars`:
-```astro
-<script define:vars={{ baseUrl }}>
-  console.log(baseUrl);
-</script>
-```
-
-### SEO Considerations
-
-- All pages should use BaseLayout for consistent meta tags
-- Pass `title`, `description`, and `image` props to BaseLayout
-- Structured data (JSON-LD) goes in individual pages
-- Use `buildUrl()` for absolute URLs in meta tags
-
-## Deployment
-
-- Automatic deployment via GitHub Actions on push to `main`
-- Uses pnpm with Node 20
-- Outputs static files to `./dist`
-- Custom domain configured via `public/CNAME`
+## Working Safely
+- The worktree may contain unrelated user changes; do not revert them.
+- `resume.tex` may exist in the workspace but is not part of the site unless requested.
+- Do not commit deploy artifacts or push changes unless explicitly asked.
+- For most code edits, run `pnpm astro check` or `pnpm build` before finishing when practical.
 
 ## Common Tasks
-
-**Add a new section:**
-1. Create `src/components/sections/NewSection.astro`
-2. Follow Props pattern with defaults
-3. Import and add to `src/pages/index.astro`
-
-**Add a new UI component:**
-1. Create `src/components/ui/NewComponent.astro`
-2. Make props flexible with optional values
-3. Use existing Tailwind/utilities where possible
-
-**Modify styles:**
-1. Check global.css for existing utilities first
-2. Add theme colors to `@theme` block
-3. Create reusable CSS classes for patterns
-
-**Add new static assets:**
-1. Place in `public/` directory
-2. Reference with `buildUrl('filename.ext')` for correct paths
+### Add a homepage section
+1. Create a component in `src/components/sections/`.
+2. Follow the existing props/frontmatter pattern.
+3. Import it into `src/pages/index.astro`.
+4. Reuse existing theme classes first.
+### Add a reusable UI component
+1. Create it in `src/components/ui/`.
+2. Keep props flexible and layout-agnostic.
+3. Let parent sections control spacing and placement.
+### Update portfolio content
+1. Verify claims against code, docs, or linked repos.
+2. Keep titles, stacks, and descriptions consistent across the site.
+3. Prefer precise technical wording over marketing language.

@@ -1,36 +1,63 @@
 ---
-interface Props {
-name?: string;
-title?: string;
+interface ProofItem {
+    value: string;
+    label: string;
 }
 
-const { 
-name = "Arnav Panigrahi",
-title = "Software Developer, AI/ML Enthusiast",
+interface Props {
+    name?: string;
+    title?: string;
+    intro?: string;
+    proof?: ProofItem[];
+}
+
+const {
+    name = "Arnav Panigrahi",
+    title = "Software developer. Lifetime Learner",
+    proof = [
+        { value: "2.5+", label: "years shipping software" },
+        { value: "60%", label: "faster agentic automation" },
+        { value: "$20K", label: "annual savings delivered" },
+    ],
 } = Astro.props;
 ---
 
-<section class="hero-section min-h-screen flex flex-col justify-center items-center text-center p-8 section-transition">
-  <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-[1.15] text-gradient text-shadow-lg">{name}</h1>
-<h2 class="text-2xl md:text-3xl mb-10 text-comment text-shadow-md">{title}</h2>
-  <div class="flex flex-wrap justify-center btn-row">
-    <div class="btn-wrap">
-      <a href="#about" class="btn-fancy" data-glass-interactive data-glass-random>
-        <span>About Me</span>
-      </a>
-      <div class="btn-shadow"></div>
+<section class="hero-shell hero-shell-first section-transition">
+    <div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[minmax(0,1.35fr)_minmax(17rem,0.65fr)] lg:items-end xl:gap-16">
+        <div class="hero-copy">
+            <p class="section-kicker">Software Developer</p>
+            <h1 class="hero-title">{name}</h1>
+            <p class="hero-lead">{title}</p>
+
+            <div class="hero-actions">
+                <a href="#projects" class="contact-link hero-primary-link">View Work</a>
+                <a href="#cta" class="hero-link">Get in touch</a>
+            </div>
+        </div>
+
+        <aside class="hero-rail">
+            <p class="panel-label">Snapshot</p>
+            <div class="hero-metrics">
+                {
+                    proof.map((item) => (
+                        <div class="metric-item">
+                            <span class="metric-value">{item.value}</span>
+                            <span class="metric-label">{item.label}</span>
+                        </div>
+                    ))
+                }
+            </div>
+
+            <div class="hero-notes">
+                <div>
+                    <span class="panel-meta">Focus</span>
+                    <p>LLM systems, backend, retrieval, automation.</p>
+                </div>
+                <div>
+                    <span class="panel-meta">Based in</span>
+                    <p>California, US</p>
+                </div>
+            </div>
+        </aside>
     </div>
-    <div class="btn-wrap">
-      <a href="#projects" class="btn-fancy" data-glass-interactive data-glass-random>
-        <span>View Projects</span>
-      </a>
-      <div class="btn-shadow"></div>
-    </div>
-    <div class="btn-wrap">
-      <a href="#cta" class="btn-fancy rounded-full w-14 h-14 relative text-white hover:text-[--color-accent-500] transition-colors duration-200" data-glass-interactive data-glass-random aria-label="Contact me">
-        <i class="fas fa-envelope text-lg absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></i>
-      </a>
-      <div class="btn-shadow"></div>
-    </div>
-  </div>
 </section>

@@ -1,114 +1,54 @@
 ---
-import SkillCard from "../ui/SkillCard.astro";
-
-interface Skill {
-  name: string;
-  icon: string;
-  prefix?: string;
-}
-
 interface SkillCategory {
-  title: string;
-  skills: Skill[];
+    title: string;
+    skills: string[];
 }
 
 interface Props {
-  categories?: SkillCategory[];
+    categories?: SkillCategory[];
 }
 
 const defaultCategories: SkillCategory[] = [
-{
-title: "Languages",
-skills: [
-{ name: "Python", icon: "fa-python", prefix: "fab" },
-{ name: "JavaScript", icon: "fa-js-square", prefix: "fab" },
-{ name: "TypeScript", icon: "fa-js", prefix: "fab" },
-],
-},
-{
-title: "AI & Machine Learning",
-skills: [
-{ name: "LangChain", icon: "fa-link", prefix: "fas" },
-{ name: "LangGraph", icon: "fa-project-diagram", prefix: "fas" },
-{ name: "LLMs", icon: "fa-robot", prefix: "fas" },
-{ name: "RAG", icon: "fa-search", prefix: "fas" },
-{ name: "PyTorch", icon: "fa-fire", prefix: "fas" },
-],
-},
-{
-title: "Backend",
-skills: [
-{ name: "FastAPI", icon: "fa-server", prefix: "fas" },
-{ name: "Flask", icon: "fa-flask", prefix: "fas" },
-{ name: "Node.js", icon: "fa-node-js", prefix: "fab" },
-{ name: "Express.js", icon: "fa-server", prefix: "fas" },
-{ name: "REST APIs", icon: "fa-exchange-alt", prefix: "fas" },
-],
-},
-{
-title: "Frontend",
-skills: [
-{ name: "React", icon: "fa-react", prefix: "fab" },
-{ name: "Astro", icon: "fa-rocket", prefix: "fas" },
-{ name: "Angular", icon: "fa-angular", prefix: "fab" },
-{ name: "Tailwind CSS", icon: "fa-wind", prefix: "fas" },
-],
-},
-{
-title: "Cloud & DevOps",
-skills: [
-{ name: "GCP", icon: "fa-google", prefix: "fab" },
-{ name: "Docker", icon: "fa-docker", prefix: "fab" },
-{ name: "CI/CD", icon: "fa-sync", prefix: "fas" },
-{ name: "Git", icon: "fa-git-alt", prefix: "fab" },
-],
-},
-{
-title: "Databases & Vector Stores",
-skills: [
-{ name: "PostgreSQL", icon: "fa-database", prefix: "fas" },
-{ name: "MongoDB", icon: "fa-database", prefix: "fas" },
-{ name: "Redis", icon: "fa-database", prefix: "fas" },
-{ name: "Pinecone", icon: "fa-vector-square", prefix: "fas" },
-],
-},
+    {
+        title: "Languages & Frameworks",
+        skills: ["Python", "TypeScript", "JavaScript", "C#", ".NET", "FastAPI", "React", "Astro"],
+    },
+    {
+        title: "AI & Data Systems",
+        skills: ["LangChain", "LangGraph", "RAG Pipelines", "PyTorch", "LLMs", "Vector Search"],
+    },
+    {
+        title: "Infrastructure & Delivery",
+        skills: ["Google Cloud", "Docker", "AWS", "REST APIs", "PostgreSQL", "SQL", "Git"],
+    },
 ];
 
 const { categories = defaultCategories } = Astro.props;
 ---
 
-<section id="skills" class="py-16 px-4 section-transition">
-  <div class="max-w-5xl mx-auto">
-    <h2 class="text-3xl font-bold mb-8 text-center text-gradient">My Skills</h2>
+<section id="skills" class="section-shell section-block section-transition">
+    <div class="mx-auto max-w-6xl">
+        <div class="section-header-split">
+            <div>
+                <p class="section-kicker">Capabilities</p>
+                <h2 class="section-title">Skills.</h2>
+            </div>
+            <!-- <p class="section-aside">Mostly backend, ML workflows, and delivery.</p> -->
+        </div>
 
-    <!-- First row with 3 categories -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-      {
-        categories
-          .slice(0, 3)
-          .map((category) => (
-            <SkillCard
-              title={category.title}
-              skills={category.skills}
-              className="rounded-2xl"
-            />
-          ))
-      }
+        <div class="capability-stack">
+            {
+                categories.map((category) => (
+                    <div class="capability-block">
+                        <p class="capability-title">{category.title}</p>
+                        <ul class="capability-list">
+                            {category.skills.map((skill) => (
+                                <li>{skill}</li>
+                            ))}
+                        </ul>
+                    </div>
+                ))
+            }
+        </div>
     </div>
-
-    <!-- Second row with 3 categories -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {
-        categories
-          .slice(3, 6)
-          .map((category) => (
-            <SkillCard
-              title={category.title}
-              skills={category.skills}
-              className="rounded-2xl"
-            />
-          ))
-      }
-    </div>
-  </div>
 </section>

@@ -2,6 +2,13 @@
 (function() {
     // Flag to prevent multiple initializations
     if (window.__boidSimulationInitialized) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    const saveData = Boolean(connection && connection.saveData);
+    const lowPowerDevice = (navigator.deviceMemory && navigator.deviceMemory <= 4) || window.innerWidth < 768;
+
+    if (prefersReducedMotion || saveData) return;
     
     function initBoidSimulation() {
         const canvas = document.getElementById('boidCanvas');
@@ -20,7 +27,16 @@
             canvas.height = window.innerHeight;
         }
 
-        window.addEventListener('resize', resizeCanvas);
+        let resizeFrame = null;
+        function onResize() {
+            if (resizeFrame) cancelAnimationFrame(resizeFrame);
+            resizeFrame = requestAnimationFrame(() => {
+                resizeCanvas();
+                resizeFrame = null;
+            });
+        }
+
+        window.addEventListener('resize', onResize, { passive: true });
         resizeCanvas();
 
         // Get background color
@@ -317,7 +333,9 @@
         
         // Create boids
         const boids = [];
-        const numBoids = Math.min(50, Math.max(20, Math.floor(canvas.width * canvas.height / 20000))); // Adjust based on screen size
+        const maxBoids = lowPowerDevice ? 24 : 40;
+        const minBoids = lowPowerDevice ? 12 : 18;
+        const numBoids = Math.min(maxBoids, Math.max(minBoids, Math.floor(canvas.width * canvas.height / 30000)));
         
         for (let i = 0; i < numBoids; i++) {
             boids.push(new Boid());
@@ -356,6 +374,18 @@
             } else {
                 isPaused = false;
                 animate();
+            }
+        });
+
+        window.addEventListener('pagehide', () => {
+            isPaused = true;
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+            if (resizeFrame) {
+                cancelAnimationFrame(resizeFrame);
+                resizeFrame = null;
             }
         });
         

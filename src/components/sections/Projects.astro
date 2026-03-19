@@ -1,154 +1,224 @@
 ---
-import Icon from '../ui/Icon.astro';
+import Icon from "../ui/Icon.astro";
 
 interface Project {
-title: string;
-description: string;
-icon?: string;
-iconColor?: string;
-bgColor?: string;
-textColor?: string;
-tags: string[];
-link?: string;
-githubUrl?: string;
-imageUrl?: string;
+    title: string;
+    description: string;
+    tags: string[];
+    compactTags?: string[];
+    highlights?: string[];
+    link?: string;
+    githubUrl?: string;
 }
 
 interface Props {
-projects?: Project[];
+    projects?: Project[];
 }
 
 const defaultProjects: Project[] = [
-{
-title: "bedtime.ai – Multi-Modal AI Storytelling Platform",
-description: "A multi-modal AI storytelling system that turns children's drawings and preferences into personalized narrated stories. Combines a fine-tuned Phi-3 model for story generation, EfficientNet for drawing analysis, Coqui TTS-style voice cloning, and a FastAPI + React/Vite application layer.",
-icon: "fa-book-reader",
-iconColor: "text-blue-600",
-bgColor: "bg-blue-50",
-textColor: "text-blue-800",
-tags: ["React", "FastAPI", "Phi-3", "Computer Vision", "Voice Cloning", "Docker"],
-githubUrl: "https://github.com/notquite28/bedtime.ai"
-},
-{
-title: "Abliteration for LFM2.5",
-description: "An interpretability-focused project for LiquidAI/LFM2.5-1.2B-Instruct that identifies refusal directions in residual stream activations and applies weight orthogonalization plus inference-time intervention. Built with manual PyTorch hooks adapted to LFM2's architecture, since TransformerLens does not support the model.",
-icon: "fa-flask",
-iconColor: "text-purple-600",
-bgColor: "bg-purple-50",
-textColor: "text-purple-800",
-tags: ["Research", "LLM Interpretability", "PyTorch", "Hugging Face", "Residual Streams", "Inference Intervention"],
-githubUrl: "https://github.com/notquite28/abliteration"
-},
-{
-title: "Edge-Native Real-Time Web Platform",
-description: "A real-time collaborative personal site with YoRHa-inspired aesthetics where visitors can see each other's cursors live. Built with SvelteKit 5 and a Cloudflare Workers + Durable Objects WebSocket backend, with Cloudflare Pages for edge deployment, KV-backed analytics, and a custom Vite plugin for build-time markdown ingestion.",
-icon: "fa-network-wired",
-iconColor: "text-stone-600",
-bgColor: "bg-stone-50",
-textColor: "text-stone-800",
-tags: ["SvelteKit 5", "Cloudflare Workers", "Durable Objects", "WebSockets", "Cloudflare KV", "Vite Plugin"],
-githubUrl: "https://github.com/notquite28/nier-archive-site"
-},
-// {
-// "title": "Agentic Job Tracker & Helper",
-// "description": "A stateful AI agent using LangGraph to automate the entire job application workflow. The agent uses natural language to manage application statuses in a Supabase database, parse job descriptions, and automatically tailor a user's resume by generating targeted modifications.",
-// "icon": "fa-briefcase",
-// "iconColor": "text-teal-600",
-// "bgColor": "bg-teal-50",
-// "textColor": "text-teal-800",
-// "tags": ["AI Agent", "LangGraph", "Python", "FastAPI", "LangChain", "Postgres", "Supabase"],
-// "githubUrl": ""
-// },
-{
-title: "Rethink BH Automation – FastAPI + Cloud Run Backend",
-description: "A production FastAPI service syncing real-time appointment and authorization data from Rethink BH to Supabase via secure user login emulation. Achieves 90% cost savings and reduces sync latency from 24-48h to real-time; deployed with Docker, Secret Manager, and full observability on Google Cloud Platform.",
-icon: "fa-cloud",
-iconColor: "text-blue-600",
-bgColor: "bg-blue-50",
-textColor: "text-blue-800",
-tags: ["System Architecture", "FastAPI", "Cloud Run", "Google Cloud", "DevOps", "Automation"],
-githubUrl: ""
-},
-{
-title: "RAG for Document Intelligence",
-description: "A high-throughput RAG system for semantic search over PDF datasets. Uses Pinecone for vector storage and Groq for accelerated inference, achieving 35% improved search relevance over keyword-based methods with sub-second response times. Custom chunking strategies optimize retrieval accuracy.",
-icon: "fa-brain",
-iconColor: "text-blue-600",
-bgColor: "bg-blue-50",
-textColor: "text-blue-800",
-tags: ["System Design", "AI/ML", "Vector Search", "RAG", "Performance Optimization"],
-githubUrl: "https://github.com/notquite28/simpleRAG"
-},
-{
-title: "Enterprise ROI System with AI Agent",
-description: "A fully automated, AI-driven system that re-engineers manual Release of Information (ROI) workflows. The AI agent manages the entire document lifecycle with enterprise-grade security, delivering $20K annual savings and 60% reduction in processing time while adhering to HIPAA compliance.",
-icon: "fa-robot",
-iconColor: "text-blue-600",
-bgColor: "bg-blue-50",
-textColor: "text-blue-800",
-tags: ["AI Agent", "Enterprise", "Automation", "Legal Tech", "Cost Optimization"],
-githubUrl: ""
-}
-// {
-// title: "Therapist Dashboard with GPT Integration",
-// description: "Built and deployed a full-stack dashboard used by 20+ therapists for schedule management and progress tracking. Integrated a GPT-powered API with custom-engineered prompts to perform NLP tasks on unstructured clinical notes, achieving 92% data accuracy and improving performance compliance by 35%.",
-// icon: "fa-user-md",
-// iconColor: "text-blue-600",
-// bgColor: "bg-blue-50",
-// textColor: "text-blue-800",
-// tags: ["React", "GPT API", "Healthcare", "CRM", "NLP", "Performance"],
-// githubUrl: ""
-// }
+    {
+        title: "bedtime.ai – Multi-Modal AI Storytelling Platform",
+        description: "A multi-modal AI storytelling system that turns children's drawings into narrated stories using Phi-3, EfficientNet, voice cloning, FastAPI, and React.",
+        tags: ["React", "FastAPI", "Phi-3", "Computer Vision", "Voice Cloning", "Docker"],
+        highlights: ["Multiple models, one application flow", "Built as a product", "Clean API and model orchestration"],
+        githubUrl: "https://github.com/notquite28/bedtime.ai",
+    },
+    {
+        title: "Abliteration for LFM2.5",
+        description: "An interpretability project for LiquidAI/LFM2.5-1.2B-Instruct focused on refusal directions, weight orthogonalization, and inference-time intervention using manual PyTorch hooks.",
+        tags: ["Research", "LLM Interpretability", "PyTorch", "Hugging Face", "Residual Streams", "Inference Intervention"],
+        compactTags: ["PyTorch", "Interpretability", "Research"],
+        githubUrl: "https://github.com/notquite28/abliteration",
+    },
+    {
+        title: "Edge-Native Real-Time Web Platform",
+        description: "A real-time collaborative site built with SvelteKit 5, Cloudflare Workers, Durable Objects, KV-backed analytics, and a custom Vite markdown pipeline.",
+        tags: ["SvelteKit 5", "Cloudflare Workers", "Durable Objects", "WebSockets", "Cloudflare KV", "Vite Plugin"],
+        compactTags: ["SvelteKit", "Cloudflare", "WebSockets"],
+        githubUrl: "https://github.com/notquite28/nier-archive-site",
+    },
+    {
+        title: "Rethink BH Automation – FastAPI + Cloud Run Backend",
+        description: "A FastAPI service that syncs Rethink BH appointment and authorization data to Supabase in real time using secure login emulation.",
+        tags: ["System Architecture", "FastAPI", "Cloud Run", "Google Cloud", "DevOps", "Automation"],
+        compactTags: ["FastAPI", "Cloud Run", "Automation"],
+        githubUrl: "",
+    },
+    {
+        title: "RAG for Document Intelligence",
+        description: "A RAG system for semantic search over PDFs using Pinecone, Groq, and custom chunking for faster and more relevant retrieval.",
+        tags: ["System Design", "AI/ML", "Vector Search", "RAG", "Performance Optimization"],
+        compactTags: ["RAG", "Pinecone", "Groq"],
+        githubUrl: "https://github.com/notquite28/simpleRAG",
+    },
+    {
+        title: "Enterprise ROI System with AI Agent",
+        description: "An AI-driven system for Release of Information workflows that automates the document lifecycle under HIPAA requirements.",
+        tags: ["AI Agent", "Enterprise", "Automation", "Legal Tech", "Cost Optimization"],
+        compactTags: ["AI Agent", "Automation", "HIPAA"],
+        githubUrl: "",
+    },
 ];
 
 const { projects = defaultProjects } = Astro.props;
+const [featuredProject, ...otherProjects] = projects;
+const secondaryProjects = otherProjects.slice(0, 2);
+const compactProjects = otherProjects.slice(2);
 ---
 
-<section id="projects" class="py-16 px-4 section-transition">
-  <div class="max-w-6xl mx-auto">
-    <h2 class="text-3xl font-bold mb-8 text-center text-gradient">My Projects</h2>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {projects.slice(0, 6).map((project) => (
-      <div class="glass-container shadow-glass transform hover:-translate-y-1 transition duration-300 h-full flex flex-col" data-glass-interactive data-glass-random>
-        <div class="glass-filter"></div>
-        <div class="glass-overlay"></div>
-        <div class="glass-specular"></div>
-        <div class="glass-content p-6 flex flex-col h-full">
-          <div class="flex items-start mb-4">
-            <div class={`w-10 h-10 flex items-center justify-center mr-4`}>
-              <i class={`fas ${project.icon || 'fa-code' } text-2xl text-[--color-brand-500]`}></i>
-            </div>
+<section id="projects" class="section-shell section-block section-transition">
+    <div class="mx-auto max-w-6xl">
+        <div class="section-header-split">
             <div>
-              <h3 class={`text-xl font-bold mb-2 text-accent text-shadow-md`}>{project.title}</h3>
-              <p class="text-white/80 mb-4">{project.description}</p>
+                <p class="section-kicker">Selected Works</p>
+                <h2 class="section-title">Some stuff I'm proud of.</h2>
             </div>
-          </div>
-          <div class="flex flex-wrap gap-2 mt-auto">
-            {project.tags.map((tag) => (
-            <span class={`text-xs px-2 py-1 rounded-full bg-white/15 text-white/90 ring-1 ring-white/20` }>
-              {tag}
-            </span>
-            ))}
-          </div>
-          <div class="mt-4 flex gap-4">
-            {project.link && (
-            <a href={project.link} class="text-sm text-[--color-brand-500] hover:underline transition-colors duration-200 flex items-center gap-1" target="_blank" rel="noopener noreferrer">
-              <Icon name="external-link" class="w-3 h-3" /> Live Demo
-            </a>
-            )}
-            {project.githubUrl && (
-            <a href={project.githubUrl} class="text-sm text-[--color-brand-500] hover:underline transition-colors duration-200 flex items-center gap-1" target="_blank" rel="noopener noreferrer">
-              <Icon name="github" class="w-3 h-3" /> View Code
-            </a>
-            )}
-            {!project.link && !project.githubUrl && (
-            <span class="text-sm text-white/50 italic">Closed Source</span>
-            )}
-          </div>
+            <!-- <p class="section-aside">Public repos, research, and production work.</p> -->
         </div>
-      </div>
-      ))}
+
+        {
+            featuredProject && (
+                <article class="featured-project panel panel-strong">
+                    <div class="featured-project-copy">
+                        <p class="panel-label">Featured</p>
+                        <h3 class="featured-project-title">{featuredProject.title}</h3>
+                        <p class="body-copy">{featuredProject.description}</p>
+                        <div class="tag-row">
+                            {featuredProject.tags.map((tag) => (
+                                <span class="tag-pill">{tag}</span>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div class="featured-project-meta">
+                        <p class="panel-meta">Highlights</p>
+                        <ul class="project-points">
+                            {(featuredProject.highlights ?? []).map((item) => (
+                                <li>{item}</li>
+                            ))}
+                        </ul>
+
+                        <div class="project-links">
+                            {featuredProject.link && (
+                                <a href={featuredProject.link} class="link-inline" target="_blank" rel="noopener noreferrer">
+                                    <Icon name="external-link" class="w-3 h-3" /> Live Demo
+                                </a>
+                            )}
+                            {featuredProject.githubUrl && (
+                                <a href={featuredProject.githubUrl} class="link-inline" target="_blank" rel="noopener noreferrer">
+                                    <Icon name="github" class="w-3 h-3" /> View Code
+                                </a>
+                            )}
+                        </div>
+                    </div>
+                </article>
+            )
+        }
+
+        <div class="project-grid project-grid-secondary">
+            {
+                secondaryProjects.map((project) => (
+                    <article class="project-card panel panel-muted">
+                        <div>
+                            <h3 class="project-card-title">{project.title}</h3>
+                            <p class="body-copy-sm">{project.description}</p>
+                        </div>
+
+                        <div class="tag-row">
+                            {project.tags.map((tag) => (
+                                <span class="tag-pill">{tag}</span>
+                            ))}
+                        </div>
+
+                        <div class="project-links">
+                            {project.link && (
+                                <a href={project.link} class="link-inline" target="_blank" rel="noopener noreferrer">
+                                    <Icon name="external-link" class="w-3 h-3" /> Live Demo
+                                </a>
+                            )}
+                            {project.githubUrl ? (
+                                <a href={project.githubUrl} class="link-inline" target="_blank" rel="noopener noreferrer">
+                                    <Icon name="github" class="w-3 h-3" /> View Code
+                                </a>
+                            ) : (
+                                <span class="project-status">Closed source</span>
+                            )}
+                        </div>
+                    </article>
+                ))
+            }
+        </div>
+
+        {
+            compactProjects.length > 0 && (
+                <div class="compact-projects-wrap" data-accordion-group>
+                    <div class="section-header-split compact-projects-header">
+                        <div>
+                            <p class="section-kicker">More stuff</p>
+                            <!-- <h3 class="compact-projects-title">More projects, expanded only when needed.</h3> -->
+                        </div>
+                    </div>
+
+                    <div class="compact-projects-list">
+                        {compactProjects.map((project) => (
+                            <details class="compact-project panel panel-muted">
+                                <summary class="compact-project-summary">
+                                    <div class="compact-project-main">
+                                        <h4 class="compact-project-name">{project.title}</h4>
+                                    </div>
+                                    <span class="compact-project-toggle">
+                                        <span>Details</span>
+                                        <span class="compact-project-chevron" aria-hidden="true" />
+                                    </span>
+                                </summary>
+
+                                <div class="compact-project-body">
+                                    <div class="compact-project-body-inner">
+                                        <p class="body-copy-sm">{project.description}</p>
+                                        <div class="tag-row">
+                                            {project.tags.map((tag) => (
+                                                <span class="tag-pill">{tag}</span>
+                                            ))}
+                                        </div>
+                                        <div class="project-links">
+                                            {project.link && (
+                                                <a href={project.link} class="link-inline" target="_blank" rel="noopener noreferrer">
+                                                    <Icon name="external-link" class="w-3 h-3" /> Live Demo
+                                                </a>
+                                            )}
+                                            {project.githubUrl ? (
+                                                <a href={project.githubUrl} class="link-inline" target="_blank" rel="noopener noreferrer">
+                                                    <Icon name="github" class="w-3 h-3" /> View Code
+                                                </a>
+                                            ) : (
+                                                <span class="project-status">Closed source</span>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </details>
+                        ))}
+                    </div>
+                </div>
+            )
+        }
     </div>
-  </div>
 </section>
+
+<script>
+    const accordionGroups = document.querySelectorAll("[data-accordion-group]");
+
+    accordionGroups.forEach((group) => {
+        const items = Array.from(group.querySelectorAll("details.compact-project"));
+
+        items.forEach((item) => {
+            item.addEventListener("toggle", () => {
+                if (!item.hasAttribute("open")) return;
+
+                items.forEach((otherItem) => {
+                    if (otherItem !== item) otherItem.removeAttribute("open");
+                });
+            });
+        });
+    });
+</script>

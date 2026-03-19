@@ -1,11 +1,11 @@
 # Portfolio Website
 
-A modern, professional portfolio website built with Astro and Tailwind CSS, showcasing software development skills and projects.
+Personal portfolio site built with Astro, Tailwind CSS, and TypeScript.
 
 ## 🚀 Tech Stack
 
-- **Framework**: Astro 5.6.1 - Static site generation with component islands
-- **Styling**: Tailwind CSS 4.1.3 - Utility-first CSS framework
+- **Framework**: Astro 5 - static site generation
+- **Styling**: Tailwind CSS 4
 - **Language**: TypeScript - Type-safe development
 - **Build Tool**: Vite - Fast build tool and dev server
 - **Deployment**: GitHub Pages - Static hosting with custom domain
@@ -18,14 +18,15 @@ src/
 │   ├── layouts/
 │   │   └── BaseLayout.astro - Main layout wrapper with SEO metadata
 │   ├── sections/
-│   │   ├── Hero.astro - Landing section with tagline and CTA
-│   │   ├── About.astro - Professional background and bio
-│   │   ├── Skills.astro - Technical skills organized by category
-│   │   ├── Projects.astro - Portfolio projects with descriptions
-│   │   ├── CTA.astro - Call-to-action and resume link
-│   │   └── Footer.astro - Footer with copyright and links
+│   │   ├── Hero.astro - Intro and key highlights
+│   │   ├── About.astro - Short personal summary
+│   │   ├── Skills.astro - Capability groups
+│   │   ├── Projects.astro - Selected work
+│   │   ├── CTA.astro - Contact links
+│   │   ├── Nav.astro - Scroll-aware navigation
+│   │   └── Footer.astro - Footer content
 │   └── ui/
-│       ├── SkillCard.astro - Reusable skill card component
+│       ├── Icon.astro - Small inline SVG icon helper
 │       └── Oneko.astro - Interactive cat mascot component
 ├── pages/
 │   ├── index.astro - Main page with SEO structured data
@@ -38,9 +39,9 @@ public/
 ├── CNAME - Custom domain configuration
 ├── .nojekyll - Disables Jekyll processing
 ├── robots.txt - SEO robots configuration
-├── sitemap.xml - SEO sitemap
 ├── favicon.svg - Site icon
-└── images/ - Static assets (photos, gifs)
+├── js/boid-simulation.js - Background animation
+└── media assets - Images, gif, and 404 videos
 ```
 
 ## 🚀 Getting Started
@@ -60,18 +61,23 @@ public/
    pnpm build
    ```
 
-4. **Preview Build**:
+4. **Run Checks**:
+   ```bash
+   pnpm check
+   ```
+
+5. **Preview Build**:
    ```bash
    pnpm preview
    ```
 
 ## 🌐 Deployment
 
-Configured for GitHub Pages with custom domain:
+Configured for static deployment with a custom domain:
 - `public/CNAME` file configures custom domain
 - `astro.config.mjs` contains build settings for static output
 - `.nojekyll` file disables Jekyll processing
-- GitHub Pages automatically provides SSL certificates
+- `dist/` is the generated output directory
 
 ### Deployment Workflow
 ```bash

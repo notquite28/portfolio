@@ -59,7 +59,7 @@ const structuredData = {
 ---
 
 <BaseLayout title={title} description={description} image={image}>
-  <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   
   <Nav />
   <Hero />
@@ -67,5 +67,5 @@ const structuredData = {
   <Skills />
   <Projects />
   <CTA />
-  <Footer copyright="Arnav Panigrahi. All Rights Reserved." />
+  <Footer />
 </BaseLayout>

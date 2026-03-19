@@ -1,22 +1,18 @@
 ---
-import Icon from '../ui/Icon.astro';
-
 interface Props {
   copyright?: string;
   year?: number;
 }
 
-const { 
-  copyright = "John Doe. All Rights Reserved.",
+const {
+  copyright = 'Arnav Panigrahi',
   year = new Date().getFullYear()
 } = Astro.props;
 ---
 
-<footer class="py-8 px-4 text-white text-center section-transition bg-gradient-to-r from-[--color-surface-2] to-[--color-surface]">
-  <div class="max-w-4xl mx-auto">
-    <p class="mb-4">© {year} {copyright}</p>
-    <p class="text-white/90 flex items-center justify-center gap-1">
-      Built with <Icon name="heart" class="w-4 h-4 text-red-500" /> and lots of coffee
-    </p>
+<footer class="px-4 pb-10 pt-2 text-white/60">
+  <div class="mx-auto flex max-w-6xl flex-col gap-3 border-t border-white/10 pt-6 text-sm md:flex-row md:items-center md:justify-between">
+    <p>{copyright}</p>
+    <p>© {year} · Built with Astro, Tailwind, and a healthy bias toward simple systems.</p>
   </div>
 </footer>
