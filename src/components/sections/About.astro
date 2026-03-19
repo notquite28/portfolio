@@ -6,7 +6,11 @@ interface Props {
     imagePath?: string;
 }
 
-const defaultParagraphs = ["With 2.5+ years shipping software, I build software for systems that move data reliably, reduce manual work, and stay understandable as requirements change.", "Most of my recent work has been in backend services, agentic AI workflows and some hobby research.", "I have a Master's degree in Computer Science from University of California, Riverside."];
+const defaultParagraphs = [
+    "I build software that moves data reliably, reduces manual work, and stays understandable as requirements change.",
+    "Most of my recent work has focused on backend services, AI workflows, and infrastructure.",
+    "I hold a master's degree in computer science from the University of California, Riverside.",
+];
 
 const { paragraphs = defaultParagraphs, imagePath = buildUrl("mumei.webp") } = Astro.props;
 ---
@@ -21,7 +25,7 @@ const { paragraphs = defaultParagraphs, imagePath = buildUrl("mumei.webp") } = A
 
         <div>
             <p class="section-kicker">About</p>
-            <h2 class="section-title">I build stuff</h2>
+            <h2 class="section-title">What I work on.</h2>
             <div class="content-stack">
                 {paragraphs.map((paragraph) => <p class="body-copy">{paragraph}</p>)}
             </div>
@@ -33,7 +37,7 @@ const { paragraphs = defaultParagraphs, imagePath = buildUrl("mumei.webp") } = A
                 </div>
                 <div class="about-fact">
                     <p class="panel-label">How I work</p>
-                    <p class="body-copy-sm">Small decisions. Clear systems. Easy maintenance.</p>
+                    <p class="body-copy-sm">Small decisions, clear systems, and steady iteration.</p>
                 </div>
             </div>
         </div>

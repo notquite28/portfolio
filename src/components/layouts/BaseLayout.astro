@@ -20,6 +20,7 @@ const {
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://notquite28.github.io/portfolio/');
+const isProd = import.meta.env.PROD;
 ---
 
 <!DOCTYPE html>
@@ -41,6 +42,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://notquite
     <meta name="twitter:image" content={buildUrl(image)}>
     <link rel="canonical" href={canonicalURL}>
     <title>{title}</title>
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap">
@@ -73,6 +77,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://notquite
 
         if (prefersReducedMotion) {
             sections.forEach((section) => section.classList.add('is-visible'));
+        } else if (!('IntersectionObserver' in window)) {
+            sections.forEach((section) => section.classList.add('is-visible'));
         } else {
             const observer = new IntersectionObserver(
                 (entries, currentObserver) => {
@@ -93,7 +99,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://notquite
     </script>
     
     {showMascot && <Oneko position="bottom-right" />}
-  <!-- Cloudflare Web Analytics -->
-  <script is:inline defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "d82e640ddac84498b86f3aef468f7107"}'></script>
+  {isProd && <script is:inline defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "d82e640ddac84498b86f3aef468f7107"}'></script>}
 </body>
 </html>

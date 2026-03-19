@@ -1,27 +1,11 @@
 ---
 import BaseLayout from '../components/layouts/BaseLayout.astro';
-import { getBaseUrl, buildUrl } from '../utils/paths';
+import NotFoundContent from '../components/ui/NotFoundContent.astro';
 
 const pageTitle = "404 - Page Not Found";
-const pageDescription = "Oops! The page you're looking for doesn't exist.";
-const baseUrl = getBaseUrl();
+const pageDescription = "The page you were looking for could not be found.";
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription} showBoids={false} showMascot={false}>
-  <div class="min-h-screen flex flex-col items-center justify-center p-8 text-center relative section-transition">
-    <p class="section-kicker">404</p>
-    <h1 class="section-title mx-auto max-w-none">Page not found.</h1>
-    <p class="mt-4 text-lg text-white/78">The page you were looking for does not exist.</p>
-
-    <div class="mx-auto my-8 w-64 overflow-hidden rounded-[1.5rem] border border-white/12 bg-white/4 shadow-[0_22px_50px_-35px_rgba(0,0,0,0.7)]">
-      <video autoplay loop muted playsinline class="w-full h-full object-cover" aria-hidden="true">
-        <source src={buildUrl('bwaa.webm')} type="video/webm">
-        <source src={buildUrl('bwaa.mp4')} type="video/mp4">
-      </video>
-    </div>
-
-    <div class="flex justify-center">
-      <a href={baseUrl} class="contact-link" title="Go back home">Go back home</a>
-    </div>
-  </div>
+  <NotFoundContent />
 </BaseLayout>

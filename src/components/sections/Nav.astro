@@ -21,7 +21,7 @@ const { links = defaultLinks } = Astro.props;
 const avatarUrl = buildUrl('mumei.webp');
 ---
 
-<nav class="site-nav" id="site-nav" aria-label="Primary">
+<nav class="site-nav" id="site-nav" aria-label="Primary" aria-hidden="true">
   <div class="site-nav-inner">
     <a href="#" class="site-nav-brand" aria-label="Home">
       <img src={avatarUrl} alt="Arnav Panigrahi" class="site-nav-avatar" loading="eager" />
@@ -63,29 +63,32 @@ const avatarUrl = buildUrl('mumei.webp');
     inset-inline: 0;
     top: 0;
     z-index: 50;
-    max-width: 72rem;
-    margin: 0 auto;
-    padding: 1rem;
+    padding: 0;
     opacity: 0;
+    visibility: hidden;
     transform: translateY(-1rem);
     pointer-events: none;
-    transition: opacity 220ms ease, transform 220ms ease;
+    transition: opacity 220ms ease, transform 220ms ease, visibility 0s linear 220ms;
   }
 
   .site-nav.is-visible {
     opacity: 1;
+    visibility: visible;
     transform: translateY(0);
     pointer-events: auto;
+    transition-delay: 0s;
   }
 
   .site-nav-inner {
+    width: min(100%, 100vw);
+    max-width: none;
+    margin: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 0.85rem 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 999px;
+    padding: 0.9rem clamp(1rem, 3vw, 2rem);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     background: rgba(16, 18, 26, 0.82);
     box-shadow: 0 20px 40px -28px rgba(0, 0, 0, 0.72);
     backdrop-filter: blur(18px) saturate(1.1);
@@ -140,13 +143,22 @@ const avatarUrl = buildUrl('mumei.webp');
     color: rgba(248, 248, 242, 1);
   }
 
+  .site-nav-brand:focus-visible,
+  .site-nav-link:focus-visible,
+  .site-nav-mobile-link:focus-visible,
+  .site-nav-toggle:focus-visible {
+    outline: 2px solid rgba(139, 233, 253, 0.9);
+    outline-offset: 3px;
+    border-radius: 0.85rem;
+  }
+
   .site-nav-toggle {
     position: relative;
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.75rem;
+    height: 2.75rem;
     padding: 0;
     border: 0;
     background: transparent;
@@ -186,10 +198,8 @@ const avatarUrl = buildUrl('mumei.webp');
   .site-nav-mobile {
     display: grid;
     gap: 0.15rem;
-    margin-top: 0.7rem;
-    padding: 0.75rem 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 1.25rem;
+    padding: 0.6rem clamp(1rem, 3vw, 2rem) 0.9rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(16, 18, 26, 0.9);
     box-shadow: 0 20px 40px -28px rgba(0, 0, 0, 0.72);
     backdrop-filter: blur(18px) saturate(1.1);
@@ -203,10 +213,6 @@ const avatarUrl = buildUrl('mumei.webp');
   }
 
   @media (min-width: 768px) {
-    .site-nav-inner {
-      padding-inline: 1.15rem;
-    }
-
     .site-nav-links {
       display: flex;
     }
@@ -235,8 +241,10 @@ const avatarUrl = buildUrl('mumei.webp');
     if (!nav) return;
     if (window.scrollY > 80) {
       nav.classList.add('is-visible');
+      nav.removeAttribute('aria-hidden');
     } else {
       nav.classList.remove('is-visible');
+      nav.setAttribute('aria-hidden', 'true');
       closeMenu();
     }
   };

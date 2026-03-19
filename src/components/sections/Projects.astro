@@ -64,34 +64,36 @@ const { projects = defaultProjects } = Astro.props;
 const [featuredProject, ...otherProjects] = projects;
 const secondaryProjects = otherProjects.slice(0, 2);
 const compactProjects = otherProjects.slice(2);
+
+const visibleTags = (tags: string[], max = 4): string[] => tags.slice(0, max);
 ---
 
 <section id="projects" class="section-shell section-block section-transition">
     <div class="mx-auto max-w-6xl">
         <div class="section-header-split">
             <div>
-                <p class="section-kicker">Selected Works</p>
-                <h2 class="section-title">Some stuff I'm proud of.</h2>
+                <p class="section-kicker">Selected Work</p>
+                <h2 class="section-title">Projects that reflect how I work.</h2>
             </div>
-            <!-- <p class="section-aside">Public repos, research, and production work.</p> -->
+            <p class="section-aside">A mix of public projects, research, and production systems with real operational constraints.</p>
         </div>
 
         {
             featuredProject && (
                 <article class="featured-project panel panel-strong">
                     <div class="featured-project-copy">
-                        <p class="panel-label">Featured</p>
+                        <p class="panel-label">Featured project</p>
                         <h3 class="featured-project-title">{featuredProject.title}</h3>
                         <p class="body-copy">{featuredProject.description}</p>
                         <div class="tag-row">
-                            {featuredProject.tags.map((tag) => (
+                            {visibleTags(featuredProject.tags, 5).map((tag) => (
                                 <span class="tag-pill">{tag}</span>
                             ))}
                         </div>
                     </div>
 
                     <div class="featured-project-meta">
-                        <p class="panel-meta">Highlights</p>
+                        <p class="panel-meta">Why it matters</p>
                         <ul class="project-points">
                             {(featuredProject.highlights ?? []).map((item) => (
                                 <li>{item}</li>
@@ -115,34 +117,36 @@ const compactProjects = otherProjects.slice(2);
             )
         }
 
-        <div class="project-grid project-grid-secondary">
+        <div class="secondary-projects">
             {
                 secondaryProjects.map((project) => (
-                    <article class="project-card panel panel-muted">
-                        <div>
-                            <h3 class="project-card-title">{project.title}</h3>
+                    <article class="project-row">
+                        <div class="project-row-main">
+                            <h3 class="project-card-title project-row-title">{project.title}</h3>
                             <p class="body-copy-sm">{project.description}</p>
                         </div>
 
-                        <div class="tag-row">
-                            {project.tags.map((tag) => (
-                                <span class="tag-pill">{tag}</span>
-                            ))}
-                        </div>
+                        <div class="project-row-side">
+                            <div class="tag-row project-row-tags">
+                                {visibleTags(project.tags).map((tag) => (
+                                    <span class="tag-pill">{tag}</span>
+                                ))}
+                            </div>
 
-                        <div class="project-links">
-                            {project.link && (
-                                <a href={project.link} class="link-inline" target="_blank" rel="noopener noreferrer">
-                                    <Icon name="external-link" class="w-3 h-3" /> Live Demo
-                                </a>
-                            )}
-                            {project.githubUrl ? (
-                                <a href={project.githubUrl} class="link-inline" target="_blank" rel="noopener noreferrer">
-                                    <Icon name="github" class="w-3 h-3" /> View Code
-                                </a>
-                            ) : (
-                                <span class="project-status">Closed source</span>
-                            )}
+                            <div class="project-links">
+                                {project.link && (
+                                    <a href={project.link} class="link-inline" target="_blank" rel="noopener noreferrer">
+                                        <Icon name="external-link" class="w-3 h-3" /> Live Demo
+                                    </a>
+                                )}
+                                {project.githubUrl ? (
+                                    <a href={project.githubUrl} class="link-inline" target="_blank" rel="noopener noreferrer">
+                                        <Icon name="github" class="w-3 h-3" /> View Code
+                                    </a>
+                                ) : (
+                                    <span class="project-status">Closed source</span>
+                                )}
+                            </div>
                         </div>
                     </article>
                 ))
@@ -154,8 +158,8 @@ const compactProjects = otherProjects.slice(2);
                 <div class="compact-projects-wrap" data-accordion-group>
                     <div class="section-header-split compact-projects-header">
                         <div>
-                            <p class="section-kicker">More stuff</p>
-                            <!-- <h3 class="compact-projects-title">More projects, expanded only when needed.</h3> -->
+                            <p class="section-kicker">More Work</p>
+                            <h3 class="compact-projects-title">Additional projects.</h3>
                         </div>
                     </div>
 

@@ -89,6 +89,13 @@ This runs the build, commits changes, and pushes to GitHub.
 
 This project is open source and available under the [MIT License](LICENSE).
 
+## 🙏 Asset Credits
+
+- 404 page fish model: `Fish  Betta Splendens` by `photogrammetryblender3D`
+- Source: https://skfb.ly/6YVCO
+- License: CC Attribution-NonCommercial-NoDerivs 4.0
+- License URL: http://creativecommons.org/licenses/by-nc-nd/4.0/
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
