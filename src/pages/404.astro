@@ -1,11 +1,122 @@
 ---
-import BaseLayout from '../components/layouts/BaseLayout.astro';
-import NotFoundContent from '../components/ui/NotFoundContent.astro';
+import Layout from '../designs/folio/Layout.astro';
+import { buildUrl } from '../utils/paths';
 
-const pageTitle = "404 - Page Not Found";
-const pageDescription = "The page you were looking for could not be found.";
+const modelUrl = buildUrl("koi.glb");
+const scriptUrl = buildUrl("js/notfound-model.js");
 ---
 
-<BaseLayout title={pageTitle} description={pageDescription} showBoids={false} showMascot={false}>
-  <NotFoundContent />
-</BaseLayout>
+<Layout title="404 - Page Not Found" description="The page you were looking for could not be found.">
+  <section class="notfound">
+    <div class="notfound-inner">
+      <p class="notfound-kicker">404</p>
+      <h1 class="notfound-title">Page not found.</h1>
+      <p class="notfound-desc">The page you were looking for does not exist.</p>
+
+      <div class="notfound-model-shell" data-notfound-model data-model-url={modelUrl} aria-hidden="true">
+        <div class="notfound-model-fallback"></div>
+      </div>
+      <script is:inline type="module" src={scriptUrl}></script>
+
+      <a href="/" class="notfound-link">Return home</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .notfound {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .notfound-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.75rem;
+  }
+
+  .notfound-kicker {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--c-accent);
+  }
+
+  .notfound-title {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(1.8rem, 3.5vw, 3rem);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    color: var(--c-ink);
+  }
+
+  .notfound-desc {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--c-body);
+    max-width: 24rem;
+  }
+
+  .notfound-model-shell {
+    position: relative;
+    width: min(100%, 18rem);
+    aspect-ratio: 1;
+    overflow: visible;
+    background: transparent;
+    touch-action: none;
+    user-select: none;
+    margin: 1rem 0;
+  }
+
+  .notfound-model-shell canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 28px 36px rgba(0, 0, 0, 0.34));
+  }
+
+  .notfound-model-fallback {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 35%, rgba(212, 102, 74, 0.1), transparent 28%),
+                radial-gradient(circle at 50% 75%, rgba(212, 102, 74, 0.08), transparent 38%);
+  }
+
+  .notfound-link {
+    position: relative;
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--c-accent);
+    text-decoration: none;
+    padding-bottom: 2px;
+  }
+
+  .notfound-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: var(--c-accent);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 300ms var(--ease-expo);
+  }
+
+  .notfound-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+</style>

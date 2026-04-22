@@ -31,3 +31,11 @@ pnpm-debug.log*
 
 # Ignore Cursor AI metadata
 .cursor/
+
+# local agent metadata
+.agents/
+.impeccable.md
+skills-lock.json
+
+# local reference projects
+threejs-ref/

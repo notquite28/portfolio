@@ -1,0 +1,191 @@
+---
+import { profile } from '../../data/content';
+---
+
+<section class="hero">
+  <div class="hero-inner">
+    <p class="hero-eyebrow">{profile.role}</p>
+    <h1 class="hero-name">{profile.name}</h1>
+    <div class="hero-rule"></div>
+    <p class="hero-tagline">{profile.tagline}</p>
+    <div class="hero-links">
+      <a href="#work" class="hero-link">
+        <span class="hero-link-text">Selected work</span>
+      </a>
+      <a href="#contact" class="hero-link">
+        <span class="hero-link-text">Get in touch</span>
+      </a>
+    </div>
+  </div>
+  <div class="hero-scroll" aria-hidden="true">
+    <div class="hero-scroll-line"></div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: clamp(2rem, 5vw, 4rem) clamp(1.5rem, 4vw, 3rem);
+    position: relative;
+  }
+
+  .hero-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .hero-eyebrow,
+  .hero-name,
+  .hero-rule,
+  .hero-tagline,
+  .hero-links {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+    opacity: 0;
+    animation: fadeUp 500ms var(--ease-expo) forwards;
+    animation-delay: 100ms;
+  }
+
+  .hero-name {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(3.8rem, 12vw, 8.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--c-ink);
+    opacity: 0;
+    animation: fadeUp 500ms var(--ease-expo) forwards;
+    animation-delay: 200ms;
+    contain: layout style;
+  }
+
+  .hero-rule {
+    width: 4rem;
+    height: 1px;
+    background-color: var(--c-muted);
+    opacity: 0;
+    animation: fadeUp 500ms var(--ease-expo) forwards;
+    animation-delay: 350ms;
+  }
+
+  .hero-tagline {
+    font-family: var(--font-serif);
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-weight: 400;
+    color: var(--c-body);
+    max-width: 30rem;
+    line-height: 1.55;
+    opacity: 0;
+    animation: fadeUp 500ms var(--ease-expo) forwards;
+    animation-delay: 450ms;
+  }
+
+  .hero-links {
+    display: flex;
+    gap: 2rem;
+    margin-top: 0.75rem;
+    opacity: 0;
+    animation: fadeUp 500ms var(--ease-expo) forwards;
+    animation-delay: 550ms;
+  }
+
+  .hero-link {
+    position: relative;
+    text-decoration: none;
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--c-ink);
+    padding-bottom: 2px;
+  }
+
+  .hero-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: var(--c-ink);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 360ms var(--ease-expo);
+  }
+
+  .hero-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .hero-scroll-line {
+    width: 1px;
+    height: 2.5rem;
+    background: linear-gradient(to bottom, var(--c-muted), transparent);
+    animation: scrollPulse 1.8s var(--ease-expo) infinite;
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 10px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes scrollPulse {
+    0% {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+    50% {
+      opacity: 0.4;
+      transform: scaleY(0.6);
+    }
+    100% {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-eyebrow,
+    .hero-name,
+    .hero-rule,
+    .hero-tagline,
+    .hero-links {
+      animation: none;
+    }
+    .hero-scroll-line {
+      animation: none;
+    }
+    .hero-link::after {
+      transition: none;
+    }
+  }
+</style>

@@ -1,0 +1,41 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span class="footer-name">Arnav Panigrahi</span>
+    <span class="footer-copy">&copy; {year} &middot; Built with Astro</span>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--c-rule);
+    padding: 1.75rem clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .footer-inner {
+    max-width: 72rem;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    color: var(--c-muted);
+  }
+
+  .footer-name {
+    font-weight: 500;
+    color: var(--c-body);
+  }
+
+  @media (max-width: 639px) {
+    .footer-inner {
+      flex-direction: column;
+      gap: 0.35rem;
+      text-align: center;
+    }
+  }
+</style>

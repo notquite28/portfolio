@@ -1,19 +1,16 @@
 ---
-import BaseLayout from '../components/layouts/BaseLayout.astro';
-import Hero from '../components/sections/Hero.astro';
-import About from '../components/sections/About.astro';
-import Skills from '../components/sections/Skills.astro';
-import Projects from '../components/sections/Projects.astro';
-import CTA from '../components/sections/CTA.astro';
-import Footer from '../components/sections/Footer.astro';
-import Nav from '../components/sections/Nav.astro';
+import Layout from '../designs/folio/Layout.astro';
+import Hero from '../designs/folio/Hero.astro';
+import About from '../designs/folio/About.astro';
+import Capabilities from '../designs/folio/Capabilities.astro';
+import Work from '../designs/folio/Work.astro';
+import Contact from '../designs/folio/Contact.astro';
+import Footer from '../designs/folio/Footer.astro';
 
-// SEO metadata
 const title = "Arnav Panigrahi - Software Developer";
 const description = "Software developer focused on backend systems, fullstack applications, and AI/ML pipelines.";
 const image = "mumei.jpg";
 
-// Structured data for SEO
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "Person",
@@ -33,21 +30,21 @@ const structuredData = {
     "https://github.com/notquite28",
     "https://www.linkedin.com/in/arnav-panigrahi/"
   ],
-"knowsAbout": [
-"Artificial Intelligence",
-"Machine Learning",
-"Backend Development",
-"Fullstack Development",
-"Distributed Systems",
-"Python",
-"TypeScript",
-"FastAPI",
-"React",
-"Cloud Computing",
-"Retrieval-Augmented Generation",
-"LLM Integrations",
-"Enterprise Software"
-],
+  "knowsAbout": [
+    "Artificial Intelligence",
+    "Machine Learning",
+    "Backend Development",
+    "Fullstack Development",
+    "Distributed Systems",
+    "Python",
+    "TypeScript",
+    "FastAPI",
+    "React",
+    "Cloud Computing",
+    "Retrieval-Augmented Generation",
+    "LLM Integrations",
+    "Enterprise Software"
+  ],
   "hasOccupation": {
     "@type": "Occupation",
     "name": "Software Developer",
@@ -61,14 +58,13 @@ const structuredData = {
 };
 ---
 
-<BaseLayout title={title} description={description} image={image}>
+<Layout title={title} description={description} image={image}>
   <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-  
-  <Nav />
+
   <Hero />
   <About />
-  <Skills />
-  <Projects />
-  <CTA />
+  <Capabilities />
+  <Work />
+  <Contact />
   <Footer />
-</BaseLayout>
+</Layout>
