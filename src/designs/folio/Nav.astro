@@ -1,0 +1,169 @@
+---
+import { profile } from '../../data/content';
+
+const links = [
+  { href: '#about', label: 'About' },
+  { href: '#experience', label: 'Experience' },
+  { href: '#skills', label: 'Skills' },
+  { href: '#work', label: 'Work' },
+  { href: '#contact', label: 'Contact' },
+];
+---
+
+<nav class="nav" aria-label="Primary navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">{profile.name}</a>
+    <div class="nav-links">
+      {links.map((link) => (
+        <a href={link.href} class="nav-link">{link.label}</a>
+      ))}
+    </div>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+    </button>
+  </div>
+  <div class="nav-mobile" aria-hidden="true">
+    {links.map((link) => (
+      <a href={link.href} class="nav-mobile-link">{link.label}</a>
+    ))}
+  </div>
+</nav>
+
+<script>
+  const toggle = document.querySelector('.nav-toggle');
+  const mobile = document.querySelector('.nav-mobile');
+
+  if (toggle instanceof HTMLButtonElement && mobile instanceof HTMLElement) {
+    toggle.addEventListener('click', () => {
+      const expanded = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!expanded));
+      mobile.setAttribute('aria-hidden', String(expanded));
+      mobile.classList.toggle('is-open', !expanded);
+    });
+
+    mobile.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        toggle.setAttribute('aria-expanded', 'false');
+        mobile.setAttribute('aria-hidden', 'true');
+        mobile.classList.remove('is-open');
+      });
+    });
+  }
+</script>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background-color: color-mix(in srgb, var(--c-surface) 85%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--c-rule);
+  }
+
+  .nav-inner {
+    max-width: 72rem;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.875rem clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .nav-brand {
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--c-ink);
+    text-decoration: none;
+    letter-spacing: 0.01em;
+  }
+
+  .nav-links {
+    display: none;
+    align-items: center;
+    gap: 1.75rem;
+  }
+
+  .nav-link {
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--c-muted);
+    text-decoration: none;
+    transition: color 200ms ease;
+    letter-spacing: 0.01em;
+  }
+
+  .nav-link:hover {
+    color: var(--c-ink);
+  }
+
+  .nav-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .nav-toggle-bar {
+    display: block;
+    width: 18px;
+    height: 1.5px;
+    background-color: var(--c-ink);
+    transition: transform 250ms var(--ease-expo), opacity 250ms ease;
+  }
+
+  .nav-toggle[aria-expanded='true'] .nav-toggle-bar:first-child {
+    transform: translateY(3.25px) rotate(45deg);
+  }
+
+  .nav-toggle[aria-expanded='true'] .nav-toggle-bar:last-child {
+    transform: translateY(-3.25px) rotate(-45deg);
+  }
+
+  .nav-mobile {
+    display: none;
+    flex-direction: column;
+    padding: 0.5rem clamp(1.5rem, 4vw, 3rem) 1.25rem;
+    border-top: 1px solid var(--c-rule);
+    background-color: var(--c-surface);
+  }
+
+  .nav-mobile.is-open {
+    display: flex;
+  }
+
+  .nav-mobile-link {
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--c-body);
+    text-decoration: none;
+    padding: 0.625rem 0;
+    transition: color 200ms ease;
+  }
+
+  .nav-mobile-link:hover {
+    color: var(--c-ink);
+  }
+
+  @media (min-width: 768px) {
+    .nav-links {
+      display: flex;
+    }
+
+    .nav-toggle {
+      display: none;
+    }
+
+    .nav-mobile {
+      display: none !important;
+    }
+  }
+</style>

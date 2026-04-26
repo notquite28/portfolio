@@ -1,15 +1,17 @@
 ---
 import Layout from '../designs/folio/Layout.astro';
+import Nav from '../designs/folio/Nav.astro';
 import Hero from '../designs/folio/Hero.astro';
 import About from '../designs/folio/About.astro';
+import Experience from '../designs/folio/Experience.astro';
 import Capabilities from '../designs/folio/Capabilities.astro';
 import Work from '../designs/folio/Work.astro';
 import Contact from '../designs/folio/Contact.astro';
 import Footer from '../designs/folio/Footer.astro';
 
-const title = "Arnav Panigrahi - Software Developer";
-const description = "Software developer focused on backend systems, fullstack applications, and AI/ML pipelines.";
-const image = "mumei.jpg";
+const title = "Arnav Panigrahi | Backend & AI/ML Software Developer";
+const description = "Software developer focused on backend systems, fullstack applications, and AI/ML pipelines. M.S. Computer Science, UC Riverside.";
+const image = "jelly.webp";
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -61,8 +63,10 @@ const structuredData = {
 <Layout title={title} description={description} image={image}>
   <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 
+  <Nav />
   <Hero />
   <About />
+  <Experience />
   <Capabilities />
   <Work />
   <Contact />

@@ -91,10 +91,10 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## 🙏 Asset Credits
 
-- 404 page fish model: `Fish  Betta Splendens` by `photogrammetryblender3D`
-- Source: https://skfb.ly/6YVCO
-- License: CC Attribution-NonCommercial-NoDerivs 4.0
-- License URL: http://creativecommons.org/licenses/by-nc-nd/4.0/
+- 404 page daruma texture: `daruma-texture` by `beauuuuuuuuu`
+- Source: https://skfb.ly/p9AXv
+- License: CC Attribution 4.0
+- License URL: http://creativecommons.org/licenses/by/4.0/
 
 ## 🤝 Contributing
 

@@ -26,9 +26,7 @@ if (host instanceof HTMLDivElement) {
     let cleanupResize = null
     let cleanupPointer = null
     let cleanupVisibility = null
-    let idleResumeAt = 0
     let lastFrameTime = 0
-    let elapsed = 0
     let isPageHidden = document.hidden
 
     const mountScene = async () => {
@@ -46,9 +44,9 @@ if (host instanceof HTMLDivElement) {
       host.appendChild(renderer.domElement)
 
       const scene = new THREE.Scene()
-      const camera = new THREE.OrthographicCamera(-4.4, 4.4, 4.4, -4.4, 0.1, 100)
-      camera.position.set(10, 7, 10)
-      camera.lookAt(0, 1.8, 0)
+      const camera = new THREE.OrthographicCamera(-5.2, 5.2, 5.2, -5.2, 0.1, 100)
+      camera.position.set(0, 1, 10)
+      camera.lookAt(0, 0, 0)
 
       const ambientLight = new THREE.AmbientLight(0xffffff, 2.4)
       const keyLight = new THREE.DirectionalLight(0xffffff, 1.1)
@@ -72,21 +70,21 @@ if (host instanceof HTMLDivElement) {
       box.getCenter(center)
 
       const maxDim = Math.max(size.x, size.y, size.z) || 1
-      const targetSpan = lowPowerDevice ? 5.6 : 6.2
+      const targetSpan = lowPowerDevice ? 5.0 : 5.6
       const fittedScale = targetSpan / maxDim
 
       model.scale.setScalar(fittedScale)
       model.position.set(-center.x * fittedScale, -center.y * fittedScale, -center.z * fittedScale)
-      model.rotation.set(-0.12, 0.9, 0)
+      model.rotation.set(-0.08, Math.PI, 0)
 
       const fittedBox = new THREE.Box3().setFromObject(model)
-      const fittedSize = new THREE.Vector3()
       const fittedCenter = new THREE.Vector3()
-      fittedBox.getSize(fittedSize)
+      const fittedSize = new THREE.Vector3()
       fittedBox.getCenter(fittedCenter)
+      fittedBox.getSize(fittedSize)
 
       model.position.x -= fittedCenter.x
-      model.position.y -= fittedCenter.y * 0.92
+      model.position.y -= fittedCenter.y - fittedSize.y * 0.06
       model.position.z -= fittedCenter.z
       scene.add(model)
 
@@ -97,10 +95,8 @@ if (host instanceof HTMLDivElement) {
         lastY: 0,
         velocity: 0,
         pitchVelocity: 0,
-        yaw: model.rotation.y,
+        yaw: Math.PI,
         pitch: model.rotation.x,
-        idleSpeed: 0.52,
-        baseYaw: model.rotation.y,
       }
 
       const clamp = (value, min, max) => Math.min(max, Math.max(min, value))
@@ -114,8 +110,6 @@ if (host instanceof HTMLDivElement) {
         rotationState.lastY = event.clientY
         rotationState.velocity = 0
         rotationState.pitchVelocity = 0
-        idleResumeAt = 0
-        lastFrameTime = 0
         host.style.cursor = 'grabbing'
         if (host.setPointerCapture) host.setPointerCapture(event.pointerId)
       }
@@ -127,8 +121,8 @@ if (host instanceof HTMLDivElement) {
         const deltaY = event.clientY - rotationState.lastY
         rotationState.lastX = event.clientX
         rotationState.lastY = event.clientY
-        rotationState.velocity = deltaX * 0.0019
-        rotationState.pitchVelocity = deltaY * -0.0012
+        rotationState.velocity = deltaX * 0.0022
+        rotationState.pitchVelocity = deltaY * -0.0014
         rotationState.yaw += rotationState.velocity
         rotationState.pitch = clamp(rotationState.pitch + rotationState.pitchVelocity, -0.42, 0.12)
         model.rotation.y = rotationState.yaw
@@ -140,7 +134,6 @@ if (host instanceof HTMLDivElement) {
         if (rotationState.pointerId !== null && event.pointerId !== rotationState.pointerId) return
         rotationState.dragging = false
         rotationState.pointerId = null
-        idleResumeAt = performance.now() + 1200
         host.style.cursor = 'grab'
       }
 
@@ -170,29 +163,19 @@ if (host instanceof HTMLDivElement) {
           if (isPageHidden) return
           const delta = lastFrameTime ? Math.min((time - lastFrameTime) / 1000, 0.033) : 1 / 60
           lastFrameTime = time
-          elapsed += delta
 
           if (!rotationState.dragging) {
             rotationState.yaw += rotationState.velocity * delta * 60
             rotationState.pitch = clamp(rotationState.pitch + rotationState.pitchVelocity * delta * 60, -0.42, 0.12)
 
-            rotationState.velocity *= Math.pow(0.92, delta * 60)
-            rotationState.pitchVelocity *= Math.pow(0.84, delta * 60)
+            rotationState.velocity *= Math.pow(0.91, delta * 60)
+            rotationState.pitchVelocity *= Math.pow(0.83, delta * 60)
 
-            if (Math.abs(rotationState.pitch - -0.12) > 0.0005) {
-              rotationState.pitch += (-0.12 - rotationState.pitch) * (1 - Math.pow(0.965, delta * 60))
-            }
+            if (Math.abs(rotationState.velocity) < 0.0001) rotationState.velocity = 0
+            if (Math.abs(rotationState.pitchVelocity) < 0.0001) rotationState.pitchVelocity = 0
 
-            if (performance.now() > idleResumeAt) {
-              const idleStep = (rotationState.idleSpeed / 60) * delta * 60
-              rotationState.velocity += (idleStep - rotationState.velocity) * (1 - Math.pow(0.94, delta * 60))
-            }
-
-            const idleWave = Math.sin(elapsed * 0.9) * 0.08
-            const idleNod = Math.sin(elapsed * 1.2 + 0.6) * 0.025
-
-            model.rotation.y = rotationState.yaw + idleWave
-            model.rotation.x = rotationState.pitch + idleNod
+            model.rotation.y = rotationState.yaw
+            model.rotation.x = rotationState.pitch
           }
           renderer.render(scene, camera)
         }

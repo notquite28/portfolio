@@ -1,10 +1,16 @@
 ---
+import { profile } from '../../data/content';
 const year = new Date().getFullYear();
 ---
 
 <footer class="footer">
   <div class="footer-inner">
     <span class="footer-name">Arnav Panigrahi</span>
+    <div class="footer-links">
+      <a href={profile.github} class="footer-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href={profile.linkedin} class="footer-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href={`mailto:${profile.email}`} class="footer-link">Email</a>
+    </div>
     <span class="footer-copy">&copy; {year} &middot; Built with Astro</span>
   </div>
 </footer>
@@ -31,10 +37,25 @@ const year = new Date().getFullYear();
     color: var(--c-body);
   }
 
+  .footer-links {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .footer-link {
+    color: var(--c-muted);
+    text-decoration: none;
+    transition: color 200ms ease;
+  }
+
+  .footer-link:hover {
+    color: var(--c-ink);
+  }
+
   @media (max-width: 639px) {
     .footer-inner {
       flex-direction: column;
-      gap: 0.35rem;
+      gap: 0.75rem;
       text-align: center;
     }
   }
