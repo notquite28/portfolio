@@ -16,6 +16,7 @@ const {
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://arnavpanigrahi.com/');
+const socialImageURL = new URL(buildUrl(image), Astro.site ?? 'https://arnavpanigrahi.com/').toString();
 const isProd = import.meta.env.PROD;
 ---
 
@@ -28,13 +29,13 @@ const isProd = import.meta.env.PROD;
   <meta name="author" content="Arnav Panigrahi" />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
-  <meta property="og:image" content={buildUrl(image)} />
+  <meta property="og:image" content={socialImageURL} />
   <meta property="og:url" content={canonicalURL} />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
-  <meta name="twitter:image" content={buildUrl(image)} />
+  <meta name="twitter:image" content={socialImageURL} />
   <link rel="canonical" href={canonicalURL} />
   <link rel="icon" type="image/svg+xml" href={buildUrl('favicon.svg')} />
   <title>{title}</title>
@@ -46,7 +47,7 @@ const isProd = import.meta.env.PROD;
   />
 </head>
 <body class="folio-theme">
-  <a href="#about" class="skip-link">Skip to content</a>
+  <a href="#main-content" class="skip-link">Skip to content</a>
   <main id="main-content">
     <slot />
   </main>
