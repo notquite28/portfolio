@@ -2,49 +2,53 @@
 
 Personal portfolio site built with Astro, Tailwind CSS, and TypeScript.
 
-## 🚀 Tech Stack
+## Tech Stack
 
-- **Framework**: Astro 5 - static site generation
+- **Framework**: Astro 6 - static site generation
 - **Styling**: Tailwind CSS 4
-- **Language**: TypeScript - Type-safe development
-- **Build Tool**: Vite - Fast build tool and dev server
-- **Deployment**: GitHub Pages - Static hosting with custom domain
+- **Language**: TypeScript - type-safe development
+- **Build Tool**: Vite - fast build tool and dev server
+- **Deployment**: GitHub Pages - static hosting with custom domain
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/
+├── data/
+│   └── content.ts           All site content: profile, projects, skills, experiences
+├── designs/
+│   └── folo/
+│       ├── Layout.astro     Main layout with SEO metadata, fonts, CSS tokens, Oneko
+│       ├── Nav.astro        Sticky navigation with mobile hamburger menu
+│       ├── Hero.astro       Intro section with "Selected work" and "Get in touch"
+│       ├── About.astro      Background section with circular portrait
+│       ├── Experience.astro Work history section
+│       ├── Capabilities.astro  Skill categories
+│       ├── Work.astro       Selected projects
+│       ├── Contact.astro    CTA and contact links
+│       └── Footer.astro     Footer with social links
 ├── components/
-│   ├── layouts/
-│   │   └── BaseLayout.astro - Main layout wrapper with SEO metadata
-│   ├── sections/
-│   │   ├── Hero.astro - Intro and key highlights
-│   │   ├── About.astro - Short personal summary
-│   │   ├── Skills.astro - Capability groups
-│   │   ├── Projects.astro - Selected work
-│   │   ├── CTA.astro - Contact links
-│   │   ├── Nav.astro - Scroll-aware navigation
-│   │   └── Footer.astro - Footer content
 │   └── ui/
-│       ├── Icon.astro - Small inline SVG icon helper
-│       └── Oneko.astro - Interactive cat mascot component
+│       └── Oneko.astro      Interactive cat mascot widget
 ├── pages/
-│   ├── index.astro - Main page with SEO structured data
-│   └── 404.astro - Custom 404 page
+│   ├── index.astro          Homepage composing all sections
+│   └── 404.astro            Custom 404 with Three.js daruma model
 ├── styles/
-│   └── global.css - Global CSS with custom properties and animations
+│   └── global.css           Tailwind import, smooth scroll, scroll-margin-top
 └── utils/
-    └── paths.ts - Path utilities
+    └── paths.ts             buildUrl() for base-aware asset URLs
 public/
-├── CNAME - Custom domain configuration
-├── .nojekyll - Disables Jekyll processing
-├── robots.txt - SEO robots configuration
-├── favicon.svg - Site icon
-├── js/boid-simulation.js - Background animation
-└── media assets - Images, gif, and 404 videos
+├── js/
+│   └── notfound-model.js    Three.js viewer for 404 page daruma model
+├── daruma.glb               3D daruma model for 404 page
+├── jelly.webp               Portrait image (also used as OG image)
+├── oneko.gif                Cat mascot sprite sheet
+├── CNAME                    Custom domain configuration
+├── favicon.svg              Site icon
+└── robots.txt               SEO robots configuration
 ```
 
-## 🚀 Getting Started
+## Getting Started
 
 1. **Install Dependencies**:
    ```bash
@@ -71,11 +75,11 @@ public/
    pnpm preview
    ```
 
-## 🌐 Deployment
+## Deployment
 
 Configured for static deployment with a custom domain:
 - `public/CNAME` file configures custom domain
-- `astro.config.mjs` contains build settings for static output
+- `astro.config.mjs` sets `output: 'static'`
 - `.nojekyll` file disables Jekyll processing
 - `dist/` is the generated output directory
 
@@ -85,21 +89,13 @@ pnpm deploy
 ```
 This runs the build, commits changes, and pushes to GitHub.
 
-## 📝 License
+## Asset Credits
 
-This project is open source and available under the [MIT License](LICENSE).
-
-## 🙏 Asset Credits
-
-- 404 page daruma texture: `daruma-texture` by `beauuuuuuuuu`
+- 404 page daruma model (`daruma.glb`): `daruma-texture` by `beauuuuuuuuu`
 - Source: https://skfb.ly/p9AXv
 - License: CC Attribution 4.0
 - License URL: http://creativecommons.org/licenses/by/4.0/
 
-## 🤝 Contributing
+## License
 
-Contributions are welcome! Please feel free to submit a Pull Request.
-
----
-
-Built with ❤️ using [Astro](https://astro.build) and [Tailwind CSS](https://tailwindcss.com)
+This project is open source and available under the [MIT License](LICENSE).

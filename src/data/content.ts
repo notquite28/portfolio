@@ -49,6 +49,16 @@ export const experiences: Experience[] = [
       "Led backend R&D and API schema design for ROI automation, prototyping in Make.com and translating to production service architecture.",
     ],
   },
+  {
+    title: "Junior Software Developer",
+    company: "Pinnacle Consulting LLC",
+    location: "Bhubaneswar, India",
+    period: "Jan 2022 - Aug 2023",
+    bullets: [
+      "Integrated ArcGIS Online with Angular and .NET for a $75M utility provider, enabling real-time infrastructure visualization and reducing oversight errors by 30%.",
+      "Delivered 3 full-stack ERP systems with Node.js and SQL Server, implementing JWT-based RBAC and complex query workflows to automate invoicing.",
+    ],
+  },
 ];
 
 export const projects: Project[] = [
@@ -156,6 +166,7 @@ export const skillCategories: SkillCategory[] = [
       ".NET",
       "FastAPI",
       "React",
+      "Angular",
       "Astro",
     ],
   },
@@ -177,6 +188,8 @@ export const skillCategories: SkillCategory[] = [
       "Docker",
       "AWS",
       "REST APIs",
+      "Node.js",
+      "SQL Server",
       "PostgreSQL",
       "SQL",
       "Git",
@@ -197,11 +210,11 @@ export const profile = {
   image: "jelly.webp",
   about: [
     "I build backend services, fullstack applications, and AI/ML pipelines with a focus on shipping reliable software to production. My work spans FastAPI microservices on Google Cloud, LangChain-based AI agents for enterprise workflows, and multi-modal ML systems combining computer vision, NLP, and voice synthesis.",
-    "At AllCheer, I've delivered measurable impact -- a 60% reduction in document processing time, $20K in annual cost savings, and 92% accuracy on an NER pipeline for clinical data extraction. I thrive at the intersection of backend engineering and applied AI, where system design meets real-world constraints.",
+    "At AllCheer, I've delivered measurable impact -- a 60% reduction in document processing time, $20K in annual cost savings, and 92% accuracy on an NER pipeline for clinical data extraction. Previously at Pinnacle Consulting, I built full-stack ERP systems and integrated geospatial services for a $75M utility provider.",
     "I hold an M.S. in Computer Science from UC Riverside, where I focused on distributed systems and machine learning. I'm currently seeking software engineering roles in backend systems and applied AI.",
   ],
   proof: [
-    { value: "2.5+", label: "years shipping software" },
+    { value: "3+", label: "years shipping software" },
     { value: "60%", label: "reduction in processing time" },
     { value: "$20K", label: "annual savings delivered" },
   ],
