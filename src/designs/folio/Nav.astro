@@ -57,10 +57,11 @@ const links = [
     position: sticky;
     top: 0;
     z-index: 40;
-    background-color: color-mix(in srgb, var(--c-surface) 85%, transparent);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--c-rule);
+    background:
+      linear-gradient(180deg, rgba(16, 15, 14, 0.92), rgba(16, 15, 14, 0.74));
+    backdrop-filter: blur(18px) saturate(130%);
+    -webkit-backdrop-filter: blur(18px) saturate(130%);
+    border-bottom: 1px solid color-mix(in oklch, var(--c-rule) 72%, transparent);
   }
 
   .nav-inner {
@@ -78,7 +79,12 @@ const links = [
     font-weight: 600;
     color: var(--c-ink);
     text-decoration: none;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.02em;
+    transition: color 280ms var(--ease-expo);
+  }
+
+  .nav-brand:hover {
+    color: var(--c-accent-soft);
   }
 
   .nav-links {
@@ -93,12 +99,33 @@ const links = [
     font-weight: 500;
     color: var(--c-muted);
     text-decoration: none;
-    transition: color 200ms ease;
-    letter-spacing: 0.01em;
+    position: relative;
+    transition: color 260ms var(--ease-expo);
+    letter-spacing: 0.03em;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.35rem;
+    height: 1px;
+    background-color: var(--c-accent-soft);
+    opacity: 0;
+    transform: scaleX(0.45);
+    transition:
+      opacity 260ms var(--ease-expo),
+      transform 260ms var(--ease-expo);
   }
 
   .nav-link:hover {
     color: var(--c-ink);
+  }
+
+  .nav-link:hover::after {
+    opacity: 1;
+    transform: scaleX(1);
   }
 
   .nav-toggle {
@@ -132,7 +159,7 @@ const links = [
     flex-direction: column;
     padding: 0.5rem clamp(1.5rem, 4vw, 3rem) 1.25rem;
     border-top: 1px solid var(--c-rule);
-    background-color: var(--c-surface);
+    background-color: color-mix(in oklch, var(--c-surface) 92%, black);
   }
 
   .nav-mobile.is-open {

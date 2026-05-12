@@ -6,8 +6,11 @@ import { profile } from '../../data/content';
   <div class="contact-inner">
     <p class="kicker">Get in touch</p>
     <h2 class="contact-title">Contact</h2>
-    <p class="contact-desc">Currently seeking software engineering roles in backend systems and applied AI. Let's talk.</p>
+    <p class="contact-desc">Currently seeking software engineering roles focused on backend systems and applied AI. Let's talk.</p>
     <div class="contact-links">
+      <a href={`mailto:${profile.email}`} class="contact-link contact-link-primary">
+        <span class="contact-link-text">Email</span>
+      </a>
       <button type="button" class="contact-link contact-link-button" data-copy-email={profile.email}>
         <span class="contact-link-label" aria-live="polite">Copy email</span>
       </button>
@@ -63,11 +66,16 @@ import { profile } from '../../data/content';
   }
 
   .contact-inner {
-    max-width: 44rem;
+    max-width: 52rem;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: clamp(2rem, 5vw, 3.75rem);
+    border: 1px solid color-mix(in oklch, var(--c-card-border) 82%, transparent);
+    border-radius: 1.25rem;
+    background-color: var(--c-paper);
+    box-shadow: 0 1rem 2.75rem rgba(0, 0, 0, 0.14);
   }
 
   .kicker {
@@ -113,16 +121,21 @@ import { profile } from '../../data/content';
     font-size: 0.9375rem;
     font-weight: 500;
     color: var(--c-ink);
-    padding-bottom: 2px;
+    padding: 0.4rem 0;
     background: none;
-    border: none;
+    border: 0;
     cursor: pointer;
+    transition: color 300ms var(--ease-expo);
+  }
+
+  .contact-link-primary {
+    color: var(--c-accent);
   }
 
   .contact-link::after {
     content: '';
     position: absolute;
-    bottom: 0;
+    bottom: 0.2rem;
     left: 0;
     width: 100%;
     height: 1px;
@@ -132,9 +145,17 @@ import { profile } from '../../data/content';
     transition: transform 360ms var(--ease-expo);
   }
 
+  .contact-link-primary::after {
+    background-color: var(--c-accent);
+  }
+
   .contact-link:hover::after {
     transform: scaleX(1);
     transform-origin: left;
+  }
+
+  .contact-link:hover {
+    color: var(--c-accent-soft);
   }
 
   .contact-link-button[data-copied='true'] .contact-link-label {

@@ -34,9 +34,9 @@ export const experiences: Experience[] = [
     location: "California, USA",
     period: "Mar 2025 - Present",
     bullets: [
-      "Built a LangChain AI agent automating ROI processing -- authorization checks, compliance validation, and document generation -- cutting processing time by 60% and saving $20K/year.",
-      "Engineered a containerized FastAPI service emulating authenticated RethinkBH sessions for real-time clinical record sync, bypassing 24-48hr public API latency.",
-      "Developed a React + FastAPI NER pipeline with OpenAI for structured data extraction from therapist notes at 92% accuracy.",
+      "Built a LangChain AI agent for ROI workflows, automating authorization checks, compliance validation, and document generation while cutting processing time by 60% and saving $20K/year.",
+      "Engineered a containerized FastAPI service that emulates authenticated RethinkBH sessions for real-time clinical record sync, bypassing 24-48-hour public API latency.",
+      "Developed a React + FastAPI NER pipeline using OpenAI for structured data extraction from therapist notes at 92% accuracy.",
     ],
   },
   {
@@ -46,7 +46,7 @@ export const experiences: Experience[] = [
     period: "Jun 2024 - Dec 2024",
     bullets: [
       "Designed a Python logistics engine on Google Cloud with Google Maps APIs for multi-stop route optimization and large-scale staff scheduling.",
-      "Led backend R&D and API schema design for ROI automation, prototyping in Make.com and translating to production service architecture.",
+      "Led backend R&D and API schema design for ROI automation, moving Make.com prototypes into production service architecture.",
     ],
   },
   {
@@ -56,7 +56,7 @@ export const experiences: Experience[] = [
     period: "Jan 2022 - Aug 2023",
     bullets: [
       "Integrated ArcGIS Online with Angular and .NET for a $75M utility provider, enabling real-time infrastructure visualization and reducing oversight errors by 30%.",
-      "Delivered 3 full-stack ERP systems with Node.js and SQL Server, implementing JWT-based RBAC and complex query workflows to automate invoicing.",
+      "Delivered three full-stack ERP systems with Node.js and SQL Server, implementing JWT-based RBAC and complex query workflows to automate invoicing.",
     ],
   },
 ];
@@ -66,7 +66,7 @@ export const projects: Project[] = [
     title: "bedtime.ai",
     subtitle: "Multi-Modal AI Storytelling Platform",
     description:
-      "Extended a multi-modal AI storytelling system that turns children's drawings into narrated stories. Four models orchestrated in a single pipeline: EfficientNet-B0 for sketch classification (~70% accuracy on children's drawings), OpenAI GPT for story generation, Coqui XTTS v2 for voice cloning, and a touch-enabled React drawing canvas. Includes 35 backend tests, 19 frontend tests, and Docker Compose deployment.",
+      "Extended a multi-modal AI storytelling system that turns children's drawings into narrated stories. The pipeline combines EfficientNet-B0 sketch classification (~70% accuracy on children's drawings), OpenAI GPT story generation, Coqui XTTS v2 voice cloning, and a touch-enabled React drawing canvas. Includes 35 backend tests, 19 frontend tests, and Docker Compose deployment.",
     tags: [
       "React",
       "TypeScript",
@@ -86,7 +86,7 @@ export const projects: Project[] = [
   {
     title: "Abliteration for LFM2.5",
     description:
-      "An interpretability project for LiquidAI/LFM2.5-1.2B-Instruct focused on refusal directions, weight orthogonalization, and inference-time intervention using manual PyTorch hooks. Reduced model refusal rate from 50% to ~37% without retraining.",
+      "An interpretability study of LiquidAI/LFM2.5-1.2B-Instruct focused on refusal directions, weight orthogonalization, and inference-time intervention using manual PyTorch hooks. Reduced model refusal rate from 50% to ~37% without retraining.",
     tags: [
       "Research",
       "LLM Interpretability",
@@ -102,7 +102,7 @@ export const projects: Project[] = [
     title: "Nier Archive",
     subtitle: "Real-Time Collaborative Site",
     description:
-      "A real-time collaborative site with live cursor sharing and viewer presence, built with SvelteKit 5, Cloudflare Workers, Durable Objects for stateful WebSocket connections, KV-backed analytics, and a custom Vite markdown pipeline for blog content.",
+      "A real-time collaborative site with live cursor sharing and viewer presence, built with SvelteKit 5, Cloudflare Workers, Durable Objects for stateful WebSocket coordination, KV-backed analytics, and a custom Vite markdown pipeline for blog content.",
     tags: [
       "SvelteKit 5",
       "Cloudflare Workers",
@@ -115,10 +115,26 @@ export const projects: Project[] = [
     githubUrl: "https://github.com/notquite28/nier-archive-site",
   },
   {
+    title: "Yomiji",
+    subtitle: "Offline-First WaniKani Android Client",
+    description:
+      "An offline-first WaniKani study app for Android, built with React Native and Expo. It implements secure API-token auth, SQLite-backed incremental sync with pending-write queues, dashboard, lesson, and review flows, romaji-to-kana answer checking, local search, diagnostics, and Jest-covered domain logic.",
+    tags: [
+      "React Native",
+      "Expo",
+      "TypeScript",
+      "SQLite",
+      "WaniKani API",
+      "Jest",
+    ],
+    compactTags: ["React Native", "Expo", "SQLite"],
+    githubUrl: "https://github.com/notquite28/yomiji",
+  },
+  {
     title: "Rethink BH Automation",
     subtitle: "FastAPI + Cloud Run Backend",
     description:
-      "A containerized FastAPI service deployed on Google Cloud Run that emulates authenticated user sessions against RethinkBH endpoints to sync appointment and authorization data in real time, bypassing 24-48 hour API latency for downstream applications.",
+      "A containerized FastAPI service deployed on Google Cloud Run that emulates authenticated user sessions against RethinkBH endpoints to sync appointment and authorization data in real time, bypassing 24-48-hour API latency for downstream applications.",
     tags: [
       "System Architecture",
       "FastAPI",
@@ -133,7 +149,7 @@ export const projects: Project[] = [
   {
     title: "LangChain RAG",
     description:
-      "A production-ready RAG pipeline querying Star Wars scripts using LangChain, OpenAI embeddings, and Qdrant. Rebuilt from a tutorial with configurable data sources, prompt hardening against injection, source attribution, ~30x cost reduction (GPT-4o-mini), and a 28-test suite (13 mocked unit + 15 integration).",
+      "A production-ready RAG pipeline for querying Star Wars scripts with LangChain, OpenAI embeddings, and Qdrant. Expanded from a tutorial into a configurable system with prompt-injection hardening, source attribution, ~30x cost reduction using GPT-4o-mini, and a 28-test suite.",
     tags: ["AI/ML", "LangChain", "Vector Search", "RAG", "LLMs"],
     compactTags: ["RAG", "LangChain", "Qdrant"],
     githubUrl: "https://github.com/notquite28/langchain-rag",
@@ -142,7 +158,7 @@ export const projects: Project[] = [
     title: "Enterprise ROI System",
     subtitle: "AI Agent for Document Processing",
     description:
-      "An LLM agent that automates HIPAA document release workflows -- orchestrating authorization checks, compliance validation, and document generation to reduce manual processing time by 60% and deliver $20K in annual savings.",
+      "An LLM agent that automates HIPAA document release workflows, orchestrating authorization checks, compliance validation, and document generation to reduce manual processing time by 60% and deliver $20K in annual savings.",
     tags: [
       "AI Agent",
       "Enterprise",
@@ -201,7 +217,7 @@ export const profile = {
   name: "Arnav Panigrahi",
   role: "Software Developer",
   tagline:
-    "Backend systems, fullstack applications, and AI/ML pipelines -- shipped to production.",
+    "Backend systems, full-stack applications, and AI/ML pipelines shipped to production.",
   location: "California, United States",
   email: "arnav.panigrahi@gmail.com",
   github: "https://github.com/notquite28",
@@ -209,8 +225,8 @@ export const profile = {
   resume: "https://notquite28.github.io/resume/resumeml.pdf",
   image: "jelly.webp",
   about: [
-    "I build backend services, fullstack applications, and AI/ML pipelines with a focus on shipping reliable software to production. My work spans FastAPI microservices on Google Cloud, LangChain-based AI agents for enterprise workflows, and multi-modal ML systems combining computer vision, NLP, and voice synthesis.",
-    "At AllCheer, I've delivered measurable impact -- a 60% reduction in document processing time, $20K in annual cost savings, and 92% accuracy on an NER pipeline for clinical data extraction. Previously at Pinnacle Consulting, I built full-stack ERP systems and integrated geospatial services for a $75M utility provider.",
+    "I build backend services, full-stack applications, and AI/ML pipelines with a focus on shipping reliable software to production. My work spans FastAPI microservices on Google Cloud, LangChain-based AI agents for enterprise workflows, and multi-modal ML systems combining computer vision, NLP, and voice synthesis.",
+    "At AllCheer, I've delivered measurable impact: a 60% reduction in document processing time, $20K in annual cost savings, and 92% accuracy on an NER pipeline for clinical data extraction. Previously at Pinnacle Consulting, I built full-stack ERP systems and integrated geospatial services for a $75M utility provider.",
     "I hold an M.S. in Computer Science from UC Riverside, where I focused on distributed systems and machine learning. I'm currently seeking software engineering roles in backend systems and applied AI.",
   ],
   proof: [

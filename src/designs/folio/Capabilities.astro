@@ -5,7 +5,7 @@ import { skillCategories } from '../../data/content';
 <section id="skills" class="capabilities reveal">
   <div class="capabilities-inner">
     <p class="kicker">Capabilities</p>
-    <h2 class="section-title">Tools I use most.</h2>
+    <h2 class="section-title">Tools I work with.</h2>
     <div class="skill-groups">
       {skillCategories.map((category) => (
         <div class="skill-group">
@@ -61,11 +61,20 @@ import { skillCategories } from '../../data/content';
   }
 
   .skill-group {
+    position: relative;
     display: grid;
     grid-template-columns: 1fr;
     gap: 0.75rem;
-    padding-top: 1.5rem;
+    padding: 1.5rem 0 0;
     border-top: 1px solid var(--c-rule);
+    transition:
+      border-color 360ms var(--ease-expo),
+      padding-left 360ms var(--ease-expo);
+  }
+
+  .skill-group:hover {
+    border-color: color-mix(in oklch, var(--c-accent) 34%, var(--c-rule));
+    padding-left: 0.6rem;
   }
 
   .skill-group + .skill-group {
@@ -94,6 +103,11 @@ import { skillCategories } from '../../data/content';
     font-size: 0.9375rem;
     color: var(--c-body);
     line-height: 1.8;
+    transition: color 240ms var(--ease-expo);
+  }
+
+  .skill-group:hover .skill-item {
+    color: color-mix(in oklch, var(--c-ink) 70%, var(--c-body));
   }
 
   .skill-item:not(:last-child)::after {

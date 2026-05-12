@@ -11,7 +11,7 @@ interface Props {
 
 const {
   title = 'Arnav Panigrahi | Backend & AI/ML Software Developer',
-  description = 'Software developer focused on backend systems, fullstack applications, and AI/ML pipelines. M.S. Computer Science, UC Riverside.',
+  description = 'Software developer focused on backend systems, full-stack applications, and AI/ML pipelines. M.S. Computer Science, UC Riverside.',
   image = 'jelly.webp',
 } = Astro.props;
 
@@ -58,21 +58,29 @@ const isProd = import.meta.env.PROD;
 
 <style is:global>
   .folio-theme {
-    --c-surface: #111110;
-    --c-elevated: #1b1a18;
-    --c-ink: #e6e0d8;
-    --c-body: #a9a29a;
-    --c-muted: #6e6862;
-    --c-rule: #2a2724;
-    --c-accent: #d4664a;
-    --c-paper: #1b1a18;
-    --c-card-border: #2e2b28;
+    --c-surface: #100f0e;
+    --c-elevated: #1b1916;
+    --c-ink: #eee7dc;
+    --c-body: #b7aea4;
+    --c-muted: #91877d;
+    --c-rule: #2f2924;
+    --c-accent: #d87556;
+    --c-accent-soft: #f0b084;
+    --c-paper: #1b1916;
+    --c-card-border: #3a312a;
+    --c-aura: #8f3e2c;
+    --shadow-soft: 0 1.5rem 4rem rgba(0, 0, 0, 0.22);
 
     --font-serif: "Newsreader", Georgia, serif;
     --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
     --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
-    background-color: var(--c-surface);
+    position: relative;
+    isolation: isolate;
+    background:
+      radial-gradient(circle at 18% 0%, color-mix(in oklch, var(--c-aura) 18%, transparent), transparent 30rem),
+      radial-gradient(circle at 88% 12%, rgba(240, 176, 132, 0.08), transparent 28rem),
+      linear-gradient(180deg, #151311 0%, var(--c-surface) 32rem);
     color: var(--c-ink);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
@@ -81,7 +89,16 @@ const isProd = import.meta.env.PROD;
   }
 
   .folio-theme::before {
-    display: none;
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(238, 231, 220, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(238, 231, 220, 0.018) 1px, transparent 1px);
+    background-size: 4.5rem 4.5rem;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.72), transparent 74%);
   }
 
   .folio-theme canvas#boidCanvas {
@@ -91,6 +108,11 @@ const isProd = import.meta.env.PROD;
   ::selection {
     background: rgba(212, 102, 74, 0.25);
     color: var(--c-ink);
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--c-accent-soft);
+    outline-offset: 4px;
   }
 
   .skip-link {
@@ -128,8 +150,8 @@ const isProd = import.meta.env.PROD;
 
   .folio-theme .reveal {
     opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 480ms var(--ease-expo), transform 480ms var(--ease-expo);
+    transform: translateY(18px);
+    transition: opacity 720ms var(--ease-expo), transform 720ms var(--ease-expo);
     will-change: transform, opacity;
   }
 

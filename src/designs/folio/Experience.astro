@@ -62,9 +62,16 @@ import { experiences } from '../../data/content';
   }
 
   .experience-item {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    padding: 0.25rem 0;
+    transition: transform 360ms var(--ease-expo);
+  }
+
+  .experience-item:hover {
+    transform: translateX(0.35rem);
   }
 
   .experience-header {
@@ -85,6 +92,11 @@ import { experiences } from '../../data/content';
     font-weight: 600;
     color: var(--c-ink);
     margin: 0;
+    transition: color 280ms var(--ease-expo);
+  }
+
+  .experience-item:hover .experience-title {
+    color: var(--c-accent-soft);
   }
 
   .experience-company {
@@ -134,7 +146,7 @@ import { experiences } from '../../data/content';
   .experience-rule {
     width: 100%;
     height: 1px;
-    background-color: var(--c-rule);
+    background: linear-gradient(90deg, var(--c-rule), transparent);
     margin: 1.25rem 0;
   }
 
