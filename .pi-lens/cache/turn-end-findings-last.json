@@ -1,0 +1,4 @@
+{
+  "signature": "src/data/content.ts::ℹ️ Advisory — no action required this turn:\n⚠️ Newly unused exports in modified files — check if callers need updating (Knip):\n  src/data/content.ts:17 — ProofItem\n",
+  "sessionId": "lens-mp4k4gfl-496963d5"
+}

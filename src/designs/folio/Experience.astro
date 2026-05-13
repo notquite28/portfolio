@@ -2,42 +2,136 @@
 import { experiences } from '../../data/content';
 ---
 
-<section id="experience" class="experience reveal">
+<section id="experience" class="experience">
   <div class="experience-inner">
-    <p class="kicker">Experience</p>
-    <h2 class="section-title">Where I've worked.</h2>
-    <div class="experience-list">
-      {experiences.map((exp, i) => (
-        <div class="experience-item">
-          <div class="experience-header">
-            <div class="experience-role">
-              <h3 class="experience-title">{exp.title}</h3>
-              <span class="experience-company">{exp.company}</span>
-            </div>
-            <div class="experience-meta">
-              <span class="experience-location">{exp.location}</span>
-              <span class="experience-period">{exp.period}</span>
+    <p class="kicker reveal">Experience</p>
+    <h2 class="section-title reveal">Where I've worked.</h2>
+    <div class="timeline">
+      <div class="timeline-line" aria-hidden="true">
+        <div class="timeline-line-fill"></div>
+      </div>
+      <div class="experience-list">
+        {experiences.map((exp) => (
+          <div class="experience-item" data-timeline-item>
+            <div class="timeline-dot" aria-hidden="true"></div>
+            <div class="experience-card">
+              <div class="experience-header">
+                <div class="experience-role">
+                  <h3 class="experience-title">{exp.title}</h3>
+                  <span class="experience-company">{exp.company}</span>
+                </div>
+                <div class="experience-meta">
+                  <span class="experience-location">{exp.location}</span>
+                  <span class="experience-period">{exp.period}</span>
+                </div>
+              </div>
+              <ul class="experience-bullets">
+                {exp.bullets.map((bullet) => (
+                  <li class="experience-bullet">{bullet}</li>
+                ))}
+              </ul>
             </div>
           </div>
-          <ul class="experience-bullets">
-            {exp.bullets.map((bullet) => (
-              <li class="experience-bullet">{bullet}</li>
-            ))}
-          </ul>
-          {i < experiences.length - 1 && <div class="experience-rule"></div>}
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   </div>
 </section>
 
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const createdTweens: gsap.core.Tween[] = [];
+
+  if (!prefersReducedMotion) {
+    const lineFill = document.querySelector('.timeline-line-fill') as HTMLElement | null;
+    if (lineFill) {
+      createdTweens.push(
+        gsap.fromTo(
+          lineFill,
+          { scaleY: 0 },
+          {
+            scaleY: 1,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: '.timeline',
+              start: 'top 75%',
+              end: 'bottom 60%',
+              scrub: 0.5,
+            },
+          }
+        )
+      );
+    }
+
+    const items = document.querySelectorAll('[data-timeline-item]');
+    items.forEach((item) => {
+      const card = item.querySelector('.experience-card') as HTMLElement | null;
+      const dot = item.querySelector('.timeline-dot') as HTMLElement | null;
+
+      if (card) {
+        createdTweens.push(
+          gsap.fromTo(
+            card,
+            { x: -24, opacity: 0 },
+            {
+              x: 0,
+              opacity: 1,
+              duration: 0.9,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: item,
+                start: 'top 82%',
+                toggleActions: 'play none none none',
+              },
+            }
+          )
+        );
+      }
+
+      if (dot) {
+        createdTweens.push(
+          gsap.fromTo(
+            dot,
+            { scale: 0, opacity: 0 },
+            {
+              scale: 1,
+              opacity: 1,
+              duration: 0.5,
+              ease: 'back.out(2)',
+              scrollTrigger: {
+                trigger: item,
+                start: 'top 80%',
+                toggleActions: 'play none none none',
+              },
+            }
+          )
+        );
+      }
+    });
+  }
+
+  window.addEventListener('beforeunload', () => {
+    createdTweens.forEach((t) => {
+      t.scrollTrigger?.kill();
+      t.kill();
+    });
+  });
+</script>
+
 <style>
   .experience {
-    padding: clamp(5rem, 10vw, 8rem) clamp(1.5rem, 4vw, 3rem);
+    padding: clamp(6rem, 12vw, 10rem) clamp(1.5rem, 4vw, 3rem);
+    position: relative;
   }
 
   .experience-inner {
-    max-width: 72rem;
+    max-width: 52rem;
     margin: 0 auto;
   }
 
@@ -45,7 +139,7 @@ import { experiences } from '../../data/content';
     font-family: var(--font-sans);
     font-size: 0.7rem;
     font-weight: 500;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--c-accent);
     margin-bottom: 0.75rem;
@@ -54,11 +148,38 @@ import { experiences } from '../../data/content';
   .section-title {
     font-family: var(--font-serif);
     font-weight: 300;
-    font-size: clamp(1.8rem, 3.5vw, 3rem);
-    line-height: 1.15;
-    letter-spacing: -0.015em;
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
     color: var(--c-ink);
-    margin-bottom: 2.5rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .timeline {
+    position: relative;
+  }
+
+  .timeline-line {
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    bottom: 0;
+    width: 1px;
+    background: var(--c-rule);
+  }
+
+  .timeline-line-fill {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, var(--c-accent), var(--c-accent-soft));
+    transform-origin: top;
+  }
+
+  .experience-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    padding-left: 2rem;
   }
 
   .experience-item {
@@ -66,18 +187,35 @@ import { experiences } from '../../data/content';
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    padding: 0.25rem 0;
-    transition: transform 360ms var(--ease-expo);
   }
 
-  .experience-item:hover {
-    transform: translateX(0.35rem);
+  .timeline-dot {
+    position: absolute;
+    left: -2rem;
+    top: 0.65rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--c-accent);
+    box-shadow: 0 0 0 4px var(--c-surface), 0 0 0 5px var(--c-accent-soft);
+    transform: translateX(-3.5px);
+  }
+
+  .experience-card {
+    position: relative;
+    padding: 0.25rem 0;
+    transition: transform 400ms var(--ease-expo);
+  }
+
+  .experience-card:hover {
+    transform: translateX(0.3rem);
   }
 
   .experience-header {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    margin-bottom: 1rem;
   }
 
   .experience-role {
@@ -92,16 +230,16 @@ import { experiences } from '../../data/content';
     font-weight: 600;
     color: var(--c-ink);
     margin: 0;
-    transition: color 280ms var(--ease-expo);
+    transition: color 300ms var(--ease-expo);
   }
 
-  .experience-item:hover .experience-title {
+  .experience-card:hover .experience-title {
     color: var(--c-accent-soft);
   }
 
   .experience-company {
-    font-family: var(--font-serif);
-    font-size: 0.9375rem;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
     color: var(--c-body);
   }
 
@@ -109,8 +247,9 @@ import { experiences } from '../../data/content';
     display: flex;
     gap: 1rem;
     font-family: var(--font-sans);
-    font-size: 0.8125rem;
+    font-size: 0.8rem;
     color: var(--c-muted);
+    letter-spacing: 0.02em;
   }
 
   .experience-bullets {
@@ -119,16 +258,15 @@ import { experiences } from '../../data/content';
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.375rem;
-    max-width: 52rem;
+    gap: 0.5rem;
   }
 
   .experience-bullet {
     position: relative;
-    padding-left: 0.875rem;
-    font-family: var(--font-sans);
-    font-size: 0.875rem;
-    line-height: 1.6;
+    padding-left: 1rem;
+    font-family: var(--font-body);
+    font-size: 0.98rem;
+    line-height: 1.7;
     color: var(--c-body);
   }
 
@@ -141,13 +279,6 @@ import { experiences } from '../../data/content';
     height: 4px;
     border-radius: 50%;
     background-color: var(--c-accent);
-  }
-
-  .experience-rule {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, var(--c-rule), transparent);
-    margin: 1.25rem 0;
   }
 
   @media (min-width: 640px) {

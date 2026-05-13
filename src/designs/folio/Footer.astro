@@ -11,14 +11,26 @@ const year = new Date().getFullYear();
       <a href={profile.linkedin} class="footer-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>
       <a href={`mailto:${profile.email}`} class="footer-link">Email</a>
     </div>
-    <span class="footer-copy">&copy; {year} &middot; Built with Astro</span>
+    <span class="footer-copy">&copy; {year} &middot; Crafted with care</span>
   </div>
 </footer>
 
 <style>
   .footer {
     border-top: 1px solid var(--c-rule);
-    padding: 1.75rem clamp(1.5rem, 4vw, 3rem);
+    padding: 2rem clamp(1.5rem, 4vw, 3rem);
+    position: relative;
+  }
+
+  .footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: clamp(4rem, 10vw, 8rem);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--c-accent-soft), transparent);
   }
 
   .footer-inner {
@@ -28,13 +40,14 @@ const year = new Date().getFullYear();
     align-items: center;
     justify-content: space-between;
     font-family: var(--font-sans);
-    font-size: 0.8125rem;
+    font-size: 0.8rem;
     color: var(--c-muted);
   }
 
   .footer-name {
     font-weight: 500;
     color: var(--c-body);
+    letter-spacing: 0.02em;
   }
 
   .footer-links {
@@ -45,11 +58,30 @@ const year = new Date().getFullYear();
   .footer-link {
     color: var(--c-muted);
     text-decoration: none;
-    transition: color 200ms ease;
+    transition: color 300ms var(--ease-expo);
+    position: relative;
+  }
+
+  .footer-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--c-accent-soft);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 300ms var(--ease-expo);
   }
 
   .footer-link:hover {
     color: var(--c-ink);
+  }
+
+  .footer-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
   }
 
   @media (max-width: 639px) {
