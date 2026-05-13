@@ -10,7 +10,7 @@ const links = [
 ];
 ---
 
-<nav class="nav" aria-label="Primary navigation">
+<nav class="nav" aria-label="Primary navigation" data-nav>
   <div class="nav-inner">
     <a href="/" class="nav-brand">{profile.name}</a>
     <div class="nav-links">
@@ -33,6 +33,7 @@ const links = [
 <script>
   const toggle = document.querySelector('.nav-toggle');
   const mobile = document.querySelector('.nav-mobile');
+  const nav = document.querySelector('[data-nav]') as HTMLElement | null;
 
   if (toggle instanceof HTMLButtonElement && mobile instanceof HTMLElement) {
     toggle.addEventListener('click', () => {
@@ -50,18 +51,64 @@ const links = [
       });
     });
   }
+
+  // Hide/show on scroll
+  if (nav) {
+    let lastScroll = 0;
+    let ticking = false;
+    const threshold = 80;
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const currentScroll = window.scrollY;
+
+          if (currentScroll < threshold) {
+            nav.classList.remove('is-hidden');
+            nav.classList.add('is-top');
+          } else if (currentScroll > lastScroll && currentScroll > threshold * 2) {
+            nav.classList.add('is-hidden');
+            nav.classList.remove('is-top');
+          } else if (currentScroll < lastScroll) {
+            nav.classList.remove('is-hidden');
+            nav.classList.remove('is-top');
+          }
+
+          lastScroll = currentScroll;
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+  }
 </script>
 
 <style>
   .nav {
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 40;
-    background:
-      linear-gradient(180deg, rgba(16, 15, 14, 0.92), rgba(16, 15, 14, 0.74));
-    backdrop-filter: blur(18px) saturate(130%);
-    -webkit-backdrop-filter: blur(18px) saturate(130%);
-    border-bottom: 1px solid color-mix(in oklch, var(--c-rule) 72%, transparent);
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transform: translateY(0);
+    transition:
+      transform 400ms var(--ease-expo),
+      background 400ms var(--ease-expo),
+      border-color 400ms var(--ease-expo),
+      backdrop-filter 400ms var(--ease-expo);
+  }
+
+  .nav.is-hidden {
+    transform: translateY(-100%);
+  }
+
+  .nav:not(.is-top) {
+    background: rgba(13, 12, 11, 0.85);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border-bottom-color: color-mix(in oklch, var(--c-rule) 60%, transparent);
   }
 
   .nav-inner {
@@ -80,7 +127,7 @@ const links = [
     color: var(--c-ink);
     text-decoration: none;
     letter-spacing: 0.02em;
-    transition: color 280ms var(--ease-expo);
+    transition: color 300ms var(--ease-expo);
   }
 
   .nav-brand:hover {
@@ -96,11 +143,11 @@ const links = [
   .nav-link {
     font-family: var(--font-sans);
     font-size: 0.8125rem;
-    font-weight: 500;
+    font-weight: 400;
     color: var(--c-muted);
     text-decoration: none;
     position: relative;
-    transition: color 260ms var(--ease-expo);
+    transition: color 300ms var(--ease-expo);
     letter-spacing: 0.03em;
   }
 
@@ -115,8 +162,8 @@ const links = [
     opacity: 0;
     transform: scaleX(0.45);
     transition:
-      opacity 260ms var(--ease-expo),
-      transform 260ms var(--ease-expo);
+      opacity 300ms var(--ease-expo),
+      transform 300ms var(--ease-expo);
   }
 
   .nav-link:hover {
@@ -143,7 +190,7 @@ const links = [
     width: 18px;
     height: 1.5px;
     background-color: var(--c-ink);
-    transition: transform 250ms var(--ease-expo), opacity 250ms ease;
+    transition: transform 300ms var(--ease-expo), opacity 300ms ease;
   }
 
   .nav-toggle[aria-expanded='true'] .nav-toggle-bar:first-child {
@@ -159,7 +206,8 @@ const links = [
     flex-direction: column;
     padding: 0.5rem clamp(1.5rem, 4vw, 3rem) 1.25rem;
     border-top: 1px solid var(--c-rule);
-    background-color: color-mix(in oklch, var(--c-surface) 92%, black);
+    background-color: rgba(13, 12, 11, 0.95);
+    backdrop-filter: blur(20px) saturate(140%);
   }
 
   .nav-mobile.is-open {

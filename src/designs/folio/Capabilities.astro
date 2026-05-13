@@ -2,15 +2,18 @@
 import { skillCategories } from '../../data/content';
 ---
 
-<section id="skills" class="capabilities reveal">
+<section id="skills" class="capabilities">
   <div class="capabilities-inner">
-    <p class="kicker">Capabilities</p>
-    <h2 class="section-title">Tools I work with.</h2>
-    <div class="skill-groups">
+    <p class="kicker reveal">Capabilities</p>
+    <h2 class="section-title reveal">Tools I work with.</h2>
+    <div class="skill-groups reveal-group">
       {skillCategories.map((category) => (
-        <div class="skill-group">
+        <div class="skill-group reveal-child">
           <div class="skill-group-left">
             <h3 class="skill-group-title">{category.title}</h3>
+            <div class="skill-group-bar" aria-hidden="true">
+              <div class="skill-group-bar-fill"></div>
+            </div>
           </div>
           <div class="skill-group-right">
             <ul class="skill-list">
@@ -25,9 +28,61 @@ import { skillCategories } from '../../data/content';
   </div>
 </section>
 
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!prefersReducedMotion) {
+    const groups = document.querySelectorAll('.skill-group');
+    groups.forEach((group) => {
+      const barFill = group.querySelector('.skill-group-bar-fill') as HTMLElement | null;
+      const items = group.querySelectorAll('.skill-item');
+
+      if (barFill) {
+        gsap.fromTo(
+          barFill,
+          { scaleX: 0 },
+          {
+            scaleX: 1,
+            duration: 1,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: group,
+              start: 'top 82%',
+              toggleActions: 'play none none none',
+            },
+          }
+        );
+      }
+
+      gsap.fromTo(
+        items,
+        { y: 12, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          ease: 'power3.out',
+          stagger: 0.05,
+          scrollTrigger: {
+            trigger: group,
+            start: 'top 78%',
+            toggleActions: 'play none none none',
+          },
+        }
+      );
+    });
+  }
+</script>
+
 <style>
   .capabilities {
-    padding: clamp(5rem, 10vw, 8rem) clamp(1.5rem, 4vw, 3rem);
+    padding: clamp(6rem, 12vw, 10rem) clamp(1.5rem, 4vw, 3rem);
+    position: relative;
   }
 
   .capabilities-inner {
@@ -39,7 +94,7 @@ import { skillCategories } from '../../data/content';
     font-family: var(--font-sans);
     font-size: 0.7rem;
     font-weight: 500;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--c-accent);
     margin-bottom: 0.75rem;
@@ -48,15 +103,16 @@ import { skillCategories } from '../../data/content';
   .section-title {
     font-family: var(--font-serif);
     font-weight: 300;
-    font-size: clamp(1.8rem, 3.5vw, 3rem);
-    line-height: 1.15;
-    letter-spacing: -0.015em;
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
     color: var(--c-ink);
-    margin-bottom: 2.5rem;
+    margin-bottom: 3rem;
   }
 
   .skill-groups {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 0;
   }
 
@@ -64,21 +120,24 @@ import { skillCategories } from '../../data/content';
     position: relative;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 0.75rem;
-    padding: 1.5rem 0 0;
+    gap: 1rem;
+    padding: 2rem 0;
     border-top: 1px solid var(--c-rule);
-    transition:
-      border-color 360ms var(--ease-expo),
-      padding-left 360ms var(--ease-expo);
+    transition: border-color 400ms var(--ease-expo);
+  }
+
+  .skill-group:last-child {
+    border-bottom: 1px solid var(--c-rule);
   }
 
   .skill-group:hover {
-    border-color: color-mix(in oklch, var(--c-accent) 34%, var(--c-rule));
-    padding-left: 0.6rem;
+    border-color: color-mix(in oklch, var(--c-accent) 25%, var(--c-rule));
   }
 
-  .skill-group + .skill-group {
-    margin-top: 1.5rem;
+  .skill-group-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
   }
 
   .skill-group-title {
@@ -87,6 +146,26 @@ import { skillCategories } from '../../data/content';
     font-weight: 600;
     color: var(--c-ink);
     letter-spacing: 0.01em;
+    transition: color 300ms var(--ease-expo);
+  }
+
+  .skill-group:hover .skill-group-title {
+    color: var(--c-accent-soft);
+  }
+
+  .skill-group-bar {
+    width: 3rem;
+    height: 2px;
+    background: var(--c-rule);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+
+  .skill-group-bar-fill {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--c-accent), var(--c-accent-soft));
+    transform-origin: left;
   }
 
   .skill-list {
@@ -95,31 +174,36 @@ import { skillCategories } from '../../data/content';
     margin: 0;
     display: flex;
     flex-wrap: wrap;
-    gap: 0;
+    gap: 0.5rem;
   }
 
   .skill-item {
     font-family: var(--font-sans);
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     color: var(--c-body);
-    line-height: 1.8;
-    transition: color 240ms var(--ease-expo);
+    line-height: 1.6;
+    padding: 0.35rem 0.85rem;
+    border: 1px solid var(--c-rule);
+    border-radius: 100px;
+    background: transparent;
+    transition:
+      color 300ms var(--ease-expo),
+      border-color 300ms var(--ease-expo),
+      background 300ms var(--ease-expo),
+      transform 300ms var(--ease-expo);
   }
 
-  .skill-group:hover .skill-item {
-    color: color-mix(in oklch, var(--c-ink) 70%, var(--c-body));
-  }
-
-  .skill-item:not(:last-child)::after {
-    content: ' / ';
-    color: var(--c-rule);
-    margin: 0 0.4em;
+  .skill-item:hover {
+    color: var(--c-ink);
+    border-color: color-mix(in oklch, var(--c-accent) 40%, var(--c-rule));
+    background: rgba(201, 123, 90, 0.06);
+    transform: translateY(-1px);
   }
 
   @media (min-width: 640px) {
     .skill-group {
       grid-template-columns: 14rem 1fr;
-      gap: 1rem;
+      gap: 2rem;
       align-items: start;
     }
   }

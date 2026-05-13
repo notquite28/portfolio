@@ -2,25 +2,25 @@
 import { profile } from '../../data/content';
 ---
 
-<section id="contact" class="contact reveal">
-  <div class="contact-inner">
+<section id="contact" class="contact">
+  <div class="contact-inner reveal">
     <p class="kicker">Get in touch</p>
-    <h2 class="contact-title">Contact</h2>
-    <p class="contact-desc">Currently seeking software engineering roles focused on backend systems and applied AI. Let's talk.</p>
+    <h2 class="contact-title">Let's build something together.</h2>
+    <p class="contact-desc">Currently seeking software engineering roles focused on backend systems and applied AI.</p>
     <div class="contact-links">
-      <a href={`mailto:${profile.email}`} class="contact-link contact-link-primary">
+      <a href={`mailto:${profile.email}`} class="contact-link contact-link-primary magnetic" data-magnetic>
         <span class="contact-link-text">Email</span>
       </a>
-      <button type="button" class="contact-link contact-link-button" data-copy-email={profile.email}>
+      <button type="button" class="contact-link contact-link-button magnetic" data-copy-email={profile.email} data-magnetic>
         <span class="contact-link-label" aria-live="polite">Copy email</span>
       </button>
-      <a href={profile.github} class="contact-link" target="_blank" rel="noopener noreferrer">
+      <a href={profile.github} class="contact-link magnetic" target="_blank" rel="noopener noreferrer" data-magnetic>
         <span class="contact-link-text">GitHub</span>
       </a>
-      <a href={profile.linkedin} class="contact-link" target="_blank" rel="noopener noreferrer">
+      <a href={profile.linkedin} class="contact-link magnetic" target="_blank" rel="noopener noreferrer" data-magnetic>
         <span class="contact-link-text">LinkedIn</span>
       </a>
-      <a href={profile.resume} class="contact-link" target="_blank" rel="noopener noreferrer">
+      <a href={profile.resume} class="contact-link magnetic" target="_blank" rel="noopener noreferrer" data-magnetic>
         <span class="contact-link-text">Resume</span>
       </a>
     </div>
@@ -28,8 +28,12 @@ import { profile } from '../../data/content';
 </section>
 
 <script>
-  const copyButtons = document.querySelectorAll('.folio-theme [data-copy-email]');
+  import gsap from 'gsap';
 
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Copy email
+  const copyButtons = document.querySelectorAll('.folio-theme [data-copy-email]');
   copyButtons.forEach((button) => {
     if (!(button instanceof HTMLButtonElement)) return;
 
@@ -57,32 +61,65 @@ import { profile } from '../../data/content';
       }, 1600);
     });
   });
+
+  // Magnetic effect
+  if (!prefersReducedMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    const magneticElements = document.querySelectorAll('[data-magnetic]');
+    magneticElements.forEach((el) => {
+      const strength = 0.3;
+
+      el.addEventListener('mousemove', (e: Event) => {
+        const me = e as MouseEvent;
+        const rect = el.getBoundingClientRect();
+        const x = me.clientX - rect.left - rect.width / 2;
+        const y = me.clientY - rect.top - rect.height / 2;
+
+        gsap.to(el, {
+          x: x * strength,
+          y: y * strength,
+          duration: 0.4,
+          ease: 'power2.out',
+        });
+      });
+
+      el.addEventListener('mouseleave', () => {
+        gsap.to(el, {
+          x: 0,
+          y: 0,
+          duration: 0.6,
+          ease: 'elastic.out(1, 0.5)',
+        });
+      });
+    });
+  }
 </script>
 
 <style>
   .contact {
-    padding: clamp(5rem, 10vw, 8rem) clamp(1.5rem, 4vw, 3rem);
+    padding: clamp(6rem, 12vw, 10rem) clamp(1.5rem, 4vw, 3rem);
     text-align: center;
   }
 
   .contact-inner {
-    max-width: 52rem;
+    max-width: 56rem;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: clamp(2rem, 5vw, 3.75rem);
-    border: 1px solid color-mix(in oklch, var(--c-card-border) 82%, transparent);
-    border-radius: 1.25rem;
-    background-color: var(--c-paper);
-    box-shadow: 0 1rem 2.75rem rgba(0, 0, 0, 0.14);
+    padding: clamp(2.5rem, 6vw, 4rem) clamp(1.5rem, 4vw, 3rem);
+    border: 1px solid color-mix(in oklch, var(--c-card-border) 60%, transparent);
+    border-radius: 1.5rem;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(201, 123, 90, 0.04), transparent 60%),
+      var(--c-paper);
+    box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.18);
   }
 
   .kicker {
     font-family: var(--font-sans);
     font-size: 0.7rem;
     font-weight: 500;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--c-accent);
     margin-bottom: 0.75rem;
@@ -91,16 +128,16 @@ import { profile } from '../../data/content';
   .contact-title {
     font-family: var(--font-serif);
     font-weight: 300;
-    font-size: clamp(1.8rem, 3.5vw, 3rem);
-    line-height: 1.15;
-    letter-spacing: -0.015em;
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
     color: var(--c-ink);
     margin-bottom: 1rem;
   }
 
   .contact-desc {
-    font-family: var(--font-serif);
-    font-size: 1rem;
+    font-family: var(--font-body);
+    font-size: 1.05rem;
     line-height: 1.65;
     color: var(--c-body);
     max-width: 36rem;
@@ -111,21 +148,22 @@ import { profile } from '../../data/content';
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 1.5rem 2.25rem;
+    gap: 1.5rem 2.5rem;
   }
 
   .contact-link {
     position: relative;
     text-decoration: none;
     font-family: var(--font-sans);
-    font-size: 0.9375rem;
-    font-weight: 500;
+    font-size: 0.95rem;
+    font-weight: 400;
     color: var(--c-ink);
     padding: 0.4rem 0;
     background: none;
     border: 0;
     cursor: pointer;
     transition: color 300ms var(--ease-expo);
+    will-change: transform;
   }
 
   .contact-link-primary {
@@ -142,7 +180,7 @@ import { profile } from '../../data/content';
     background-color: var(--c-ink);
     transform: scaleX(0);
     transform-origin: right;
-    transition: transform 360ms var(--ease-expo);
+    transition: transform 400ms var(--ease-expo);
   }
 
   .contact-link-primary::after {

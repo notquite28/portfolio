@@ -66,16 +66,8 @@ export const projects: Project[] = [
     title: "bedtime.ai",
     subtitle: "Multi-Modal AI Storytelling Platform",
     description:
-      "Extended a multi-modal AI storytelling system that turns children's drawings into narrated stories. The pipeline combines EfficientNet-B0 sketch classification (~70% accuracy on children's drawings), OpenAI GPT story generation, Coqui XTTS v2 voice cloning, and a touch-enabled React drawing canvas. Includes 35 backend tests, 19 frontend tests, and Docker Compose deployment.",
-    tags: [
-      "React",
-      "TypeScript",
-      "FastAPI",
-      "EfficientNet",
-      "OpenAI GPT",
-      "Voice Cloning",
-      "Docker",
-    ],
+      "A multi-modal AI pipeline that turns children's drawings into narrated bedtime stories. Combines EfficientNet-B0 sketch classification, GPT story generation, and Coqui XTTS voice cloning in a single orchestrated flow.",
+    tags: ["React", "TypeScript", "FastAPI", "EfficientNet", "OpenAI GPT", "Voice Cloning", "Docker"],
     highlights: [
       "4 models orchestrated in a single pipeline",
       "~70% classification accuracy on children's drawings",
@@ -85,49 +77,44 @@ export const projects: Project[] = [
   },
   {
     title: "Abliteration for LFM2.5",
+    subtitle: "LLM Interpretability via Weight Orthogonalization",
     description:
-      "An interpretability study of LiquidAI/LFM2.5-1.2B-Instruct focused on refusal directions, weight orthogonalization, and inference-time intervention using manual PyTorch hooks. Reduced model refusal rate from 50% to ~37% without retraining.",
-    tags: [
-      "Research",
-      "LLM Interpretability",
-      "PyTorch",
-      "Hugging Face",
-      "Residual Streams",
-      "Inference Intervention",
-    ],
+      "An interpretability study on LiquidAI/LFM2.5 that identifies and removes refusal directions via weight orthogonalization. Reduced model refusal rate from 50% to ~37% without retraining.",
+    tags: ["Research", "LLM Interpretability", "PyTorch", "Hugging Face", "Residual Streams", "Inference Intervention"],
     compactTags: ["PyTorch", "Interpretability", "Research"],
+    highlights: [
+      "Identified refusal directions in LFM2.5-1.2B residual streams",
+      "Removed refusal behavior via weight orthogonalization — no retraining",
+      "Cut refusal rate from 50% to ~37%",
+    ],
     githubUrl: "https://github.com/notquite28/abliteration",
   },
   {
     title: "Nier Archive",
     subtitle: "Real-Time Collaborative Site",
     description:
-      "A real-time collaborative site with live cursor sharing and viewer presence, built with SvelteKit 5, Cloudflare Workers, Durable Objects for stateful WebSocket coordination, KV-backed analytics, and a custom Vite markdown pipeline for blog content.",
-    tags: [
-      "SvelteKit 5",
-      "Cloudflare Workers",
-      "Durable Objects",
-      "WebSockets",
-      "Cloudflare KV",
-      "Vite Plugin",
-    ],
+      "A real-time collaborative site with live cursor sharing and viewer presence. Built on Cloudflare Workers, Durable Objects, and SvelteKit 5.",
+    tags: ["SvelteKit 5", "Cloudflare Workers", "Durable Objects", "WebSockets", "Cloudflare KV", "Vite Plugin"],
     compactTags: ["SvelteKit", "Cloudflare", "WebSockets"],
+    highlights: [
+      "Live cursor sharing and viewer presence across sessions",
+      "Stateful WebSocket coordination via Cloudflare Durable Objects",
+      "Custom Vite markdown pipeline for blog content",
+    ],
     githubUrl: "https://github.com/notquite28/nier-archive-site",
   },
   {
     title: "Yomiji",
     subtitle: "Offline-First WaniKani Android Client",
     description:
-      "An offline-first WaniKani study app for Android, built with React Native and Expo. It implements secure API-token auth, SQLite-backed incremental sync with pending-write queues, dashboard, lesson, and review flows, romaji-to-kana answer checking, local search, diagnostics, and Jest-covered domain logic.",
-    tags: [
-      "React Native",
-      "Expo",
-      "TypeScript",
-      "SQLite",
-      "WaniKani API",
-      "Jest",
-    ],
+      "An offline-first WaniKani study app for Android with SQLite-backed incremental sync, review flows, and romaji-to-kana answer checking. Jest-covered domain logic.",
+    tags: ["React Native", "Expo", "TypeScript", "SQLite", "WaniKani API", "Jest"],
     compactTags: ["React Native", "Expo", "SQLite"],
+    highlights: [
+      "SQLite incremental sync with pending-write queues",
+      "Romaji-to-kana answer checking, offline-first",
+      "Jest-covered domain logic for lessons and reviews",
+    ],
     githubUrl: "https://github.com/notquite28/yomiji",
   },
   {
@@ -135,14 +122,7 @@ export const projects: Project[] = [
     subtitle: "FastAPI + Cloud Run Backend",
     description:
       "A containerized FastAPI service deployed on Google Cloud Run that emulates authenticated user sessions against RethinkBH endpoints to sync appointment and authorization data in real time, bypassing 24-48-hour API latency for downstream applications.",
-    tags: [
-      "System Architecture",
-      "FastAPI",
-      "Cloud Run",
-      "Google Cloud",
-      "DevOps",
-      "Automation",
-    ],
+    tags: ["System Architecture", "FastAPI", "Cloud Run", "Google Cloud", "DevOps", "Automation"],
     compactTags: ["FastAPI", "Cloud Run", "Automation"],
     githubUrl: "",
   },
@@ -159,13 +139,7 @@ export const projects: Project[] = [
     subtitle: "AI Agent for Document Processing",
     description:
       "An LLM agent that automates HIPAA document release workflows, orchestrating authorization checks, compliance validation, and document generation to reduce manual processing time by 60% and deliver $20K in annual savings.",
-    tags: [
-      "AI Agent",
-      "Enterprise",
-      "Automation",
-      "Legal Tech",
-      "Cost Optimization",
-    ],
+    tags: ["AI Agent", "Enterprise", "Automation", "Legal Tech", "Cost Optimization"],
     compactTags: ["AI Agent", "Automation", "HIPAA"],
     githubUrl: "",
   },
@@ -174,50 +148,22 @@ export const projects: Project[] = [
 export const skillCategories: SkillCategory[] = [
   {
     title: "Languages & Frameworks",
-    skills: [
-      "Python",
-      "TypeScript",
-      "JavaScript",
-      "C#",
-      ".NET",
-      "FastAPI",
-      "React",
-      "Angular",
-      "Astro",
-    ],
+    skills: ["Python", "TypeScript", "JavaScript", "C#", ".NET", "FastAPI", "React", "Angular", "Astro"],
   },
   {
     title: "AI & Data Systems",
-    skills: [
-      "LangChain",
-      "LangGraph",
-      "PyTorch",
-      "Vector Search",
-      "Embeddings",
-      "Prompt Engineering",
-    ],
+    skills: ["LangChain", "LangGraph", "PyTorch", "Vector Search", "Embeddings", "Prompt Engineering"],
   },
   {
     title: "Infrastructure & Delivery",
-    skills: [
-      "Google Cloud",
-      "Docker",
-      "AWS",
-      "REST APIs",
-      "Node.js",
-      "SQL Server",
-      "PostgreSQL",
-      "SQL",
-      "Git",
-    ],
+    skills: ["Google Cloud", "Docker", "AWS", "REST APIs", "Node.js", "SQL Server", "PostgreSQL", "SQL", "Git"],
   },
 ];
 
 export const profile = {
   name: "Arnav Panigrahi",
   role: "Software Developer",
-  tagline:
-    "Backend systems, full-stack applications, and AI/ML pipelines shipped to production.",
+  tagline: "Backend systems, full-stack applications, and AI/ML pipelines shipped to production.",
   location: "California, United States",
   email: "arnav.panigrahi@gmail.com",
   github: "https://github.com/notquite28",

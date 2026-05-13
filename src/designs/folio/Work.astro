@@ -1,98 +1,75 @@
 ---
 import { projects } from '../../data/content';
+import { buildUrl } from '../../utils/paths';
 
-const featured = projects[0];
-if (!featured) throw new Error("No projects found");
-const secondary = projects.slice(1, 4);
+const secondary = projects.slice(0, 4);
 const collapsible = projects.slice(4);
+
+const projectImages: Record<string, string> = {
+  'bedtime.ai': 'bedtime.ai.png',
+  'Abliteration for LFM2.5': 'abliteration.png',
+  'Nier Archive': 'nier.png',
+  'Yomiji': 'kanji.png',
+};
+
+const projectThemes = [
+  'theme-sunset',
+  'theme-deep',
+  'theme-forest',
+  'theme-bloom',
+  'theme-sage',
+  'theme-indigo',
+  'theme-bronze',
+];
+
+function hasImage(title: string) {
+  return projectImages[title] !== undefined;
+}
+
+function getImage(title: string) {
+  return buildUrl(projectImages[title] ?? '');
+}
+
+function getTheme(title: string, fallbackIndex: number) {
+  if (hasImage(title)) return '';
+  return projectThemes[fallbackIndex] ?? '';
+}
 ---
 
-<section id="work" class="work reveal">
+<section id="work" class="work">
   <div class="work-inner">
-    <p class="kicker">Selected Work</p>
-    <h2 class="section-title">Projects</h2>
+    <p class="kicker reveal">Selected Work</p>
+    <h2 class="section-title reveal">Projects</h2>
 
-    <div class="featured-card">
-      <div class="featured-content">
-        <h3 class="featured-title">{featured.title}</h3>
-        <p class="featured-desc">{featured.description}</p>
-        {featured.highlights && featured.highlights.length > 0 && (
-          <ul class="featured-highlights">
-            {featured.highlights.map((h) => (
-              <li>{h}</li>
-            ))}
-          </ul>
-        )}
-      </div>
-      <div class="featured-meta">
-        <div class="tags">
-          {featured.tags.map((tag, i) => (
-            <>
-              {i > 0 && <span class="tag-sep"> / </span>}
-              <span class="tag">{tag}</span>
-            </>
-          ))}
-        </div>
-        {featured.githubUrl && (
-          <a href={featured.githubUrl} class="project-link" target="_blank" rel="noopener noreferrer">
-            View on GitHub
-          </a>
-        )}
-      </div>
-    </div>
-
-    <div class="secondary-list">
-      {secondary.map((project) => (
-        <div class="secondary-row">
-          <div class="secondary-main">
-            <h3 class="secondary-title">{project.title}</h3>
-            <p class="secondary-desc">{project.description}</p>
-          </div>
-          <div class="secondary-side">
-            <div class="tags">
-              {(project.compactTags ?? project.tags).map((tag, i) => (
-                <>
-                  {i > 0 && <span class="tag-sep"> / </span>}
-                  <span class="tag">{tag}</span>
-                </>
-              ))}
-            </div>
-            {project.githubUrl && (
-              <a href={project.githubUrl} class="project-link" target="_blank" rel="noopener noreferrer">
-                View on GitHub
-              </a>
+    <div class="project-grid">
+      {secondary.map((project, i) => (
+        <div class="project-card reveal" data-tilt>
+          <div class={`project-visual ${getTheme(project.title, i)}`} aria-hidden="true">
+            {hasImage(project.title) && (
+              <img
+                src={getImage(project.title)}
+                alt={`${project.title} preview`}
+                class="project-image"
+                loading="lazy"
+              />
             )}
+            <div class="project-visual-shine"></div>
           </div>
-        </div>
-      ))}
-    </div>
-
-    {collapsible.length > 0 && (
-      <div class="collapsible-list">
-        {collapsible.map((project) => (
-          <details class="collapsible-item">
-            <summary class="collapsible-summary">
-              <span class="collapsible-summary-main">
-                <span class="collapsible-name">{project.title}</span>
-                <span class="collapsible-tags">
-                  {(project.compactTags ?? project.tags).slice(0, 3).map((tag, i) => (
-                    <>
-                      {i > 0 && <span class="tag-sep"> / </span>}
-                      <span>{tag}</span>
-                    </>
-                  ))}
-                </span>
-              </span>
-              <span class="collapsible-toggle">
-                <span class="chevron"></span>
-              </span>
-            </summary>
-            <div class="collapsible-body">
-              <p class="collapsible-desc">{project.description}</p>
+          <div class="project-content">
+            <h3 class="project-title">{project.title}</h3>
+            {project.subtitle && <p class="project-subtitle">{project.subtitle}</p>}
+            {project.highlights && project.highlights.length > 0 && (
+              <ul class="project-highlights">
+                {project.highlights.map((h) => (
+                  <li>{h}</li>
+                ))}
+              </ul>
+            )}
+            <div class="project-meta">
               <div class="tags">
-                {(project.compactTags ?? project.tags).map((tag, i) => (
+                {(project.compactTags ?? project.tags).map((tag, j) => (
                   <>
-                    {i > 0 && <span class="tag-sep"> / </span>}
+                    {j > 0 && <span class="tag-sep"> / </span>}
                     <span class="tag">{tag}</span>
                   </>
                 ))}
@@ -103,16 +80,188 @@ const collapsible = projects.slice(4);
                 </a>
               )}
             </div>
-          </details>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {collapsible.length > 0 && (
+      <div class="collapsible-list">
+        {collapsible.map((project) => (
+          <div class="collapsible-item reveal" data-collapsible>
+            <div class="collapsible-summary" role="button" tabindex="0" aria-expanded="false">
+              <span class="collapsible-summary-main">
+                <span class="collapsible-name">{project.title}</span>
+                <span class="collapsible-tags">
+                  {(project.compactTags ?? project.tags).slice(0, 3).map((tag, j) => (
+                    <>
+                      {j > 0 && <span class="tag-sep"> / </span>}
+                      <span>{tag}</span>
+                    </>
+                  ))}
+                </span>
+              </span>
+              <span class="collapsible-toggle">
+                <span class="chevron"></span>
+              </span>
+            </div>
+            <div class="collapsible-body">
+              <p class="collapsible-desc">{project.description}</p>
+              <div class="tags">
+                {(project.compactTags ?? project.tags).map((tag, j) => (
+                  <>
+                    {j > 0 && <span class="tag-sep"> / </span>}
+                    <span class="tag">{tag}</span>
+                  </>
+                ))}
+              </div>
+              {project.githubUrl && (
+                <a href={project.githubUrl} class="project-link" target="_blank" rel="noopener noreferrer">
+                  View on GitHub
+                </a>
+              )}
+            </div>
+          </div>
         ))}
       </div>
     )}
   </div>
 </section>
 
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Tilt effect on cards
+  const tiltControllers: AbortController[] = [];
+  if (!prefersReducedMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    const tiltCards = document.querySelectorAll('[data-tilt]');
+    tiltCards.forEach((card) => {
+      const controller = new AbortController();
+      tiltControllers.push(controller);
+      const visual = card.querySelector('.project-visual') as HTMLElement | null;
+
+      const onMouseMove = (e: Event) => {
+        const me = e as MouseEvent;
+        const rect = card.getBoundingClientRect();
+        const x = (me.clientX - rect.left) / rect.width - 0.5;
+        const y = (me.clientY - rect.top) / rect.height - 0.5;
+
+        gsap.to(card, {
+          rotateY: x * 4,
+          rotateX: -y * 4,
+          duration: 0.5,
+          ease: 'power2.out',
+        });
+
+        if (visual) {
+          const shine = visual.querySelector('.project-visual-shine') as HTMLElement | null;
+          if (shine) {
+            shine.style.background = `radial-gradient(circle at ${(x + 0.5) * 100}% ${(y + 0.5) * 100}%, rgba(255,255,255,0.12), transparent 60%)`;
+          }
+        }
+      };
+
+      const onMouseLeave = () => {
+        gsap.to(card, {
+          rotateY: 0,
+          rotateX: 0,
+          duration: 0.7,
+          ease: 'power2.out',
+        });
+      };
+
+      card.addEventListener('mousemove', onMouseMove, { signal: controller.signal });
+      card.addEventListener('mouseleave', onMouseLeave, { signal: controller.signal });
+    });
+  }
+
+  // Fluid collapsible animations
+  const collapsibleControllers: AbortController[] = [];
+  if (!prefersReducedMotion) {
+    const collapsibles = document.querySelectorAll('[data-collapsible]');
+    collapsibles.forEach((item) => {
+      const controller = new AbortController();
+      collapsibleControllers.push(controller);
+      const summary = item.querySelector('.collapsible-summary') as HTMLElement | null;
+      const body = item.querySelector('.collapsible-body') as HTMLElement | null;
+      if (!summary || !body) return;
+
+      let isOpen = false;
+      let anim: gsap.core.Tween | null = null;
+
+      const toggle = () => {
+        if (anim?.isActive()) return;
+
+        if (!isOpen) {
+          // Open
+          body.style.display = 'flex';
+          const fullHeight = body.scrollHeight;
+          gsap.set(body, { height: 0, opacity: 0, overflow: 'hidden' });
+
+          anim = gsap.to(body, {
+            height: fullHeight,
+            opacity: 1,
+            duration: 0.5,
+            ease: 'power3.out',
+            onComplete: () => {
+              gsap.set(body, { height: 'auto', overflow: '' });
+            },
+          });
+
+          summary.setAttribute('aria-expanded', 'true');
+          item.classList.add('is-open');
+          isOpen = true;
+        } else {
+          // Close
+          const currentHeight = body.offsetHeight;
+          gsap.set(body, { height: currentHeight, overflow: 'hidden' });
+
+          anim = gsap.to(body, {
+            height: 0,
+            opacity: 0,
+            duration: 0.4,
+            ease: 'power3.inOut',
+            onComplete: () => {
+              body.style.display = 'none';
+              gsap.set(body, { clearProps: 'height,opacity,overflow' });
+            },
+          });
+
+          summary.setAttribute('aria-expanded', 'false');
+          item.classList.remove('is-open');
+          isOpen = false;
+        }
+      };
+
+      summary.addEventListener('click', toggle, { signal: controller.signal });
+      summary.addEventListener('keydown', (e: Event) => {
+        if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
+          e.preventDefault();
+          toggle();
+        }
+      }, { signal: controller.signal });
+
+      // Initially hide body
+      body.style.display = 'none';
+    });
+  }
+
+  // Cleanup listeners on page unload
+  window.addEventListener('beforeunload', () => {
+    tiltControllers.forEach((c) => c.abort());
+    collapsibleControllers.forEach((c) => c.abort());
+  });
+</script>
+
 <style>
   .work {
-    padding: clamp(5rem, 10vw, 8rem) clamp(1.5rem, 4vw, 3rem);
+    padding: clamp(6rem, 12vw, 10rem) clamp(1.5rem, 4vw, 3rem);
+    position: relative;
   }
 
   .work-inner {
@@ -124,7 +273,7 @@ const collapsible = projects.slice(4);
     font-family: var(--font-sans);
     font-size: 0.7rem;
     font-weight: 500;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--c-accent);
     margin-bottom: 0.75rem;
@@ -133,80 +282,108 @@ const collapsible = projects.slice(4);
   .section-title {
     font-family: var(--font-serif);
     font-weight: 300;
-    font-size: clamp(1.8rem, 3.5vw, 3rem);
-    line-height: 1.15;
-    letter-spacing: -0.015em;
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
     color: var(--c-ink);
+    margin-bottom: 3rem;
+  }
+
+  /* Project grid — 4 equal cards */
+  .project-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
     margin-bottom: 2.5rem;
   }
 
-  .featured-card {
+  .project-card {
     position: relative;
     overflow: hidden;
     background-color: var(--c-paper);
-    border-radius: 1rem;
+    border-radius: 1.25rem;
     border: 1px solid var(--c-card-border);
-    padding: clamp(1.5rem, 3vw, 2.5rem);
-    display: grid;
-    gap: 2rem;
-    margin-bottom: 2rem;
-    box-shadow: var(--shadow-soft);
-    transition:
-      border-color 520ms var(--ease-expo),
-      transform 520ms var(--ease-expo),
-      box-shadow 520ms var(--ease-expo);
-  }
-
-  .featured-card:hover {
-    border-color: color-mix(in oklch, var(--c-accent) 38%, var(--c-card-border));
-    box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.28);
-    transform: translateY(-4px);
-  }
-
-  .featured-content {
-    position: relative;
-    z-index: 1;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    box-shadow: var(--shadow-soft);
+    transition: border-color 600ms var(--ease-expo), box-shadow 600ms var(--ease-expo);
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    will-change: transform;
   }
 
-  .featured-title {
+  .project-card:hover {
+    border-color: color-mix(in oklch, var(--c-accent) 25%, var(--c-card-border));
+    box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.28);
+  }
+
+  .project-visual {
+    position: relative;
+    min-height: 12rem;
+    overflow: hidden;
+  }
+
+  .project-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .project-visual-shine {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    transition: background 300ms ease;
+    z-index: 1;
+  }
+
+  .project-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: clamp(1.25rem, 2.5vw, 1.75rem);
+    flex: 1;
+  }
+
+  .project-title {
     font-family: var(--font-serif);
     font-weight: 400;
-    font-size: clamp(1.7rem, 2.8vw, 2.35rem);
-    line-height: 1.15;
-    letter-spacing: -0.015em;
+    font-size: 1.4rem;
+    line-height: 1.2;
     color: var(--c-ink);
   }
 
-  .featured-desc {
-    font-family: var(--font-serif);
-    font-size: 1rem;
-    line-height: 1.72;
-    color: var(--c-body);
-    max-width: 44rem;
+  .project-subtitle {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--c-accent-soft);
+    margin-top: -0.4rem;
+    letter-spacing: 0.02em;
   }
 
-  .featured-highlights {
+  .project-highlights {
     list-style: none;
     padding: 0;
-    margin: 0.5rem 0 0;
+    margin: 0.25rem 0 0;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.4rem;
   }
 
-  .featured-highlights li {
+  .project-highlights li {
     position: relative;
     padding-left: 1rem;
-    font-family: var(--font-sans);
-    font-size: 0.9375rem;
-    line-height: 1.6;
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    line-height: 1.55;
     color: var(--c-body);
   }
 
-  .featured-highlights li::before {
+  .project-highlights li::before {
     content: '';
     position: absolute;
     left: 0;
@@ -217,18 +394,41 @@ const collapsible = projects.slice(4);
     background-color: var(--c-accent);
   }
 
-  .featured-meta {
-    position: relative;
-    z-index: 1;
+  .project-meta {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    justify-content: flex-start;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--c-rule);
   }
 
+  /* Theme gradients — fallback for projects without images */
+  .theme-sunset {
+    background: linear-gradient(135deg, #3d1f16 0%, #5a2e1e 30%, #7a3e28 60%, #a05030 100%);
+  }
+  .theme-deep {
+    background: linear-gradient(135deg, #1a1628 0%, #252040 40%, #302858 70%, #1e1a35 100%);
+  }
+  .theme-forest {
+    background: linear-gradient(135deg, #0f1f1a 0%, #1a3528 35%, #244535 65%, #183028 100%);
+  }
+  .theme-bloom {
+    background: linear-gradient(135deg, #2a1820 0%, #3d2530 35%, #4d3038 65%, #352028 100%);
+  }
+  .theme-sage {
+    background: linear-gradient(135deg, #1a2018 0%, #253020 35%, #304028 65%, #1e281a 100%);
+  }
+  .theme-indigo {
+    background: linear-gradient(135deg, #141a2e 0%, #1c2545 40%, #253058 70%, #1a1f38 100%);
+  }
+  .theme-bronze {
+    background: linear-gradient(135deg, #2a1f14 0%, #3d2e1e 35%, #4d3a28 65%, #352618 100%);
+  }
+
+  /* Shared */
   .tags {
     font-family: var(--font-sans);
-    font-size: 0.8125rem;
+    font-size: 0.78rem;
     line-height: 1.8;
     color: var(--c-muted);
   }
@@ -241,13 +441,14 @@ const collapsible = projects.slice(4);
   .project-link {
     display: inline-block;
     font-family: var(--font-sans);
-    font-size: 0.875rem;
+    font-size: 0.85rem;
     font-weight: 500;
     color: var(--c-accent);
     text-decoration: none;
     position: relative;
     padding-bottom: 1px;
-    transition: color 280ms var(--ease-expo);
+    transition: color 300ms var(--ease-expo);
+    align-self: flex-start;
   }
 
   .project-link:hover {
@@ -264,7 +465,7 @@ const collapsible = projects.slice(4);
     background-color: var(--c-accent);
     transform: scaleX(0);
     transform-origin: right;
-    transition: transform 300ms var(--ease-expo);
+    transition: transform 400ms var(--ease-expo);
   }
 
   .project-link:hover::after {
@@ -272,89 +473,18 @@ const collapsible = projects.slice(4);
     transform-origin: left;
   }
 
-  .secondary-list {
-    border-top: 1px solid var(--c-rule);
-  }
-
-  .secondary-row {
-    position: relative;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    padding: 1.75rem 0;
-    border-bottom: 1px solid var(--c-rule);
-    transition:
-      border-color 360ms var(--ease-expo),
-      padding-left 360ms var(--ease-expo),
-      padding-right 360ms var(--ease-expo);
-  }
-
-  .secondary-row::before {
-    content: '';
-    position: absolute;
-    inset: 0 -1rem;
-    z-index: -1;
-    border-radius: 0.75rem;
-    background: rgba(238, 231, 220, 0.028);
-    opacity: 0;
-    transform: scaleX(0.985);
-    transition:
-      opacity 360ms var(--ease-expo),
-      transform 360ms var(--ease-expo);
-  }
-
-  .secondary-row:hover {
-    border-color: color-mix(in oklch, var(--c-accent) 34%, var(--c-rule));
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
-  }
-
-  .secondary-row:hover::before {
-    opacity: 1;
-    transform: scaleX(1);
-  }
-
-  .secondary-title {
-    font-family: var(--font-serif);
-    font-weight: 400;
-    font-size: 1.25rem;
-    line-height: 1.25;
-    color: var(--c-ink);
-    margin-bottom: 0.5rem;
-  }
-
-  .secondary-desc {
-    font-family: var(--font-serif);
-    font-size: 0.9375rem;
-    line-height: 1.65;
-    color: var(--c-body);
-  }
-
-  .secondary-side {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
+  /* Collapsible */
   .collapsible-list {
-    margin-top: 1.5rem;
+    border-top: 1px solid var(--c-rule);
   }
 
   .collapsible-item {
-    border-top: 1px solid var(--c-rule);
-    transition: border-color 280ms var(--ease-expo);
+    border-bottom: 1px solid var(--c-rule);
+    transition: border-color 300ms var(--ease-expo);
   }
 
   .collapsible-item:hover {
-    border-color: color-mix(in oklch, var(--c-accent) 26%, var(--c-rule));
-  }
-
-  .collapsible-item:first-child {
-    border-top: 0;
-  }
-
-  .collapsible-item:last-child {
-    border-bottom: 1px solid var(--c-rule);
+    border-color: color-mix(in oklch, var(--c-accent) 20%, var(--c-rule));
   }
 
   .collapsible-summary {
@@ -362,18 +492,19 @@ const collapsible = projects.slice(4);
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 1rem 0;
+    padding: 1.1rem 0;
     cursor: pointer;
-    list-style: none;
     font-family: var(--font-sans);
     font-size: 0.95rem;
     font-weight: 500;
     color: var(--c-ink);
-    transition: color 200ms ease;
+    transition: color 300ms ease;
+    user-select: none;
+    outline: none;
   }
 
-  .collapsible-summary:hover .collapsible-tags {
-    color: var(--c-body);
+  .collapsible-summary:focus-visible {
+    color: var(--c-accent);
   }
 
   .collapsible-summary-main {
@@ -397,10 +528,6 @@ const collapsible = projects.slice(4);
     color: var(--c-muted);
   }
 
-  .collapsible-summary::-webkit-details-marker {
-    display: none;
-  }
-
   .collapsible-summary:hover {
     color: var(--c-accent);
   }
@@ -408,6 +535,7 @@ const collapsible = projects.slice(4);
   .collapsible-toggle {
     display: inline-flex;
     align-items: center;
+    flex-shrink: 0;
   }
 
   .chevron {
@@ -417,34 +545,42 @@ const collapsible = projects.slice(4);
     border-right: 1.5px solid currentColor;
     border-bottom: 1.5px solid currentColor;
     transform: rotate(45deg) translateY(-1px);
-    transition:
-      transform 280ms var(--ease-expo),
-      color 280ms var(--ease-expo);
+    transition: transform 350ms var(--ease-expo);
   }
 
-  .collapsible-item[open] .chevron {
+  .collapsible-item.is-open .chevron {
     transform: rotate(225deg) translateY(1px);
   }
 
   .collapsible-body {
-    padding: 0 0 1.25rem;
+    padding: 0 0 1.5rem;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
   }
 
   .collapsible-desc {
-    font-family: var(--font-serif);
-    font-size: 0.9375rem;
+    font-family: var(--font-body);
+    font-size: 0.92rem;
     line-height: 1.65;
     color: var(--c-body);
     max-width: 44rem;
   }
 
-  @media (min-width: 640px) {
-    .secondary-row {
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 2rem;
+  @media (min-width: 768px) {
+    .project-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .project-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .project-visual {
+      min-height: 10rem;
     }
   }
 
@@ -453,13 +589,6 @@ const collapsible = projects.slice(4);
       flex-direction: column;
       align-items: flex-start;
       gap: 0.25rem;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .featured-card {
-      grid-template-columns: 1.2fr 0.8fr;
-      align-items: start;
     }
   }
 </style>

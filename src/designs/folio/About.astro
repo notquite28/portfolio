@@ -3,30 +3,33 @@ import { profile } from '../../data/content';
 import { buildUrl } from '../../utils/paths';
 ---
 
-<section id="about" class="about reveal">
+<section id="about" class="about">
   <div class="about-inner">
     <div class="about-image-col">
-      <img
-        src={buildUrl(profile.image)}
-        alt="Portrait of Arnav Panigrahi"
-        class="about-portrait"
-        loading="lazy"
-      />
+      <div class="about-image-frame" data-parallax="0.12">
+        <img
+          src={buildUrl(profile.image)}
+          alt="Portrait of Arnav Panigrahi"
+          class="about-portrait"
+          loading="lazy"
+        />
+        <div class="about-image-border" aria-hidden="true"></div>
+      </div>
     </div>
     <div class="about-text-col">
-      <p class="kicker">Background</p>
-      <h2 class="about-title">About</h2>
-      <div class="about-body">
+      <p class="kicker reveal">Background</p>
+      <h2 class="about-title reveal">About</h2>
+      <div class="about-body reveal-group">
         {profile.about.map((paragraph) => (
-          <p>{paragraph}</p>
+          <p class="reveal-child">{paragraph}</p>
         ))}
       </div>
-      <div class="about-facts">
-        <div class="about-fact">
+      <div class="about-facts reveal-group">
+        <div class="about-fact reveal-child">
           <span class="fact-label">Based in</span>
           <span class="fact-desc">California, United States</span>
         </div>
-        <div class="about-fact">
+        <div class="about-fact reveal-child">
           <span class="fact-label">Education</span>
           <span class="fact-desc">M.S. Computer Science, UC Riverside</span>
         </div>
@@ -37,7 +40,8 @@ import { buildUrl } from '../../utils/paths';
 
 <style>
   .about {
-    padding: clamp(5rem, 10vw, 8rem) clamp(1.5rem, 4vw, 3rem);
+    padding: clamp(6rem, 12vw, 10rem) clamp(1.5rem, 4vw, 3rem);
+    position: relative;
   }
 
   .about-inner {
@@ -45,40 +49,56 @@ import { buildUrl } from '../../utils/paths';
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr;
-    gap: clamp(2rem, 4vw, 3rem);
+    gap: clamp(2.5rem, 5vw, 4rem);
     align-items: center;
+  }
+
+  .about-image-col {
+    display: flex;
+    justify-content: center;
+  }
+
+  .about-image-frame {
+    position: relative;
+    width: 100%;
+    max-width: 20rem;
+    will-change: transform;
   }
 
   .about-portrait {
     display: block;
     width: 100%;
-    max-width: 18rem;
     aspect-ratio: 1;
     object-fit: cover;
     border-radius: 50%;
-    border: 1px solid color-mix(in oklch, var(--c-accent) 26%, var(--c-card-border));
-    margin: 0 auto;
-    box-shadow:
-      0 0 0 0.75rem rgba(238, 231, 220, 0.018),
-      0 1.5rem 4rem rgba(0, 0, 0, 0.3);
-    filter: saturate(0.88) contrast(1.04);
-    transition:
-      filter 520ms var(--ease-expo),
-      transform 520ms var(--ease-expo),
-      border-color 520ms var(--ease-expo);
+    filter: saturate(0.85) contrast(1.04);
+    transition: filter 600ms var(--ease-expo), transform 600ms var(--ease-expo);
   }
 
-  .about-portrait:hover {
-    border-color: color-mix(in oklch, var(--c-accent-soft) 46%, var(--c-card-border));
+  .about-image-frame:hover .about-portrait {
     filter: saturate(1) contrast(1.06);
-    transform: translateY(-3px);
+    transform: scale(1.02);
+  }
+
+  .about-image-border {
+    position: absolute;
+    inset: -0.5rem;
+    border-radius: 50%;
+    border: 1px solid color-mix(in oklch, var(--c-accent) 20%, var(--c-card-border));
+    transition: border-color 600ms var(--ease-expo), transform 600ms var(--ease-expo);
+    pointer-events: none;
+  }
+
+  .about-image-frame:hover .about-image-border {
+    border-color: color-mix(in oklch, var(--c-accent-soft) 35%, var(--c-card-border));
+    transform: scale(1.03);
   }
 
   .kicker {
     font-family: var(--font-sans);
     font-size: 0.7rem;
     font-weight: 500;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--c-accent);
     margin-bottom: 0.75rem;
@@ -87,11 +107,11 @@ import { buildUrl } from '../../utils/paths';
   .about-title {
     font-family: var(--font-serif);
     font-weight: 300;
-    font-size: clamp(1.8rem, 3.5vw, 3rem);
-    line-height: 1.15;
-    letter-spacing: -0.015em;
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
     color: var(--c-ink);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.75rem;
   }
 
   .about-body {
@@ -99,11 +119,11 @@ import { buildUrl } from '../../utils/paths';
   }
 
   .about-body p {
-    font-family: var(--font-serif);
-    font-size: 1rem;
-    line-height: 1.72;
+    font-family: var(--font-body);
+    font-size: 1.02rem;
+    line-height: 1.75;
     color: var(--c-body);
-    margin-bottom: 1rem;
+    margin-bottom: 1.1rem;
   }
 
   .about-body p:last-child {
@@ -113,12 +133,14 @@ import { buildUrl } from '../../utils/paths';
   .about-facts {
     position: relative;
     overflow: hidden;
-    margin-top: 2rem;
-    padding: clamp(1.25rem, 3vw, 1.75rem);
-    border: 1px solid color-mix(in oklch, var(--c-card-border) 82%, transparent);
-    border-radius: 1.25rem;
-    background-color: var(--c-paper);
-    box-shadow: 0 1rem 2.75rem rgba(0, 0, 0, 0.14);
+    margin-top: 2.5rem;
+    padding: clamp(1.5rem, 3vw, 2rem);
+    border: 1px solid color-mix(in oklch, var(--c-card-border) 70%, transparent);
+    border-radius: 1rem;
+    background:
+      linear-gradient(135deg, rgba(201, 123, 90, 0.03), transparent 60%),
+      var(--c-paper);
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.16);
     display: grid;
     gap: 0;
   }
@@ -132,15 +154,15 @@ import { buildUrl } from '../../utils/paths';
 
   .fact-label {
     font-family: var(--font-sans);
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--c-ink);
   }
 
   .fact-desc {
-    font-family: var(--font-serif);
+    font-family: var(--font-body);
     font-size: 0.95rem;
     line-height: 1.6;
     color: var(--c-body);
