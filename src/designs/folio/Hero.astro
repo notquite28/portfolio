@@ -57,15 +57,22 @@ import { profile } from '../../data/content';
     .to('.hero-tagline', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, '-=0.6')
     .to('.hero-links', { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, '-=0.5');
 
-    // Ambient floating orbs respond to mouse
+    // Ambient floating orbs respond to mouse — quickTo avoids creating new tweens per frame
     const hero = document.querySelector('.hero') as HTMLElement | null;
     if (hero) {
+      const orb1X = gsap.quickTo('.hero-orb-1', 'x', { duration: 1.5, ease: 'power2.out' });
+      const orb1Y = gsap.quickTo('.hero-orb-1', 'y', { duration: 1.5, ease: 'power2.out' });
+      const orb2X = gsap.quickTo('.hero-orb-2', 'x', { duration: 1.5, ease: 'power2.out' });
+      const orb2Y = gsap.quickTo('.hero-orb-2', 'y', { duration: 1.5, ease: 'power2.out' });
+
       hero.addEventListener('mousemove', (e) => {
         const rect = hero.getBoundingClientRect();
         const x = (e.clientX - rect.left) / rect.width - 0.5;
         const y = (e.clientY - rect.top) / rect.height - 0.5;
-        gsap.to('.hero-orb-1', { x: x * 60, y: y * 40, duration: 1.5, ease: 'power2.out' });
-        gsap.to('.hero-orb-2', { x: x * -40, y: y * -30, duration: 1.5, ease: 'power2.out' });
+        orb1X(x * 60);
+        orb1Y(y * 40);
+        orb2X(x * -40);
+        orb2Y(y * -30);
       });
     }
   } else if (nameEl) {

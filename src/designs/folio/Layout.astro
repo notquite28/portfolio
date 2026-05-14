@@ -126,15 +126,16 @@ const isProd = import.meta.env.PROD;
     position: fixed;
     width: 40rem;
     height: 40rem;
+    margin-left: -20rem;
+    margin-top: -20rem;
     border-radius: 50%;
     pointer-events: none;
     z-index: 9998;
     background: radial-gradient(circle, rgba(201, 123, 90, 0.06) 0%, transparent 70%);
-    transform: translate(-50%, -50%);
-    left: var(--cursor-x, 50%);
-    top: var(--cursor-y, 50%);
-    transition: left 0.15s ease-out, top 0.15s ease-out;
-    will-change: left, top;
+    transform: translate3d(var(--cursor-x, 0px), var(--cursor-y, 0px), 0);
+    left: 0;
+    top: 0;
+    will-change: transform;
     opacity: 0;
   }
 
@@ -194,20 +195,8 @@ const isProd = import.meta.env.PROD;
   .folio-theme .reveal {
     opacity: 0;
     transform: translateY(28px);
-    transition: opacity 900ms var(--ease-expo), transform 900ms var(--ease-expo);
     will-change: transform, opacity;
   }
-
-  .folio-theme .reveal.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .folio-theme .reveal-delay-1 { transition-delay: 80ms; }
-  .folio-theme .reveal-delay-2 { transition-delay: 160ms; }
-  .folio-theme .reveal-delay-3 { transition-delay: 240ms; }
-  .folio-theme .reveal-delay-4 { transition-delay: 320ms; }
-  .folio-theme .reveal-delay-5 { transition-delay: 400ms; }
 
   @media (prefers-reduced-motion: reduce) {
     .folio-theme .reveal {
@@ -237,10 +226,12 @@ const isProd = import.meta.env.PROD;
   let lenis: Lenis | null = null;
   if (!prefersReducedMotion) {
     lenis = new Lenis({
-      duration: 1.15,
+      duration: 0.85,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       smoothWheel: true,
+      syncTouch: true,
+      anchors: true,
     });
 
     lenis.on('scroll', ScrollTrigger.update);
@@ -250,7 +241,7 @@ const isProd = import.meta.env.PROD;
     gsap.ticker.lagSmoothing(0);
   }
 
-  // Cursor glow
+  // Cursor glow — transform-only (no layout thrashing), pauses RAF when idle
   const cursorGlow = document.querySelector('.cursor-glow') as HTMLElement | null;
   let cursorRafId: number | null = null;
   if (cursorGlow && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
@@ -258,14 +249,26 @@ const isProd = import.meta.env.PROD;
     let mouseY = window.innerHeight / 2;
     let currentX = mouseX;
     let currentY = mouseY;
+    let lastMouseMove = performance.now();
+    let isCursorActive = false;
 
     const onMouseMove = (e: MouseEvent) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
+      lastMouseMove = performance.now();
+      if (!isCursorActive) {
+        isCursorActive = true;
+        animateCursor();
+      }
     };
     document.addEventListener('mousemove', onMouseMove);
 
     function animateCursor() {
+      const now = performance.now();
+      if (now - lastMouseMove > 100) {
+        isCursorActive = false;
+        return;
+      }
       currentX += (mouseX - currentX) * 0.08;
       currentY += (mouseY - currentY) * 0.08;
       cursorGlow!.style.setProperty('--cursor-x', `${currentX}px`);

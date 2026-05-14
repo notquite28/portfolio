@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "files": {
+    "astro.config.mjs": {
+      "latest": {
+        "commit": "f543c6c",
+        "timestamp": "2026-05-13T23:21:00.980Z",
+        "mi": 69,
+        "cognitive": 0,
+        "nesting": 0,
+        "lines": 16,
+        "maxCyclomatic": 1,
+        "entropy": 3.09
+      },
+      "history": [
+        {
+          "commit": "f543c6c",
+          "timestamp": "2026-05-13T23:21:00.980Z",
+          "mi": 69,
+          "cognitive": 0,
+          "nesting": 0,
+          "lines": 16,
+          "maxCyclomatic": 1,
+          "entropy": 3.09
+        }
+      ],
+      "trend": "stable"
+    },
+    "src/utils/paths.ts": {
+      "latest": {
+        "commit": "f543c6c",
+        "timestamp": "2026-05-13T23:21:10.665Z",
+        "mi": 67.1,
+        "cognitive": 4,
+        "nesting": 1,
+        "lines": 20,
+        "maxCyclomatic": 1,
+        "entropy": 3.92
+      },
+      "history": [
+        {
+          "commit": "f543c6c",
+          "timestamp": "2026-05-13T23:21:10.665Z",
+          "mi": 67.1,
+          "cognitive": 4,
+          "nesting": 1,
+          "lines": 20,
+          "maxCyclomatic": 1,
+          "entropy": 3.92
+        }
+      ],
+      "trend": "stable"
+    }
+  },
+  "capturedAt": "2026-05-13T23:21:15.665Z"
+}

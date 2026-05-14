@@ -145,18 +145,17 @@ function getTheme(title: string, fallbackIndex: number) {
       tiltControllers.push(controller);
       const visual = card.querySelector('.project-visual') as HTMLElement | null;
 
+      const quickRotateY = gsap.quickTo(card, 'rotateY', { duration: 0.5, ease: 'power2.out' });
+      const quickRotateX = gsap.quickTo(card, 'rotateX', { duration: 0.5, ease: 'power2.out' });
+
       const onMouseMove = (e: Event) => {
         const me = e as MouseEvent;
         const rect = card.getBoundingClientRect();
         const x = (me.clientX - rect.left) / rect.width - 0.5;
         const y = (me.clientY - rect.top) / rect.height - 0.5;
 
-        gsap.to(card, {
-          rotateY: x * 4,
-          rotateX: -y * 4,
-          duration: 0.5,
-          ease: 'power2.out',
-        });
+        quickRotateY(x * 4);
+        quickRotateX(-y * 4);
 
         if (visual) {
           const shine = visual.querySelector('.project-visual-shine') as HTMLElement | null;
@@ -167,12 +166,8 @@ function getTheme(title: string, fallbackIndex: number) {
       };
 
       const onMouseLeave = () => {
-        gsap.to(card, {
-          rotateY: 0,
-          rotateX: 0,
-          duration: 0.7,
-          ease: 'power2.out',
-        });
+        quickRotateY(0);
+        quickRotateX(0);
       };
 
       card.addEventListener('mousemove', onMouseMove, { signal: controller.signal });
@@ -198,7 +193,7 @@ function getTheme(title: string, fallbackIndex: number) {
         if (anim?.isActive()) return;
 
         if (!isOpen) {
-          // Open
+          // Open — measure natural height (padding intact), then animate
           body.style.display = 'flex';
           const fullHeight = body.scrollHeight;
           gsap.set(body, { height: 0, opacity: 0, overflow: 'hidden' });
@@ -217,18 +212,19 @@ function getTheme(title: string, fallbackIndex: number) {
           item.classList.add('is-open');
           isOpen = true;
         } else {
-          // Close
-          const currentHeight = body.offsetHeight;
+          // Close — freeze current height, then animate height + padding to 0
+          const currentHeight = body.scrollHeight;
           gsap.set(body, { height: currentHeight, overflow: 'hidden' });
 
           anim = gsap.to(body, {
             height: 0,
+            paddingBottom: 0,
             opacity: 0,
             duration: 0.4,
             ease: 'power3.inOut',
             onComplete: () => {
+              gsap.set(body, { clearProps: 'height,paddingBottom,opacity,overflow' });
               body.style.display = 'none';
-              gsap.set(body, { clearProps: 'height,opacity,overflow' });
             },
           });
 
