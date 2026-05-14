@@ -86,6 +86,8 @@ function getTheme(title: string, fallbackIndex: number) {
     </div>
 
     {collapsible.length > 0 && (
+      <div class="collapsible-list-wrapper">
+        <p class="kicker collapsible-kicker reveal">Earlier Work</p>
       <div class="collapsible-list">
         {collapsible.map((project) => (
           <div class="collapsible-item reveal" data-collapsible>
@@ -123,6 +125,7 @@ function getTheme(title: string, fallbackIndex: number) {
             </div>
           </div>
         ))}
+      </div>
       </div>
     )}
   </div>
@@ -256,7 +259,7 @@ function getTheme(title: string, fallbackIndex: number) {
 
 <style>
   .work {
-    padding: clamp(6rem, 12vw, 10rem) clamp(1.5rem, 4vw, 3rem);
+    padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 4vw, 3rem) clamp(6rem, 12vw, 10rem);
     position: relative;
   }
 
@@ -470,6 +473,14 @@ function getTheme(title: string, fallbackIndex: number) {
   }
 
   /* Collapsible */
+  .collapsible-list-wrapper {
+    margin-top: 2.5rem;
+  }
+
+  .collapsible-kicker {
+    margin-bottom: 1rem;
+  }
+
   .collapsible-list {
     border-top: 1px solid var(--c-rule);
   }
@@ -481,6 +492,7 @@ function getTheme(title: string, fallbackIndex: number) {
 
   .collapsible-item:hover {
     border-color: color-mix(in oklch, var(--c-accent) 20%, var(--c-rule));
+    background: rgba(201, 123, 90, 0.03);
   }
 
   .collapsible-summary {
@@ -500,6 +512,8 @@ function getTheme(title: string, fallbackIndex: number) {
   }
 
   .collapsible-summary:focus-visible {
+    outline: 1px solid var(--c-accent-soft);
+    outline-offset: 4px;
     color: var(--c-accent);
   }
 
@@ -536,12 +550,17 @@ function getTheme(title: string, fallbackIndex: number) {
 
   .chevron {
     display: block;
-    width: 0.45rem;
-    height: 0.45rem;
+    width: 0.55rem;
+    height: 0.55rem;
     border-right: 1.5px solid currentColor;
     border-bottom: 1.5px solid currentColor;
     transform: rotate(45deg) translateY(-1px);
     transition: transform 350ms var(--ease-expo);
+    opacity: 0.6;
+  }
+
+  .collapsible-item:hover .chevron {
+    opacity: 1;
   }
 
   .collapsible-item.is-open .chevron {

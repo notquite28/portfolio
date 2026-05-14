@@ -15,17 +15,18 @@ const links = [
     <a href="/" class="nav-brand">{profile.name}</a>
     <div class="nav-links">
       {links.map((link) => (
-        <a href={link.href} class="nav-link">{link.label}</a>
+        <a href={link.href} class="nav-link" data-nav-link>{link.label}</a>
       ))}
     </div>
     <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <span class="nav-toggle-bar"></span>
       <span class="nav-toggle-bar"></span>
       <span class="nav-toggle-bar"></span>
     </button>
   </div>
   <div class="nav-mobile" aria-hidden="true">
     {links.map((link) => (
-      <a href={link.href} class="nav-mobile-link">{link.label}</a>
+      <a href={link.href} class="nav-mobile-link" data-nav-link>{link.label}</a>
     ))}
   </div>
 </nav>
@@ -51,6 +52,37 @@ const links = [
       });
     });
   }
+
+  // Active section tracking
+  const sectionIds = ['about', 'experience', 'skills', 'work', 'contact'];
+  const navLinks = document.querySelectorAll<HTMLElement>('[data-nav-link]');
+
+  const updateActiveLink = (id: string | null) => {
+    navLinks.forEach((link) => {
+      const href = link.getAttribute('href');
+      if (href === `#${id}`) {
+        link.classList.add('is-active');
+      } else {
+        link.classList.remove('is-active');
+      }
+    });
+  };
+
+  const sectionObserver = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          updateActiveLink(entry.target.id);
+        }
+      }
+    },
+    { rootMargin: '-20% 0px -60% 0px' }
+  );
+
+  sectionIds.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) sectionObserver.observe(el);
+  });
 
   // Hide/show on scroll
   if (nav) {
@@ -170,15 +202,20 @@ const links = [
     color: var(--c-ink);
   }
 
-  .nav-link:hover::after {
+  .nav-link:hover::after,
+  .nav-link.is-active::after {
     opacity: 1;
     transform: scaleX(1);
+  }
+
+  .nav-link.is-active {
+    color: var(--c-ink);
   }
 
   .nav-toggle {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 4px;
     background: none;
     border: none;
     cursor: pointer;
@@ -193,12 +230,21 @@ const links = [
     transition: transform 300ms var(--ease-expo), opacity 300ms ease;
   }
 
+  .nav-toggle-bar:nth-child(2) {
+    transition: transform 300ms var(--ease-expo), opacity 300ms ease, width 300ms var(--ease-expo);
+  }
+
   .nav-toggle[aria-expanded='true'] .nav-toggle-bar:first-child {
-    transform: translateY(3.25px) rotate(45deg);
+    transform: translateY(5px) rotate(45deg);
+  }
+
+  .nav-toggle[aria-expanded='true'] .nav-toggle-bar:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
   }
 
   .nav-toggle[aria-expanded='true'] .nav-toggle-bar:last-child {
-    transform: translateY(-3.25px) rotate(-45deg);
+    transform: translateY(-5px) rotate(-45deg);
   }
 
   .nav-mobile {
@@ -224,8 +270,13 @@ const links = [
     transition: color 200ms ease;
   }
 
-  .nav-mobile-link:hover {
+  .nav-mobile-link:hover,
+  .nav-mobile-link.is-active {
     color: var(--c-ink);
+  }
+
+  .nav-mobile-link.is-active {
+    color: var(--c-accent-soft);
   }
 
   @media (min-width: 768px) {
