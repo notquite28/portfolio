@@ -1,10 +1,22 @@
 ---
+import { profile } from '../../data/content';
+
 const year = new Date().getFullYear();
+const footerLinks = [
+  { href: profile.github, label: 'GitHub' },
+  { href: profile.linkedin, label: 'LinkedIn' },
+  { href: profile.resume, label: 'Resume' },
+];
 ---
 
 <footer class="footer">
   <div class="footer-inner">
     <span class="footer-name">Arnav Panigrahi</span>
+    <nav class="footer-links" aria-label="Footer navigation">
+      {footerLinks.map((link) => (
+        <a href={link.href} class="footer-link" target="_blank" rel="noopener noreferrer">{link.label}</a>
+      ))}
+    </nav>
     <span class="footer-copy">&copy; {year} &middot; Crafted with care</span>
   </div>
 </footer>
@@ -69,6 +81,21 @@ const year = new Date().getFullYear();
     color: var(--c-body);
     letter-spacing: 0.02em;
   }
+  .footer-links {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  .footer-link {
+    color: var(--c-muted);
+    text-decoration: none;
+    transition: color 300ms var(--ease-expo);
+  }
+
+  .footer-link:hover {
+    color: var(--c-accent-soft);
+  }
+
 
   @media (max-width: 639px) {
     .footer-inner {
@@ -81,7 +108,8 @@ const year = new Date().getFullYear();
   .back-to-top {
     position: fixed;
     bottom: 1.5rem;
-    right: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(8px);
     z-index: 30;
     display: flex;
     align-items: center;
@@ -95,7 +123,6 @@ const year = new Date().getFullYear();
     color: var(--c-muted);
     cursor: pointer;
     opacity: 0;
-    transform: translateY(8px);
     pointer-events: none;
     transition:
       opacity 400ms var(--ease-expo),
@@ -106,23 +133,12 @@ const year = new Date().getFullYear();
 
   .back-to-top.is-visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(-50%) translateY(0);
     pointer-events: auto;
   }
 
   .back-to-top:hover {
     color: var(--c-ink);
     border-color: var(--c-accent-soft);
-  }
-
-  @media (max-width: 767px) {
-    .back-to-top {
-      right: 50%;
-      transform: translateX(50%) translateY(8px);
-    }
-
-    .back-to-top.is-visible {
-      transform: translateX(50%) translateY(0);
-    }
   }
 </style>

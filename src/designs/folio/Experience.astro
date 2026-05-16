@@ -26,9 +26,16 @@ import { experiences } from '../../data/content';
                 </div>
               </div>
               <ul class="experience-bullets">
-                {exp.bullets.map((bullet) => (
-                  <li class="experience-bullet">{bullet}</li>
-                ))}
+                {exp.bullets.map((bullet) => {
+                  const commaIdx = bullet.indexOf(', ');
+                  const lead = commaIdx >= 0 ? bullet.slice(0, commaIdx + 1) : null;
+                  const rest = commaIdx >= 0 ? bullet.slice(commaIdx + 1) : bullet;
+                  return (
+                    <li class="experience-bullet">
+                      {lead ? <><strong>{lead}</strong> {rest}</> : bullet}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </div>
@@ -161,7 +168,7 @@ import { experiences } from '../../data/content';
 
   .timeline-line {
     position: absolute;
-    left: 0;
+    left: 0.75rem;
     top: 0.5rem;
     bottom: 0;
     width: 1px;
@@ -191,7 +198,7 @@ import { experiences } from '../../data/content';
 
   .timeline-dot {
     position: absolute;
-    left: -2rem;
+    left: -1.25rem;
     top: 0.65rem;
     width: 8px;
     height: 8px;
@@ -268,6 +275,11 @@ import { experiences } from '../../data/content';
     font-size: 0.98rem;
     line-height: 1.7;
     color: var(--c-body);
+  }
+
+  .experience-bullet strong {
+    color: var(--c-ink);
+    font-weight: 500;
   }
 
   .experience-bullet::before {

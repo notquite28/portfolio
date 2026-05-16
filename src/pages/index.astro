@@ -11,7 +11,6 @@ import Footer from '../designs/folio/Footer.astro';
 
 const title = "Arnav Panigrahi | Backend & AI/ML Software Developer";
 const description = "Software developer focused on backend systems, full-stack applications, and AI/ML pipelines. M.S. Computer Science, UC Riverside.";
-const image = "jelly.webp";
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -60,7 +59,7 @@ const structuredData = {
 };
 ---
 
-<Layout title={title} description={description} image={image}>
+<Layout title={title} description={description}>
   <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 
   <Nav />
