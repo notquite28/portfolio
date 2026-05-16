@@ -171,9 +171,8 @@ export const profile = {
   resume: "https://notquite28.github.io/resume/resumeml.pdf",
   image: "jelly.webp",
   about: [
-    "I build backend services, full-stack applications, and AI/ML pipelines with a focus on shipping reliable software to production. My work spans FastAPI microservices on Google Cloud, LangChain-based AI agents for enterprise workflows, and multi-modal ML systems combining computer vision, NLP, and voice synthesis.",
-    "At AllCheer, I've delivered measurable impact: a 60% reduction in document processing time, $20K in annual cost savings, and 92% accuracy on an NER pipeline for clinical data extraction. Previously at Pinnacle Consulting, I built full-stack ERP systems and integrated geospatial services for a $75M utility provider.",
-    "I hold an M.S. in Computer Science from UC Riverside, where I focused on distributed systems and machine learning. I'm currently seeking software engineering roles in backend systems and applied AI.",
+    "I write backend services and ML systems that run in production. Lately that's been FastAPI microservices, LangChain agents, and multi-modal models. I did my M.S. in CS at UC Riverside and I'm based in California.",
+    "Outside of work, I play guitar, sink hours into JRPGs, and tinker with OSS and agentic harnesses. I collect keyboards — HHKB is the only correct answer — and use Mario Zechner's pi agentic harness. I'm slowly teaching myself Japanese.",
   ],
   proof: [
     { value: "3+", label: "years shipping software" },

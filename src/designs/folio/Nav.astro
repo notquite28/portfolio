@@ -7,6 +7,7 @@ const links = [
   { href: '#skills', label: 'Skills' },
   { href: '#work', label: 'Work' },
   { href: '#contact', label: 'Contact' },
+  { href: profile.resume, label: 'Resume' },
 ];
 ---
 
@@ -15,7 +16,7 @@ const links = [
     <a href="/" class="nav-brand">{profile.name}</a>
     <div class="nav-links">
       {links.map((link) => (
-        <a href={link.href} class="nav-link" data-nav-link>{link.label}</a>
+        <a href={link.href} class={`nav-link${link.label === 'Resume' ? ' nav-link-accent' : ''}`} data-nav-link{...link.label === 'Resume' ? { target: '_blank', rel: 'noopener noreferrer' } : {}}>{link.label}</a>
       ))}
     </div>
     <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
@@ -26,7 +27,7 @@ const links = [
   </div>
   <div class="nav-mobile" aria-hidden="true">
     {links.map((link) => (
-      <a href={link.href} class="nav-mobile-link" data-nav-link>{link.label}</a>
+      <a href={link.href} class={`nav-mobile-link${link.label === 'Resume' ? ' nav-mobile-link-accent' : ''}`} data-nav-link{...link.label === 'Resume' ? { target: '_blank', rel: 'noopener noreferrer' } : {}}>{link.label}</a>
     ))}
   </div>
 </nav>
@@ -291,5 +292,15 @@ const links = [
     .nav-mobile {
       display: none !important;
     }
+  }
+
+  .nav-link-accent,
+  .nav-mobile-link-accent {
+    color: var(--c-accent);
+  }
+
+  .nav-link-accent:hover,
+  .nav-mobile-link-accent:hover {
+    color: var(--c-accent-soft);
   }
 </style>

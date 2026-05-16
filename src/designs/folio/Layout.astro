@@ -6,17 +6,15 @@ import { buildUrl } from '../../utils/paths';
 interface Props {
   title?: string;
   description?: string;
-  image?: string;
 }
 
 const {
   title = 'Arnav Panigrahi | Backend & AI/ML Software Developer',
   description = 'Software developer focused on backend systems, full-stack applications, and AI/ML pipelines. M.S. Computer Science, UC Riverside.',
-  image = 'jelly.webp',
 } = Astro.props;
 
+const socialImageURL = new URL(buildUrl('og-image.png'), Astro.site ?? 'https://arnavpanigrahi.com/').toString();
 const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://arnavpanigrahi.com/');
-const socialImageURL = new URL(buildUrl(image), Astro.site ?? 'https://arnavpanigrahi.com/').toString();
 const isProd = import.meta.env.PROD;
 ---
 
@@ -25,6 +23,7 @@ const isProd = import.meta.env.PROD;
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0d0c0b" />
   <meta name="description" content={description} />
   <meta name="author" content="Arnav Panigrahi" />
   <meta property="og:title" content={title} />
@@ -50,6 +49,7 @@ const isProd = import.meta.env.PROD;
   <a href="#main-content" class="skip-link">Skip to content</a>
 
   <div class="noise-overlay" aria-hidden="true"></div>
+  <noscript><style>.reveal,.reveal-child{opacity:1;transform:none}</style></noscript>
   <div class="cursor-glow" aria-hidden="true"></div>
 
   <main id="main-content">

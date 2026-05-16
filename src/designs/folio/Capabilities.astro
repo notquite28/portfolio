@@ -183,9 +183,9 @@ import { skillCategories } from '../../data/content';
     color: var(--c-body);
     line-height: 1.6;
     padding: 0.35rem 0.85rem;
-    border: 1px solid var(--c-rule);
+    border: 1px solid color-mix(in oklch, var(--c-accent) 15%, var(--c-rule));
     border-radius: 100px;
-    background: transparent;
+    background: color-mix(in oklch, var(--c-accent) 6%, var(--c-elevated));
     transition:
       color 300ms var(--ease-expo),
       border-color 300ms var(--ease-expo),
