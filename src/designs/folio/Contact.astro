@@ -68,25 +68,24 @@ import { profile } from '../../data/content';
     magneticElements.forEach((el) => {
       const strength = 0.3;
 
+      const quickX = gsap.quickTo(el, "x", { duration: 0.6, ease: "power3.out" });
+      const quickY = gsap.quickTo(el, "y", { duration: 0.6, ease: "power3.out" });
+
       el.addEventListener('mousemove', (e: Event) => {
         const me = e as MouseEvent;
         const rect = el.getBoundingClientRect();
         const x = me.clientX - rect.left - rect.width / 2;
         const y = me.clientY - rect.top - rect.height / 2;
 
-        gsap.to(el, {
-          x: x * strength,
-          y: y * strength,
-          duration: 0.4,
-          ease: 'power2.out',
-        });
+        quickX(x * strength);
+        quickY(y * strength);
       });
 
       el.addEventListener('mouseleave', () => {
         gsap.to(el, {
           x: 0,
           y: 0,
-          duration: 0.6,
+          duration: 0.8,
           ease: 'elastic.out(1, 0.5)',
         });
       });

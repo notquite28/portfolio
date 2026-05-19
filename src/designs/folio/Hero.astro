@@ -32,32 +32,38 @@ import { profile } from '../../data/content';
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const nameEl = document.querySelector('[data-split-name]') as HTMLElement | null;
 
+  // Run synchronously to hide raw text immediately (outside font gate)
+  gsap.set('.hero-eyebrow', { opacity: 0, y: 20 });
+  gsap.set('.hero-rule', { scaleX: 0, opacity: 0 });
+  gsap.set('.hero-tagline', { opacity: 0, y: 10 });
+  gsap.set('.hero-links', { opacity: 0, y: 20 });
+
   if (nameEl && !prefersReducedMotion) {
-    const split = new SplitType(nameEl, { types: 'chars' });
-    const chars = split.chars ?? [];
+    document.fonts.ready.then(async () => {
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
 
-    gsap.set(chars, { y: 60, opacity: 0, rotateX: -40 });
-    gsap.set('.hero-eyebrow', { y: 20, opacity: 0 });
-    gsap.set('.hero-rule', { scaleX: 0, opacity: 0 });
-    gsap.set('.hero-tagline', { y: 20, opacity: 0 });
-    gsap.set('.hero-links', { y: 20, opacity: 0 });
+      const split = new SplitType(nameEl, { types: 'chars' });
+      const chars = split.chars ?? [];
 
-    const tl = gsap.timeline({ delay: 0.3 });
+      gsap.set(chars, { y: 60, opacity: 0, rotateX: -40 });
 
-    tl.to(chars, {
-      y: 0,
-      opacity: 1,
-      rotateX: 0,
-      duration: 1.1,
-      ease: 'power3.out',
-      stagger: 0.03,
-    })
-    .to('.hero-eyebrow', { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, '-=0.8')
-    .to('.hero-rule', { scaleX: 1, opacity: 1, duration: 0.9, ease: 'power3.inOut' }, '-=0.5')
-    .to('.hero-tagline', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, '-=0.6')
-    .to('.hero-links', { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, '-=0.5');
+      const tl = gsap.timeline({ delay: 0.3 });
 
-    // Ambient floating orbs respond to mouse — quickTo avoids creating new tweens per frame
+      tl.to(chars, {
+        y: 0,
+        opacity: 1,
+        rotateX: 0,
+        duration: 1.1,
+        ease: 'power3.out',
+        stagger: 0.03,
+      })
+      .to('.hero-eyebrow', { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, '-=0.8')
+      .to('.hero-rule', { scaleX: 1, opacity: 1, duration: 0.9, ease: 'power3.inOut' }, '-=0.5')
+      .to('.hero-tagline', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, '-=0.6')
+      .to('.hero-links', { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, '-=0.5');
+    });
+
+    // Ambient floating orbs respond to mouse — stays outside font gate (pointer-driven)
     const hero = document.querySelector('.hero') as HTMLElement | null;
     if (hero) {
       const orb1X = gsap.quickTo('.hero-orb-1', 'x', { duration: 1.5, ease: 'power2.out' });
@@ -76,7 +82,6 @@ import { profile } from '../../data/content';
       });
     }
   } else if (nameEl) {
-    // Fallback: show everything immediately
     gsap.set('.hero-eyebrow, .hero-name, .hero-rule, .hero-tagline, .hero-links', { opacity: 1, y: 0 });
   }
 </script>
@@ -110,7 +115,6 @@ import { profile } from '../../data/content';
     border-radius: 50%;
     pointer-events: none;
     filter: blur(80px);
-    will-change: transform;
   }
 
   .hero-orb-1 {
@@ -161,7 +165,6 @@ import { profile } from '../../data/content';
 
   .hero-name :global(.char) {
     display: inline-block;
-    will-change: transform, opacity;
     transform-origin: center bottom;
   }
 

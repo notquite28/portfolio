@@ -254,11 +254,6 @@ function getTheme(title: string, fallbackIndex: number) {
     });
   }
 
-  // Cleanup listeners on page unload
-  window.addEventListener('beforeunload', () => {
-    tiltControllers.forEach((c) => c.abort());
-    collapsibleControllers.forEach((c) => c.abort());
-  });
 </script>
 
 <style>

@@ -53,82 +53,44 @@ import { experiences } from '../../data/content';
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const createdTweens: gsap.core.Tween[] = [];
-
   if (!prefersReducedMotion) {
-    const lineFill = document.querySelector('.timeline-line-fill') as HTMLElement | null;
-    if (lineFill) {
-      createdTweens.push(
-        gsap.fromTo(
-          lineFill,
-          { scaleY: 0 },
-          {
-            scaleY: 1,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: '.timeline',
-              start: 'top 75%',
-              end: 'bottom 60%',
-              scrub: 0.5,
-            },
-          }
-        )
-      );
-    }
+    ScrollTrigger.matchMedia({
+      "(min-width: 768px)": function () {
+        const triggers: ScrollTrigger[] = [];
 
-    const items = document.querySelectorAll('[data-timeline-item]');
-    items.forEach((item) => {
-      const card = item.querySelector('.experience-card') as HTMLElement | null;
-      const dot = item.querySelector('.timeline-dot') as HTMLElement | null;
+        // Line-fill: explicit create (uses scrub — cannot batch)
+        triggers.push(ScrollTrigger.create({
+          trigger: ".timeline",
+          start: "top 75%",
+          end: "bottom 60%",
+          scrub: 0.5,
+          animation: gsap.fromTo(".timeline-line-fill", { scaleY: 0 }, { scaleY: 1, ease: "none" }),
+        }));
 
-      if (card) {
-        createdTweens.push(
-          gsap.fromTo(
-            card,
-            { x: -24, opacity: 0 },
-            {
-              x: 0,
-              opacity: 1,
-              duration: 0.9,
-              ease: 'power3.out',
-              scrollTrigger: {
-                trigger: item,
-                start: 'top 82%',
-                toggleActions: 'play none none none',
-              },
-            }
-          )
-        );
-      }
+        // Card triggers: slide-in from left
+        document.querySelectorAll(".experience-card").forEach((card) => {
+          triggers.push(ScrollTrigger.create({
+            trigger: card,
+            start: "top 82%",
+            once: true,
+            animation: gsap.fromTo(card, { x: -24, opacity: 0 }, { x: 0, opacity: 1, duration: 0.9, ease: "power3.out" }),
+          }));
+        });
 
-      if (dot) {
-        createdTweens.push(
-          gsap.fromTo(
-            dot,
-            { scale: 0, opacity: 0 },
-            {
-              scale: 1,
-              opacity: 1,
-              duration: 0.5,
-              ease: 'back.out(2)',
-              scrollTrigger: {
-                trigger: item,
-                start: 'top 80%',
-                toggleActions: 'play none none none',
-              },
-            }
-          )
-        );
-      }
+        // Dot triggers: scale pop
+        document.querySelectorAll(".timeline-dot").forEach((dot) => {
+          triggers.push(ScrollTrigger.create({
+            trigger: dot,
+            start: "top 80%",
+            once: true,
+            animation: gsap.fromTo(dot, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(2)" }),
+          }));
+        });
+
+        return function () { triggers.forEach((t) => t.kill()); };
+      },
     });
   }
-
-  window.addEventListener('beforeunload', () => {
-    createdTweens.forEach((t) => {
-      t.scrollTrigger?.kill();
-      t.kill();
-    });
-  });
 </script>
 
 <style>

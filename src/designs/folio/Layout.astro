@@ -114,7 +114,7 @@ const isProd = import.meta.env.PROD;
   .noise-overlay {
     position: fixed;
     inset: 0;
-    z-index: 9999;
+    z-index: 9997;
     pointer-events: none;
     opacity: 0.035;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -135,7 +135,6 @@ const isProd = import.meta.env.PROD;
     transform: translate3d(var(--cursor-x, 0px), var(--cursor-y, 0px), 0);
     left: 0;
     top: 0;
-    will-change: transform;
     opacity: 0;
   }
 
@@ -195,8 +194,9 @@ const isProd = import.meta.env.PROD;
   .folio-theme .reveal {
     opacity: 0;
     transform: translateY(28px);
-    will-change: transform, opacity;
   }
+
+  .js-fonts-pending [data-split-name] { visibility: hidden; }
 
   @media (prefers-reduced-motion: reduce) {
     .folio-theme .reveal {
@@ -220,149 +220,133 @@ const isProd = import.meta.env.PROD;
 
   gsap.registerPlugin(ScrollTrigger);
 
+  document.documentElement.classList.add('js-fonts-pending');
+
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fontsReady = Promise.race([
+    document.fonts.ready,
+    new Promise<void>((r) => setTimeout(r, 3000)),
+  ]);
 
-  // Smooth scroll — wired into GSAP ticker, no separate RAF loop
   let lenis: Lenis | null = null;
-  if (!prefersReducedMotion) {
-    lenis = new Lenis({
-      duration: 0.85,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      smoothWheel: true,
-      syncTouch: true,
-      anchors: true,
-    });
-
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => {
-      lenis!.raf(time * 1000);
-    });
-    gsap.ticker.lagSmoothing(0);
-  }
-
-  // Cursor glow — transform-only (no layout thrashing), pauses RAF when idle
-  const cursorGlow = document.querySelector('.cursor-glow') as HTMLElement | null;
+  let tickerCb: ((time: number) => void) | null = null;
   let cursorRafId: number | null = null;
-  if (cursorGlow && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let currentX = mouseX;
-    let currentY = mouseY;
-    let lastMouseMove = performance.now();
-    let isCursorActive = false;
 
-    const onMouseMove = (e: MouseEvent) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      lastMouseMove = performance.now();
-      if (!isCursorActive) {
-        isCursorActive = true;
-        animateCursor();
-      }
-    };
-    document.addEventListener('mousemove', onMouseMove);
+  const cursorGlow = document.querySelector('.cursor-glow') as HTMLElement | null;
 
-    function animateCursor() {
-      const now = performance.now();
-      if (now - lastMouseMove > 100) {
-        isCursorActive = false;
-        return;
+  fontsReady.then(async () => {
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    document.documentElement.classList.remove('js-fonts-pending');
+
+    // Smooth scroll — wired into GSAP ticker, no separate RAF loop
+    if (!prefersReducedMotion) {
+      lenis = new Lenis({
+        duration: 0.85,
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        smoothWheel: true,
+        syncTouch: true,
+        anchors: true,
+      });
+
+      lenis.on('scroll', ScrollTrigger.update);
+      tickerCb = (time: number) => lenis!.raf(time * 1000);
+      gsap.ticker.add(tickerCb);
+      gsap.ticker.lagSmoothing(0);
+    }
+
+    // Cursor glow — transform-only (no layout thrashing), pauses RAF when idle
+    if (cursorGlow && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      let mouseX = window.innerWidth / 2;
+      let mouseY = window.innerHeight / 2;
+      let currentX = mouseX;
+      let currentY = mouseY;
+      let lastMouseMove = performance.now();
+      let isCursorActive = false;
+
+      const onMouseMove = (e: MouseEvent) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        lastMouseMove = performance.now();
+        if (!isCursorActive) {
+          isCursorActive = true;
+          animateCursor();
+        }
+      };
+      document.addEventListener('mousemove', onMouseMove);
+
+      function animateCursor() {
+        const now = performance.now();
+        if (now - lastMouseMove > 100) {
+          isCursorActive = false;
+          return;
+        }
+        currentX += (mouseX - currentX) * 0.08;
+        currentY += (mouseY - currentY) * 0.08;
+        cursorGlow!.style.setProperty('--cursor-x', `${currentX}px`);
+        cursorGlow!.style.setProperty('--cursor-y', `${currentY}px`);
+        cursorRafId = requestAnimationFrame(animateCursor);
       }
-      currentX += (mouseX - currentX) * 0.08;
-      currentY += (mouseY - currentY) * 0.08;
-      cursorGlow!.style.setProperty('--cursor-x', `${currentX}px`);
-      cursorGlow!.style.setProperty('--cursor-y', `${currentY}px`);
       cursorRafId = requestAnimationFrame(animateCursor);
     }
-    cursorRafId = requestAnimationFrame(animateCursor);
-  }
 
-  // Enhanced reveal system with GSAP ScrollTrigger
-  const createdTweens: gsap.core.Tween[] = [];
-
-  if (!prefersReducedMotion) {
-    const revealElements = document.querySelectorAll('.reveal');
-    revealElements.forEach((el) => {
-      createdTweens.push(
-        gsap.fromTo(
-          el,
-          { y: 32, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.9,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: el,
-              start: 'top 88%',
-              end: 'top 55%',
-              toggleActions: 'play none none none',
-            },
-          }
-        )
-      );
+    // Reveal triggers
+    ScrollTrigger.matchMedia({
+      "(min-width: 768px)": function () {
+        ScrollTrigger.batch(".reveal", {
+          onEnter: (batch) => {
+            gsap.fromTo(batch, { y: 32, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: "power3.out", stagger: 0.08, overwrite: "auto" });
+          },
+          start: "top 88%",
+          once: true,
+        });
+        return function () { ScrollTrigger.getAll().forEach((t) => t.kill()); };
+      },
     });
 
     // Staggered group reveals
-    const revealGroups = document.querySelectorAll('.reveal-group');
-    revealGroups.forEach((group) => {
-      const children = group.querySelectorAll('.reveal-child');
-      createdTweens.push(
-        gsap.fromTo(
-          children,
-          { y: 28, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            ease: 'power3.out',
-            stagger: 0.1,
-            scrollTrigger: {
-              trigger: group,
-              start: 'top 85%',
-              toggleActions: 'play none none none',
+    ScrollTrigger.matchMedia({
+      "(min-width: 768px)": function () {
+        const triggers: ScrollTrigger[] = [];
+        document.querySelectorAll('.reveal-group').forEach((group) => {
+          const children = group.querySelectorAll('.reveal-child');
+          triggers.push(ScrollTrigger.create({
+            trigger: group,
+            start: 'top 85%',
+            once: true,
+            onEnter: () => {
+              gsap.fromTo(children, { y: 28, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.1, overwrite: 'auto' });
             },
-          }
-        )
-      );
+          }));
+        });
+        return function () { triggers.forEach((t) => t.kill()); };
+      },
     });
 
     // Parallax elements
-    const parallaxElements = document.querySelectorAll('[data-parallax]');
-    parallaxElements.forEach((el) => {
-      const speed = parseFloat(el.getAttribute('data-parallax') ?? '0.15');
-      createdTweens.push(
-        gsap.to(el, {
-          y: () => speed * 100,
-          ease: 'none',
-          scrollTrigger: {
+    ScrollTrigger.matchMedia({
+      "(min-width: 768px)": function () {
+        const triggers: ScrollTrigger[] = [];
+        document.querySelectorAll('[data-parallax]').forEach((el) => {
+          const speed = parseFloat(el.getAttribute('data-parallax') ?? '0.15');
+          triggers.push(ScrollTrigger.create({
             trigger: el,
             start: 'top bottom',
             end: 'bottom top',
             scrub: true,
-          },
-        })
-      );
+            animation: gsap.to(el, { y: () => speed * 100, ease: 'none' }),
+          }));
+        });
+        return function () { triggers.forEach((t) => t.kill()); };
+      },
     });
-  } else {
-    document.querySelectorAll('.reveal, .reveal-child').forEach((el) => {
-      (el as HTMLElement).style.opacity = '1';
-      (el as HTMLElement).style.transform = 'none';
-    });
-  }
+  });
 
-  // Cleanup on page unload to prevent HMR leaks
+  // Centralized cleanup on page unload
   window.addEventListener('beforeunload', () => {
-    createdTweens.forEach((t) => {
-      t.scrollTrigger?.kill();
-      t.kill();
-    });
-    if (lenis) {
-      lenis.destroy();
-    }
-    if (cursorRafId) {
-      cancelAnimationFrame(cursorRafId);
-    }
+    if (tickerCb) gsap.ticker.remove(tickerCb);
+    ScrollTrigger.killAll();
+    lenis?.destroy();
+    if (cursorRafId) cancelAnimationFrame(cursorRafId);
   });
 </script>
