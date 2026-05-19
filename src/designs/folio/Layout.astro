@@ -211,6 +211,14 @@ const isProd = import.meta.env.PROD;
       display: none;
     }
   }
+
+  @media (max-width: 767px) {
+    .folio-theme .reveal,
+    .folio-theme .reveal-child {
+      opacity: 1;
+      transform: none;
+    }
+  }
 </style>
 
 <script>
