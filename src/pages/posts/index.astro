@@ -1,0 +1,107 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import Layout from '../../designs/folio/Layout.astro';
+import Nav from '../../designs/folio/Nav.astro';
+import Footer from '../../designs/folio/Footer.astro';
+
+const posts: CollectionEntry<'posts'>[] = (await getCollection('posts')).sort(
+  (a: CollectionEntry<'posts'>, b: CollectionEntry<'posts'>) => b.data.published.getTime() - a.data.published.getTime()
+);
+
+const title = 'Posts | Arnav Panigrahi';
+const description = 'Posts by Arnav Panigrahi, mirrored from Medium.';
+
+function formatDate(date: Date) {
+  return new Intl.DateTimeFormat('en', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(date);
+}
+---
+
+<Layout title={title} description={description}>
+  <Nav />
+  <section class="posts-index">
+    <div class="posts-index-inner">
+      <p class="kicker">Writing</p>
+      <h1>Posts</h1>
+      <div class="posts-list">
+        {posts.map((post: CollectionEntry<'posts'>) => (
+          <a class="post-link" href={`/posts/${post.id}/`}>
+            <span>{formatDate(post.data.published)}</span>
+            <strong>{post.data.title}</strong>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+  <Footer />
+</Layout>
+
+<style>
+  .posts-index {
+    min-height: 100vh;
+    padding: 8rem clamp(1.5rem, 4vw, 3rem) 4rem;
+  }
+
+  .posts-index-inner {
+    max-width: 56rem;
+    margin: 0 auto;
+  }
+
+  .kicker {
+    margin: 0 0 1rem;
+    color: var(--c-accent);
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 0 0 4rem;
+    color: var(--c-ink);
+    font-family: var(--font-serif);
+    font-size: clamp(4rem, 12vw, 8rem);
+    font-weight: 300;
+    letter-spacing: -0.06em;
+    line-height: 0.88;
+  }
+
+  .posts-list {
+    border-top: 1px solid var(--c-rule);
+  }
+
+  .post-link {
+    display: grid;
+    gap: 0.5rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--c-rule);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .post-link span {
+    color: var(--c-muted);
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .post-link strong {
+    color: var(--c-ink);
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 300;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    transition: color 200ms var(--ease-expo);
+  }
+
+  .post-link:hover strong {
+    color: var(--c-accent-soft);
+  }
+</style>
