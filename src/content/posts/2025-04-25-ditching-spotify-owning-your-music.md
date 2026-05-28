@@ -13,7 +13,7 @@ categories: ["audiophile", "audio"]
 #### Creating an offline music library on a budget.
 
 ![](/posts/images/dece60da467c/01.jpg)
-*Mio-chan uses the AKG K701*
+*The AKG K701: still iconic, still polarizing.*
 
 ### The Streaming Era and Music Discovery
 
@@ -25,7 +25,7 @@ So why bother with the hassle of an offline music library? Because streaming, fo
 
 This whole setup would’ve been a dream come true for any audiophile in the ‘90s… but is it really?
 
-First, there’s the audio quality. YouTube’s compression (AAC at ~128–160kbps) kills dynamic range, and while Spotify’s Ogg Vorbis at 320kbps is better, it’s still lossy. Sure, Apple Music and Tidal offer lossless and hi-res, but everything else is a mess. Spotify’s algorithms are great, but the platform’s reliability? Not so much. Licensing deals cause albums to vanish overnight, and discographies get rearranged by “remasters.” It’s a digital wilderness where your favorite music can disappear without a trace. Also apparently, [Spotify co-founder is a war-monger](https://youtu.be/EYRfDxLH9JY?si=2OAXjphNK5XMKudt)?
+First, there’s the audio quality. YouTube’s compression (AAC at ~128–160kbps) kills dynamic range, and while Spotify’s Ogg Vorbis at 320kbps is better, it’s still lossy. Sure, Apple Music and Tidal offer lossless and hi-res, but everything else is a mess. Spotify’s algorithms are great, but the platform’s reliability? Not so much. Licensing deals cause albums to vanish overnight, and discographies get rearranged by “remasters.” It’s a digital wilderness where your favorite music can disappear without a trace.
 
 And don’t even get me started on the apps. Apple’s Android and Windows apps are frustrating to use, and Tidal’s MQA debacle was a train wreck. After they started adding AI-generated clutter to my playlists, I canceled my subscription.
 
@@ -59,7 +59,7 @@ For a dedicated player, check out brands like **HiBy** or **FiiO**. The **HiBy M
 
 As for IEMs, I swear by the **Moondrop x Crinacle Dusks**. For headphones, the **Sennheiser HD 6xx** or **Beyerdynamic DT 770 Pro** are classic choices. Remember: wired is king.
 
-While you could dive deeper into audio bit rate, sampling rate, THD, noise floor, and SNR, don’t obsess for getting started with Hi-Res. The basics:
+While you could dive deeper into audio bit rate, sampling rate, THD, noise floor, and SNR, don’t obsess when you are getting started with hi-res audio. The basics:
 
 - **Bit-depth** affects dynamic range.
 - **Sampling rate** affects frequency response. More isn’t always better—**the quality of the mastering matters most.**
@@ -79,8 +79,8 @@ Start building your library with **FLACs** (Free Lossless Audio Codec). My prefe
 
 - **Bandcamp** (My top choice)
 - **HDTracks** / **Qobuz** / **7digital**
-- **Ripping your own CDs.**
-- **Rip from Tidal/Qobuz/Apple Music (ALACs)**
+- **Ripping your own CDs**
+- **Buying lossless files from services that support it**
 - **Soulseek:** useful for finding obscure releases that are hard to buy or stream.
 
 To manage your files, use **MusicBrainz Picard** to automatically tag everything with metadata. On Android, I use **UAPP** (USB Audio Player PRO) for bit-perfect playback, as it bypasses Android’s default resampling.
@@ -91,21 +91,21 @@ The stock HiBy and FiiO music players are solid and come pre-installed on their 
 
 #### Managing Your FLAC Library
 
-Once you have your FLACs, tag them with metadata. I use MusicBrainz Picard on Linux (binaries available for MacOS and Windows). Then move your music to your DAP’s internal memory or an SD Card. Use AutomaTag on Android for on-the-go tag editing.
+Once you have your FLACs, tag them with metadata. I use MusicBrainz Picard on Linux (binaries are available for macOS and Windows). Then move your music to your DAP’s internal memory or an SD card. Use AutomaTag on Android for on-the-go tag editing.
 Lastly, **always keep backups.** Set up regular backups or use SyncThing to keep everything synced.
 
 ### Final Thoughts
 
 Building an offline music library is a way to reclaim ownership and rediscover the joy of intentional listening. It separates your music from the planned obsolescence and licensing nightmares of the streaming world.
 
-As a newcomer to this world, this isn’t a technical review. It’s mostly me thinking out loud about media ownership. If you have money to burn, you could explore higher end gear and software like Roon.
+As a newcomer to this world, this isn’t a technical review. It’s mostly me thinking out loud about media ownership. If you have money to burn, you could explore higher-end gear and software like Roon.
 
 Cheers!
 
 ### Update: HiBy R3 Pro Saber and R4 x Evangelion Impressions
 
 ![](/posts/images/dece60da467c/05.jpg)
-*go listen to tricot*
+*A compact offline setup for rediscovering albums intentionally.*
 
 The **HiBy R3 Pro Saber** absolutely cooks. With its premium glass build and pocket-friendly size, it’s a great little player. The UI is surprisingly decent for a budget DAP, and its battery life with offline playback is rock solid. Streaming, however, is a different story—I saw quick battery drain and stutters. I eventually sold it to get the Android-powered **R4 x Evangelion**, which handles streaming perfectly but has worse battery life.
 

@@ -11,12 +11,12 @@ categories: ["software-development", "arch-linux", "programming", "vim", "linux"
 # Vim for Beginners
 
 ![](/posts/images/bdbbceb46b19/01.png)
-*Megumin my beloved*
+*Vim motions started making more sense once I stopped reaching for arrow keys.*
 
 #### Introduction
 
 So, you got yourself a shiny new (or old) ThinkPad to put Linux on and flex on r/unixporn and r/thinkpad. You boot into an Arch ISO. Then reality hits—you don’t have internet, and you can’t `sudo pacman -S nano` your way out of editing `locale.conf`. Or maybe you fell for the HHKB hype—the allure of a decade-old Japanese keyboard with worn rubber domes, topre goodness you overpaid for on eBay, and no dedicated arrow keys.
-Alternatively, like me, you might attempt to ditch your overpriced, overengineered mouse for no logical reason and write code *the GNU way*. Regardless of the reason, you’re here to get your hands dirty and learn Vim.
+Alternatively, like me, you might attempt to ditch your overpriced, overengineered mouse for no logical reason and write code with fewer trips away from the keyboard. Regardless of the reason, you’re here to get your hands dirty and learn Vim.
 
 Contrary to what some Vim evangelists claim, Vim (or Vi IMproved) didn’t adopt its strange motion keybindings just so people could keep their hands on the home row for “efficiency.” Instead, these bindings originated from the ADM-3A keyboard layout, where the HJKL keys were literally the arrow keys. Here's what that keyboard looked like (yes, there is a “rub” key…):
 
@@ -33,7 +33,7 @@ There exists a Vim plugin for any and every IDE. I will be using Cursor because 
 ![](/posts/images/bdbbceb46b19/03.png)
 *Just download the right extension on your IDE*
 
-Type `set number` to have numbered lines, although this might be the default behavior of the IDE. Many Vim users prefer relative numbering. Use the command `set relativenumber` to have relative numbering. This helps you do some stuff that we talk about later.
+Type `set number` to show numbered lines, although this might already be the default behavior of the IDE. Many Vim users prefer relative numbering. Use `set relativenumber` to enable it. This helps with some motions we will talk about later.
 
 ### Basic Features
 
@@ -68,8 +68,8 @@ For lines:
 
 - `gg`: Jump to the beginning of the file.
 - `G`: Jump to the end of the file.
-- `f<char>`: Jump to the next occurrence of <char>.
-- `F<char>`: Jump to the previous occurrence of <char>.
+- `f<char>`: Jump to the next occurrence of `<char>`.
+- `F<char>`: Jump to the previous occurrence of `<char>`.
 - `%`: Jump between matching brackets or parentheses.
 
 To scroll:
@@ -109,7 +109,7 @@ You might want to add funny ASCII art to the beginning of your config. To do thi
 - `diw`: Delete the current word.
 - `dd`: Delete the current line.
 - `d$`: Delete everything from the cursor to the end of the line.
-- `dt<char>`: Delete until the occurrence of <char> in current line.
+- `dt<char>`: Delete until the occurrence of `<char>` in the current line.
 - `dip`: Delete the current paragraph.
 
 You will probably need the last one more often than you expect.
@@ -136,21 +136,21 @@ For confirmation: `:%s/search_term/replace_term/gc`
 
 #### Function Folds
 
-Fold (minimize) a function in our editor, use `zc` (close). To unfold, use `zo` (open).
+To fold (minimize) a function in your editor, use `zc` (close). To unfold, use `zo` (open).
 
 To operate on all functions in the current file, we use `zM` and `zR`.
 
-We can select some lines in VISUAL mode and shift them left or right using the < or > keys.
+We can select some lines in VISUAL mode and shift them left or right using the `<` or `>` keys.
 
 To add the same prefix to multiple lines, use VISUAL BLOCK mode, select the lines, press `I`, type the prefix, and press `Esc`.
 
 #### Macros
 
-1. Start recording: qa (records into register a).
+1. Start recording: `qa` (records into register `a`).
 2. Perform your actions.
-3. Stop recording: q.
-4. Replay the macro: @a.
-5. Repeat on multiple lines: 15@a (executes the macro 15 times).
+3. Stop recording: `q`.
+4. Replay the macro: `@a`.
+5. Repeat on multiple lines: `15@a` (executes the macro 15 times).
 
 #### **Folding**
 
@@ -166,30 +166,30 @@ To add the same prefix to multiple lines, use VISUAL BLOCK mode, select the line
 
 #### Bookmarks
 
-Set a bookmark on a line with ma (bookmark a). Jump to it with `a.
-Toggle between the last two locations with ``.
+Set a bookmark on a line with `ma` (bookmark `a`). Jump to it with `` `a ``.
+Toggle between the last two locations by pressing the backtick key twice.
 
 #### **Running External Commands**
 
-Running external commands can be done by using something like this
+Running external commands can be done with something like this:
 
 ```
- :read !whoami.
+:read !whoami
 ```
 
 You could also send a block of code, e.g., JSON to a command and parse it.
 
 ```
 {
- “firstname” : “quiet”,
- “lastname” : “owo”
+ "firstname" : "quiet",
+ "lastname" : "owo"
 }
 ```
 
-so now running `!jq .firstname` replaces the block of text with “quiet”.
+Now running `!jq .firstname` replaces the block of text with “quiet”.
 
 #### Conclusion
 
-Congrats, now you can ramble on about how you code in Vim and act all holier-than-thou with your friends and earn the right to casually drop `:wq!` into conversations.
+Congrats, now you can casually drop `:wq!` into conversations and actually know what it means.
 
 I am still deciding how deep I want to go with Vim, considering school and work, but even the basics have already been useful.

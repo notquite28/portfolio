@@ -17,11 +17,11 @@ We all know Linux users. We either spend years living comfortably on Debian or j
 ### NixOS, flakes and home-manager
 
 ![](/posts/images/7ae541f5533f/01.png)
-*here is a cute picture of nixos unofficial mascot*
+*The unofficial NixOS mascot, because every operating system deserves one.*
 
-NixOS is truly amazingly mind-boggling. When I learned that this was **Eelco Dolstra**’s PhD thesis on “correct software deployment”, this simultaneously intrigued me and made me have an existential crisis (whenever I see someone my age be incredibly talented, it gives me a mild existential crisis). NixOS is lauded for its modularity, reproducibility and something else I cannot remember, nor can I be bothered to look up.
+NixOS is truly mind-boggling. When I learned that this came from **Eelco Dolstra**’s PhD thesis on “correct software deployment,” I was both intrigued and humbled. NixOS is lauded for its modularity, reproducibility, and declarative approach to system configuration.
 
-If you want a quick NixOS setup and you don't want to bother watching dozens of hours of [*Vimoyer*](https://youtu.be/a67Sv4Mbxmc?si=TP0RYzfmuVjhn7oD)’s NixOS videos, be sure to check out [Fernando Borretti](https://borretti.me/article/nixos-for-the-impatient#postinstall)’s quick install guide!
+If you want a quick NixOS setup and you don't want to watch dozens of hours of [*Vimjoyer*](https://youtu.be/a67Sv4Mbxmc?si=TP0RYzfmuVjhn7oD)’s NixOS videos, be sure to check out [Fernando Borretti](https://borretti.me/article/nixos-for-the-impatient#postinstall)’s quick install guide.
 
 If you have looked up info on Nix, you probably know you could imperatively install anything on Nix just like on Arch:
 
@@ -37,9 +37,9 @@ sudo pacman -S <package name>
 
 But we are on NixOS! We want to do stuff the Nix way! We want to declaratively install packages! Even if they don’t exist in the official NixOS package repo!
 
-Let’s proceed to what is really important. Nix is a very versatile language; no two configs will be similar! It is very important to understand the basics of the language to efficiently write your configs. This can take weeks or even months to completely ingrain in my noggin. But I don’t have time for that stuff! So, I did the next best thing; copy my friend’s config :) (Thanks draff).
+Let’s proceed to what is really important. Nix is a very versatile language; no two configs will be identical. It is important to understand the basics of the language to efficiently write your configs. This can take weeks or even months to fully click. I was impatient, so I did the next best thing: study my friend’s config and adapt it for my setup. Thanks, draff.
 
-My flake.nix and home.nix probably look different than yours, that’s because I have followed [Drake Rossman](https://drakerossman.com/blog/how-to-add-home-manager-to-nixos)’s immaculate guide on setting up home-manager as a module (I want my home-manager to rebuild alongside NixOS cuz it’s just more convenient and I am a lazy bum). Also, I moved everything inside /etc/nixos to /home/quiet/Documents/nixos and symlinked them to the original folder so I can edit them as user without root.
+My flake.nix and home.nix probably look different than yours because I followed [Drake Rossman](https://drakerossman.com/blog/how-to-add-home-manager-to-nixos)’s excellent guide on setting up home-manager as a module. I want home-manager to rebuild alongside NixOS because it is more convenient. Also, I moved everything inside /etc/nixos to /home/quiet/Documents/nixos and symlinked it to the original folder so I can edit the files as a regular user without root.
 
 The two important lines I’d recommend adding to configuration.nix are:
 
@@ -108,7 +108,7 @@ This is my flake.nix
 The key line here is to add the following line to your flake inputs:
 
 ```
-zen-browser.url = “GitHub:0xc000022070/zen-browser-flake”;
+zen-browser.url = "GitHub:0xc000022070/zen-browser-flake";
 ```
 
 Let’s look at my home.nix:
@@ -175,23 +175,21 @@ let
 ## rest of home.nix
 ```
 
-Now, all we gotta do is run the rebuild the system!
+Now, all we have to do is rebuild the system.
 
 ```
 sudo nixos-rebuild switch
 ```
 
-Voila! Now you have Walmart version of Arc Browser installed on your NixOS system (I kid! I prefer Zen over Arc because it’s based on Firefox and not Chromium).
+Voila! Now you have a Firefox-based Arc-style browser installed on your NixOS system. I prefer Zen over Arc because it’s based on Firefox and not Chromium.
 
 ### Conclusion
 
-For the impatient who cannot wait for Zen Browser to be added to the NixOS package set, this can let us install Zen from a stranger’s flake on GitHub!
-This is a godsend for folks who don’t want to compile it from source (my ThinkPad took 3 hours to compile it, I think. And what’s worse? It immediately got an update!). So thanks to the [maintainer](https://github.com/0xc000022070/zen-browser-flake) who did it for us!
+For the impatient who cannot wait for Zen Browser to be added to the NixOS package set, this lets us install Zen from an external flake on GitHub.
+This is a godsend for folks who don’t want to compile it from source. My ThinkPad took about three hours to compile it, and then it immediately got an update. So thanks to the [maintainer](https://github.com/0xc000022070/zen-browser-flake) who did it for us.
 
 Keep in mind that running random flakes can be a security compromise. This is not a formal guide as much as the note I wish existed when I was trying to do this myself.
 
-Also, I know GNU/Linux users love understanding *why* something works. I am impatient and was mostly concerned with the *how* this time. I just wanted to jump the Windows ship and never look back.
-
-Also, my friend is currently being hospitalized for subdural hematoma and subarachnoid hemorrhage. He has much to do in this world still. Keep him in your prayers and pray for his recovery.
+Also, I know GNU/Linux users love understanding *why* something works. I am impatient and was mostly concerned with the *how* this time. I just wanted to jump ship from Windows and never look back.
 
 Cheers!

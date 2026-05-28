@@ -11,7 +11,7 @@ categories: ["configuration-nixos", "linux", "nvidia", "nixos", "gaming"]
 # Gaming on NixOS! ❄️
 
 ![](/posts/images/f98506351a24/01.jpg)
-*cirno for NixOS*
+*A very serious NixOS gaming setup, naturally.*
 
 #### Introduction
 
@@ -48,9 +48,9 @@ hardware.nvidia.modesetting.enable = true;
 
 #### Gaming Laptops
 
-But wait—if you’re like me and you bought an NVIDIA hybrid gaming laptop to run Linux on (Why are we still here? Just to suffer?), you’ll need to enable Prime. This allows you to offload graphic tasks to your dedicated GPU (dGPU) or suspend it for power-saving, depending on the workload.
+But wait—if you’re like me and you bought an NVIDIA hybrid gaming laptop to run Linux on, you’ll need to enable Prime. This allows you to offload graphic tasks to your dedicated GPU (dGPU) or suspend it for power-saving, depending on the workload.
 
-You have two options: sync and offload. Sync keeps the dGPU running constantly, which is usually overkill. On the other hand, Offload wakes up the dGPU when needed and lets the integrated GPU (iGPU) handle lower workloads (effectively helps my laptop’s battery life last longer).
+You have two options: sync and offload. Sync keeps the dGPU running constantly, which is usually overkill. On the other hand, offload wakes up the dGPU when needed and lets the integrated GPU (iGPU) handle lower workloads, which helps my laptop’s battery life last longer.
 
 On Arch, I have used **rog-control-center** (basically, a Linux-friendly Armory Crate alternative) and can vouch for its ability to adjust temperature limits and fan curves reliably. You can also use **supergfxctl**, a tool by the same devs, to switch between integrated, hybrid, and VFIO (for GPU passthrough to VMs) modes.
 
@@ -117,12 +117,12 @@ programs.gamemode.enable = true;
 environment.systemPackages = with pkgs; [mangohud protonup-qt lutris bottles heroic];
 ```
 
-Once that’s done, you can switch between custom Proton versions in the **Steam compatibility tab** for each game. And if you’re playing non-Steam games (🏴‍☠️), I highly recommend using **Heroic**—it simply works™️.
+Once that’s done, you can switch between custom Proton versions in the **Steam compatibility tab** for each game. If you’re playing non-Steam games, I highly recommend using **Heroic**—it simply works.
 
 If you’re ever stuck, check the community’s recommendation for Steam launch arguments on [protondb](https://www.protondb.com/)!
 
 #### Conclusion
 
-And that’s it! With just a bit of configuration, your NixOS system should be ready to game. Now you can bring up that you use NixOS (btw) in every conversation you have! Also big thanks to Vimjoyer for making NixOS easier to understand! A major chunk of this post is based on his [video](https://www.youtube.com/watch?v=qlfm3MEbqYA).
+And that’s it! With just a bit of configuration, your NixOS system should be ready to game. Now you can bring up that you use NixOS in every conversation you have. Also, big thanks to Vimjoyer for making NixOS easier to understand. A major chunk of this post is based on his [video](https://www.youtube.com/watch?v=qlfm3MEbqYA).
 
 Cheers!
