@@ -1,5 +1,5 @@
 ---
-title: "WabiSabi: A Imperfect Rust Agent Harness"
+title: "WabiSabi: An Imperfect Rust Agent Harness"
 author: "Arnav Panigrahi"
 published: "2026-05-27"
 updated: "2026-05-27T00:00:00.000Z"
