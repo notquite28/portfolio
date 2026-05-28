@@ -181,7 +181,7 @@ export const profile = {
   location: "California, United States",
   email: "arnav.panigrahi@gmail.com",
   github: "https://github.com/notquite28",
-  linkedin: "https://www.linkedin.com/in/arnav-panigrahi/",
+  linkedin: "https://www.linkedin.com/in/arnavpanigrahi/",
   resume: "https://notquite28.github.io/resume/resumeml.pdf",
   image: "jelly.webp",
   about: [
