@@ -1,10 +1,9 @@
 ---
 title: "Vim for Beginners"
+description: "A beginner-focused guide to Vim motions, modes, editing habits, and keyboard-driven workflows for Linux users learning to stop reaching for the mouse."
 author: "Arnav Panigrahi"
 published: "2024-11-22"
 updated: "2024-11-22T09:03:40.173Z"
-source: "https://medium.com/@notquitethereyet_/vim-for-beginners-bdbbceb46b19"
-guid: "https://medium.com/p/bdbbceb46b19"
 categories: ["software-development", "arch-linux", "programming", "vim", "linux"]
 ---
 

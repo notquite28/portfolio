@@ -10,7 +10,7 @@ const posts: CollectionEntry<'posts'>[] = (await getCollection('posts')).sort(
 );
 
 const title = 'Posts | Arnav Panigrahi';
-const description = 'Posts by Arnav Panigrahi, mirrored from Medium.';
+const description = 'Technical notes, project writeups, and personal essays by Arnav Panigrahi.';
 
 function formatDate(date: Date) {
   return new Intl.DateTimeFormat('en', {

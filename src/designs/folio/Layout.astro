@@ -6,11 +6,23 @@ import { buildUrl } from '../../utils/paths';
 interface Props {
   title?: string;
   description?: string;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+  publishedTime?: string;
+  modifiedTime?: string;
+  tags?: string[];
+  structuredData?: Record<string, unknown>;
 }
 
 const {
   title = 'Arnav Panigrahi | Backend & AI/ML Software Developer',
   description = 'Software developer focused on backend systems, full-stack applications, and AI/ML pipelines. M.S. Computer Science, UC Riverside.',
+  ogType = 'website',
+  noindex = false,
+  publishedTime,
+  modifiedTime,
+  tags = [],
+  structuredData,
 } = Astro.props;
 
 const socialImageURL = new URL(buildUrl('og-image.png'), Astro.site ?? 'https://arnavpanigrahi.com/').toString();
@@ -26,18 +38,26 @@ const isProd = import.meta.env.PROD;
   <meta name="theme-color" content="#0d0c0b" />
   <meta name="description" content={description} />
   <meta name="author" content="Arnav Panigrahi" />
+  {noindex && <meta name="robots" content="noindex, follow" />}
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:image" content={socialImageURL} />
   <meta property="og:url" content={canonicalURL} />
-  <meta property="og:type" content="website" />
+  <meta property="og:type" content={ogType} />
+  <meta property="og:site_name" content="Arnav Panigrahi" />
+  {ogType === 'article' && publishedTime && <meta property="article:published_time" content={publishedTime} />}
+  {ogType === 'article' && modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+  {ogType === 'article' && <meta property="article:author" content="Arnav Panigrahi" />}
+  {ogType === 'article' && tags.map((tag) => <meta property="article:tag" content={tag} />)}
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={socialImageURL} />
   <link rel="canonical" href={canonicalURL} />
+  <link rel="alternate" type="application/rss+xml" title="Arnav Panigrahi Posts" href={new URL(buildUrl('rss.xml'), Astro.site ?? 'https://arnavpanigrahi.com/')} />
   <link rel="icon" type="image/svg+xml" href={buildUrl('favicon.svg')} />
   <title>{title}</title>
+  {structuredData && <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />}
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link

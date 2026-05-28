@@ -1,10 +1,9 @@
 ---
 title: "Yomiji: Offline-First Japanese Learning App"
+description: "How I built Yomiji, an offline-first WaniKani study app for Android with SQLite sync, local search, lessons, reviews, and React Native platform details."
 author: "Arnav Panigrahi"
 published: "2026-05-20"
 updated: "2026-05-20T00:00:00.000Z"
-source: "https://github.com/notquite28/yomiji"
-guid: "https://github.com/notquite28/yomiji"
 categories: ["react-native", "wanikani", "japanese", "mobile", "offline-first"]
 ---
 

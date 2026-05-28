@@ -59,9 +59,7 @@ const structuredData = {
 };
 ---
 
-<Layout title={title} description={description}>
-  <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-
+<Layout title={title} description={description} structuredData={structuredData}>
   <Nav />
   <Hero />
   <About />

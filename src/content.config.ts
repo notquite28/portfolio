@@ -9,11 +9,10 @@ const posts = defineCollection({
   }),
   schema: z.object({
     title: z.string(),
+    description: z.string(),
     author: z.string(),
     published: z.coerce.date(),
     updated: z.string().datetime().optional(),
-    source: z.string().url(),
-    guid: z.string().url(),
     categories: z.array(z.string()).default([]),
   }),
 });

@@ -1,10 +1,9 @@
 ---
 title: "Ditching Spotify: Owning Your Music"
+description: "A practical argument for leaving streaming behind and building an offline music library with budget audio gear, local files, and fewer platform surprises."
 author: "Arnav Panigrahi"
 published: "2025-04-25"
 updated: "2025-08-21T00:43:11.470Z"
-source: "https://medium.com/@notquitethereyet_/digital-audio-players-and-owning-your-music-dece60da467c"
-guid: "https://medium.com/p/dece60da467c"
 categories: ["audiophile", "audio"]
 ---
 

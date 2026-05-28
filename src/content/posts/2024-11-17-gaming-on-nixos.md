@@ -1,10 +1,9 @@
 ---
 title: "Gaming on NixOS! ❄️"
+description: "A walkthrough for setting up gaming on NixOS with Wayland, Hyprland, OpenGL drivers, Nvidia considerations, Steam, and practical troubleshooting."
 author: "Arnav Panigrahi"
 published: "2024-11-17"
 updated: "2024-11-17T10:47:07.117Z"
-source: "https://medium.com/@notquitethereyet_/gaming-on-nixos-%EF%B8%8F-f98506351a24"
-guid: "https://medium.com/p/f98506351a24"
 categories: ["configuration-nixos", "linux", "nvidia", "nixos", "gaming"]
 ---
 

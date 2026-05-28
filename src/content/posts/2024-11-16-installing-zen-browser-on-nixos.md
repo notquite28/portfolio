@@ -1,10 +1,9 @@
 ---
 title: "Installing Zen Browser on NixOS ❄️"
+description: "A beginner-friendly NixOS flake and Home Manager walkthrough for installing Zen Browser from an external flake on a declarative Linux setup."
 author: "Arnav Panigrahi"
 published: "2024-11-16"
 updated: "2024-11-16T04:07:04.601Z"
-source: "https://medium.com/@notquitethereyet_/installing-zen-browser-on-nixos-%EF%B8%8F-7ae541f5533f"
-guid: "https://medium.com/p/7ae541f5533f"
 categories: ["nix", "linux", "home-manager-in-nixos", "nixos", "home-manager-nixos"]
 ---
 

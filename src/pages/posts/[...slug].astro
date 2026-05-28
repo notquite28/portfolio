@@ -5,6 +5,7 @@ import type { CollectionEntry } from 'astro:content';
 import Layout from '../../designs/folio/Layout.astro';
 import Nav from '../../designs/folio/Nav.astro';
 import Footer from '../../designs/folio/Footer.astro';
+import { buildUrl } from '../../utils/paths';
 
 type Props = {
   post: CollectionEntry<'posts'>;
@@ -21,7 +22,36 @@ export const getStaticPaths: GetStaticPaths = async () => {
 const { post } = Astro.props as Props;
 const { Content } = await render(post);
 const title = `${post.data.title} | Arnav Panigrahi`;
-const description = `Post by Arnav Panigrahi, originally published on Medium on ${post.data.published.toISOString().slice(0, 10)}.`;
+const description = post.data.description;
+const publishedTime = post.data.published.toISOString();
+const modifiedTime = post.data.updated ?? publishedTime;
+const postURL = new URL(Astro.url.pathname, Astro.site ?? 'https://arnavpanigrahi.com/').toString();
+const socialImageURL = new URL(buildUrl('og-image.png'), Astro.site ?? 'https://arnavpanigrahi.com/').toString();
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description,
+  datePublished: publishedTime,
+  dateModified: modifiedTime,
+  author: {
+    '@type': 'Person',
+    name: 'Arnav Panigrahi',
+    url: 'https://arnavpanigrahi.com',
+  },
+  publisher: {
+    '@type': 'Person',
+    name: 'Arnav Panigrahi',
+    url: 'https://arnavpanigrahi.com',
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': postURL,
+  },
+  url: postURL,
+  image: socialImageURL,
+  keywords: post.data.categories,
+};
 
 function formatDate(date: Date) {
   return new Intl.DateTimeFormat('en', {
@@ -32,7 +62,15 @@ function formatDate(date: Date) {
 }
 ---
 
-<Layout title={title} description={description}>
+<Layout
+  title={title}
+  description={description}
+  ogType="article"
+  publishedTime={publishedTime}
+  modifiedTime={modifiedTime}
+  tags={post.data.categories}
+  structuredData={structuredData}
+>
   <Nav />
   <article class="post-page">
     <header class="post-header">

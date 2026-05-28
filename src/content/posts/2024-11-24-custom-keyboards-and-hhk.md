@@ -1,10 +1,9 @@
 ---
 title: "Custom Keyboards and HHKB"
+description: "A personal tour through custom mechanical keyboards, switches, layouts, and the HHKB rabbit hole that turned a simple upgrade into a full hobby."
 author: "Arnav Panigrahi"
 published: "2024-11-24"
 updated: "2024-11-29T11:09:09.632Z"
-source: "https://medium.com/@notquitethereyet_/custom-keyboards-and-hhk-1050e29ce6f3"
-guid: "https://medium.com/p/1050e29ce6f3"
 categories: ["computer-science", "mechanical-keyboards", "hhkb", "programming", "tech"]
 ---
 

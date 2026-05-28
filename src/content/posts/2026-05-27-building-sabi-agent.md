@@ -1,10 +1,9 @@
 ---
 title: "WabiSabi: An Imperfect Rust Agent Harness"
+description: "A look at building Sabi Agent, a small Rust coding-agent harness with inspectable loops, tools, approvals, sessions, and an early Tauri desktop shell."
 author: "Arnav Panigrahi"
 published: "2026-05-27"
 updated: "2026-05-27T00:00:00.000Z"
-source: "https://github.com/notquite28/sabi-agent"
-guid: "https://github.com/notquite28/sabi-agent"
 categories: ["rust", "ai", "agents", "tauri", "cli"]
 ---
 
