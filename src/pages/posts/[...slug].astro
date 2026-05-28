@@ -49,7 +49,7 @@ function formatDate(date: Date) {
 
 <style>
   .post-page {
-    max-width: 52rem;
+    max-width: 72rem;
     margin: 0 auto;
     padding: 8rem clamp(1.5rem, 4vw, 3rem) 4rem;
   }
@@ -123,6 +123,27 @@ function formatDate(date: Date) {
     margin: 0 0 1.35rem;
   }
 
+  .post-body :global(ul),
+  .post-body :global(ol) {
+    padding-left: 1.35rem;
+  }
+
+  .post-body :global(ul) {
+    list-style: disc;
+  }
+
+  .post-body :global(ol) {
+    list-style: decimal;
+  }
+
+  .post-body :global(li) {
+    margin: 0.35rem 0;
+  }
+
+  .post-body :global(li::marker) {
+    color: var(--c-accent);
+  }
+
   .post-body :global(a) {
     color: var(--c-accent-soft);
     text-underline-offset: 0.18em;
@@ -130,12 +151,51 @@ function formatDate(date: Date) {
 
   .post-body :global(img) {
     display: block;
-    width: 100%;
+    width: auto;
+    max-width: 100%;
+    max-height: 42rem;
     height: auto;
-    margin: 2rem 0 0.5rem;
+    margin: 2rem auto 0.5rem;
     border: 1px solid var(--c-rule);
     border-radius: 1rem;
     box-shadow: var(--shadow-soft);
+  }
+
+  .post-body :global(.post-image-row) {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+    max-width: 58rem;
+    margin: 2rem auto 0.5rem;
+  }
+
+  .post-body :global(.post-image-row img) {
+    width: 100%;
+    height: auto;
+    max-height: 34rem;
+    margin: 0;
+    object-fit: contain;
+  }
+
+  .post-body :global(.post-image-row--two) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 42rem;
+  }
+
+  @media (max-width: 640px) {
+    .post-body :global(.post-image-row) {
+      display: flex;
+      gap: 0.75rem;
+      margin-inline: -1rem;
+      overflow-x: auto;
+      padding-inline: 1rem;
+      scroll-snap-type: x mandatory;
+    }
+
+    .post-body :global(.post-image-row img) {
+      flex: 0 0 78%;
+      scroll-snap-align: center;
+    }
   }
 
   .post-body :global(blockquote) {
