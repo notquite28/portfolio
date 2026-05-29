@@ -53,7 +53,7 @@ I also tried to keep the ancestry visible in the Rust code. `agent.rs` points ba
 
 The “I will remember why I did this” to “a mysterious Ronin in my dreams revealed this system design” pipeline is one of the funniest jokes in software. Two weeks later you are staring at your own code like it appeared out of thin air. The module notes are mostly there because future me deserves breadcrumbs.
 
-One decision I like: core logic lives behind `src/lib.rs`, while `src/main.rs` stays a thin CLI frontend. That lets the desktop app call the same engine instead of scraping stdout like a raccoon licking soup out of a keyboard.
+One decision I like: core logic lives behind `src/lib.rs`, while `src/main.rs` stays a thin CLI frontend. That lets the desktop app call the same engine instead of reverse-engineering its own CLI output like Ouroboros.
 
 At the moment, Sabi supports OpenAI-compatible chat completions, project/user/env config, built-in file and shell tools, Exa-backed search, JSONL sessions, slash commands, skills, approval prompts, and a small Tauri shell with project selection, autocomplete, approval cards, compact tool rows, and collapsible diffs.
 
@@ -186,7 +186,7 @@ Small failures are good too. “The exact snippet appears twice” is the harnes
 
 Sabi started as “I want to understand coding agents” and became a small real harness with tools, sessions, skills, approvals, and a desktop shell beginning to form around it. This is usually how my projects go.
 
-It made the category less intimidating. Before building it, coding agents felt like a black box pointed at a terminal. After building the loop, tools, approvals, and session files, the fog cleared enough to see the gears. Some of it is ugly. Some of it is interesting. All of it is just software. Most of “AI Engineering” right now is just Software Engineering with a model-shaped chaos monkey in the middle.
+It made the category less intimidating. Before building it, coding agents felt like a black box pointed at a terminal. After building the loop, tools, approvals, and session files, the fog cleared enough to see the gears. Some of it is ugly. Some of it is interesting. All of it is just software. Most of “AI Engineering” right now is just Software Engineering with a model-shaped slot machine sitting in the cockpit.
 
 The satisfying part is that the agent uses only around 1,000 tokens in the first message.
 

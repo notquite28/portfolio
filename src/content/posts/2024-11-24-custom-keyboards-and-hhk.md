@@ -95,7 +95,7 @@ Throughout my journey in the custom keyboard hobby, I’ve often noticed people 
 
 Wrong! This keyboard single-handedly inspired this post. There’s something about **Eiichi Wada’s vision** that completely changed my perspective about prebuilt keyboards (HHKBs are the only prebuilt keyboards worth using). Wada, a computer scientist in the 1990s, was frustrated with the ever-changing keyboard designs and how poorly suited most layouts were for UNIX programming. So, he decided to create his own layout. After several iterations, he finalized what we now know as the **HHKB layout**.
 
-Wada famously compared keyboards to a cowboy’s saddle. A cowboy might leave a dead horse behind, but they always keep their saddle because it’s an interface that becomes an extension of their body. The same philosophy applies to the HHKB—it’s more than a tool; it’s a companion.
+Wada famously compared keyboards to a cowboy’s saddle. A cowboy might leave a dead horse behind, but they always keep their saddle because it’s an interface that becomes an extension of their body. That explains the HHKB better than any spec sheet. It is built around muscle memory, not features.
 
 These keyboards don’t come cheap. As of 2024, the most affordable HHKB is the **HHKB Pro Classic**, a Type-C wired version costing $220. The **Hybrid model**, which offers tri-mode connectivity, comes in at a steep $300. Despite their minimalist and somewhat flimsy plastic cases (which can sound a little hollow and plasticky), the technology underneath is extraordinary.
 
@@ -113,6 +113,6 @@ I adore my custom builds like the Fukuro and Crin, which I’ve poured blood, sw
 
 The HHKB has reignited my passion for typing and, in a way, given me a new appreciation for simplicity and functionality. This hobby has brought me joy, friendships, and experiences I never expected. Custom keyboards pushed me out of my comfort zone, encouraged me to meet new people, and helped me get involved in a community I genuinely care about.
 
-So, now what? Do I settle down and retire from this tantalizing hobby? Or do I dive into another rabbit hole, exploring luxury housings for the HHKB by Noxary or Norbauer?
+So, now what? Do I settle down and retire from this tantalizing hobby? Or do I start pricing out Noxary and Norbauer housings like I have learned absolutely nothing?
 
 Would I do it all again? Without hesitation. After all, some treasures (*takaramono*) are worth the madness.

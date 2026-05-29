@@ -148,7 +148,7 @@ Shipping became its own feature. Yomiji has GitHub Actions for Android releases,
 
 I skipped a lot on purpose. I did not add a backend. I did not replace WaniKani's SRS. I did not add AI explanations, social features, streak mechanics, or a second learning system beside WaniKani. I also deferred offline audio downloads, custom font controls, deep links, manual theme selection, and some WaniKani web parity around lesson pools.
 
-The app already had enough complexity hiding in sync, answer checking, local persistence, notifications, and release builds. There is no need to duct-tape a motivational *tanuki* (狸) onto it just because modern software is apparently required to have a mascot and a retention funnel.
+The app already had enough complexity hiding in sync, answer checking, local persistence, notifications, and release builds. There is no need to turn a WaniKani client into a dopamine casino just because modern software keeps rewarding that.
 
 ### Final Thoughts
 
