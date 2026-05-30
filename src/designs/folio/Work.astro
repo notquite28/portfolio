@@ -111,21 +111,23 @@ function getTheme(title: string, fallbackIndex: number) {
                 <span class="chevron"></span>
               </span>
             </div>
-            <div class="collapsible-body">
-              <p class="collapsible-desc">{project.description}</p>
-              <div class="tags">
-                {(project.compactTags ?? project.tags).map((tag, j) => (
-                  <>
-                    {j > 0 && <span class="tag-sep"> / </span>}
-                    <span class="tag">{tag}</span>
-                  </>
-                ))}
+            <div class="collapsible-body" aria-hidden="true" inert>
+              <div class="collapsible-body-inner">
+                <p class="collapsible-desc">{project.description}</p>
+                <div class="tags">
+                  {(project.compactTags ?? project.tags).map((tag, j) => (
+                    <>
+                      {j > 0 && <span class="tag-sep"> / </span>}
+                      <span class="tag">{tag}</span>
+                    </>
+                  ))}
+                </div>
+                {project.githubUrl && (
+                  <a href={project.githubUrl} class="project-link" target="_blank" rel="noopener noreferrer">
+                    View on GitHub
+                  </a>
+                )}
               </div>
-              {project.githubUrl && (
-                <a href={project.githubUrl} class="project-link" target="_blank" rel="noopener noreferrer">
-                  View on GitHub
-                </a>
-              )}
             </div>
           </div>
         ))}
@@ -137,9 +139,6 @@ function getTheme(title: string, fallbackIndex: number) {
 
 <script>
   import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-  gsap.registerPlugin(ScrollTrigger);
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -175,77 +174,33 @@ function getTheme(title: string, fallbackIndex: number) {
     });
   }
 
-  // Fluid collapsible animations
+  // CSS grid-based collapsible transitions: no scrollHeight reads or height tweens.
   const collapsibleControllers: AbortController[] = [];
-  if (!prefersReducedMotion) {
-    const collapsibles = document.querySelectorAll('[data-collapsible]');
-    collapsibles.forEach((item) => {
-      const controller = new AbortController();
-      collapsibleControllers.push(controller);
-      const summary = item.querySelector('.collapsible-summary') as HTMLElement | null;
-      const body = item.querySelector('.collapsible-body') as HTMLElement | null;
-      if (!summary || !body) return;
+  const collapsibles = document.querySelectorAll('[data-collapsible]');
+  collapsibles.forEach((item) => {
+    const controller = new AbortController();
+    collapsibleControllers.push(controller);
+    const summary = item.querySelector('.collapsible-summary') as HTMLElement | null;
+    const body = item.querySelector('.collapsible-body') as HTMLElement | null;
+    if (!summary || !body) return;
 
-      let isOpen = false;
-      let anim: gsap.core.Tween | null = null;
+    const setOpen = (isOpen: boolean) => {
+      item.classList.toggle('is-open', isOpen);
+      summary.setAttribute('aria-expanded', String(isOpen));
+      body.setAttribute('aria-hidden', String(!isOpen));
+      body.toggleAttribute('inert', !isOpen);
+    };
 
-      const toggle = () => {
-        if (anim?.isActive()) return;
+    const toggle = () => setOpen(!item.classList.contains('is-open'));
 
-        if (!isOpen) {
-          // Open — measure natural height (padding intact), then animate
-          body.style.display = 'flex';
-          const fullHeight = body.scrollHeight;
-          gsap.set(body, { height: 0, opacity: 0, overflow: 'hidden' });
-
-          anim = gsap.to(body, {
-            height: fullHeight,
-            opacity: 1,
-            duration: 0.5,
-            ease: 'power3.out',
-            onComplete: () => {
-              gsap.set(body, { height: 'auto', overflow: '' });
-            },
-          });
-
-          summary.setAttribute('aria-expanded', 'true');
-          item.classList.add('is-open');
-          isOpen = true;
-        } else {
-          // Close — freeze current height, then animate height + padding to 0
-          const currentHeight = body.scrollHeight;
-          gsap.set(body, { height: currentHeight, overflow: 'hidden' });
-
-          anim = gsap.to(body, {
-            height: 0,
-            paddingBottom: 0,
-            opacity: 0,
-            duration: 0.4,
-            ease: 'power3.inOut',
-            onComplete: () => {
-              gsap.set(body, { clearProps: 'height,paddingBottom,opacity,overflow' });
-              body.style.display = 'none';
-            },
-          });
-
-          summary.setAttribute('aria-expanded', 'false');
-          item.classList.remove('is-open');
-          isOpen = false;
-        }
-      };
-
-      summary.addEventListener('click', toggle, { signal: controller.signal });
-      summary.addEventListener('keydown', (e: Event) => {
-        if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
-          e.preventDefault();
-          toggle();
-        }
-      }, { signal: controller.signal });
-
-      // Initially hide body
-      body.style.display = 'none';
-    });
-  }
+    summary.addEventListener('click', toggle, { signal: controller.signal });
+    summary.addEventListener('keydown', (e: Event) => {
+      if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
+        e.preventDefault();
+        toggle();
+      }
+    }, { signal: controller.signal });
+  });
 
 </script>
 
@@ -568,10 +523,39 @@ function getTheme(title: string, fallbackIndex: number) {
   }
 
   .collapsible-body {
-    padding: 0 0 1.5rem;
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      grid-template-rows 300ms var(--ease-out),
+      opacity 200ms ease;
+  }
+
+  .collapsible-body-inner {
+    min-height: 0;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    padding-bottom: 0;
+  }
+
+  .collapsible-item.is-open .collapsible-body {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .collapsible-item.is-open .collapsible-body-inner {
+    padding-bottom: 1.5rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .collapsible-body,
+    .chevron {
+      transition: none;
+    }
   }
 
   .collapsible-desc {
