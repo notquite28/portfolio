@@ -58,7 +58,6 @@ function getTheme(title: string, fallbackIndex: number) {
                 {project.title.charAt(0)}
               </span>
             )}
-            <div class="project-visual-shine"></div>
           </div>
           <div class="project-content">
             <h3 class="project-title">{project.title}</h3>
@@ -151,7 +150,6 @@ function getTheme(title: string, fallbackIndex: number) {
     tiltCards.forEach((card) => {
       const controller = new AbortController();
       tiltControllers.push(controller);
-      const visual = card.querySelector('.project-visual') as HTMLElement | null;
 
       const quickRotateY = gsap.quickTo(card, 'rotateY', { duration: 0.35, ease: 'power2.out' });
       const quickRotateX = gsap.quickTo(card, 'rotateX', { duration: 0.35, ease: 'power2.out' });
@@ -165,12 +163,6 @@ function getTheme(title: string, fallbackIndex: number) {
         quickRotateY(x * 2.5);
         quickRotateX(-y * 2.5);
 
-        if (visual) {
-          const shine = visual.querySelector('.project-visual-shine') as HTMLElement | null;
-          if (shine) {
-            shine.style.background = `radial-gradient(circle at ${(x + 0.5) * 100}% ${(y + 0.5) * 100}%, rgba(255,255,255,0.12), transparent 60%)`;
-          }
-        }
       };
 
       const onMouseLeave = () => {
@@ -331,13 +323,6 @@ function getTheme(title: string, fallbackIndex: number) {
     display: block;
   }
 
-  .project-visual-shine {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    transition: background 300ms ease;
-    z-index: 1;
-  }
 
   .project-monogram {
     position: absolute;

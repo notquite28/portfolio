@@ -232,6 +232,13 @@ const isProd = import.meta.env.PROD;
     }
   }
 
+  @media (max-width: 1024px) {
+    .cursor-glow,
+    .noise-overlay {
+      display: none;
+    }
+  }
+
   @media (max-width: 767px) {
     .folio-theme .reveal,
     .folio-theme .reveal-child {
@@ -242,7 +249,6 @@ const isProd = import.meta.env.PROD;
 </style>
 
 <script>
-  import Lenis from 'lenis';
   import gsap from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -250,14 +256,11 @@ const isProd = import.meta.env.PROD;
 
   document.documentElement.classList.add('js-fonts-pending');
 
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const fontsReady = Promise.race([
     document.fonts.ready,
     new Promise<void>((r) => setTimeout(r, 3000)),
   ]);
 
-  let lenis: Lenis | null = null;
-  let tickerCb: ((time: number) => void) | null = null;
   let cursorRafId: number | null = null;
 
   const cursorGlow = document.querySelector('.cursor-glow') as HTMLElement | null;
@@ -266,22 +269,7 @@ const isProd = import.meta.env.PROD;
     await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
     document.documentElement.classList.remove('js-fonts-pending');
 
-    // Smooth scroll — wired into GSAP ticker, no separate RAF loop
-    if (!prefersReducedMotion) {
-      lenis = new Lenis({
-        duration: 0.85,
-        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: 'vertical',
-        smoothWheel: true,
-        syncTouch: true,
-        anchors: true,
-      });
-
-      lenis.on('scroll', ScrollTrigger.update);
-      tickerCb = (time: number) => lenis!.raf(time * 1000);
-      gsap.ticker.add(tickerCb);
-      gsap.ticker.lagSmoothing(0);
-    }
+    // Use native browser scrolling. It stays on the compositor path and avoids a permanent Lenis RAF loop.
 
     // Cursor glow — transform-only (no layout thrashing), pauses RAF when idle
     if (cursorGlow && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
@@ -372,9 +360,7 @@ const isProd = import.meta.env.PROD;
 
   // Centralized cleanup on page unload
   window.addEventListener('beforeunload', () => {
-    if (tickerCb) gsap.ticker.remove(tickerCb);
     ScrollTrigger.killAll();
-    lenis?.destroy();
     if (cursorRafId) cancelAnimationFrame(cursorRafId);
   });
 </script>
