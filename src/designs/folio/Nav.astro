@@ -59,7 +59,7 @@ const links = [
   const updateActiveLink = (id: string | null) => {
     navLinks.forEach((link) => {
       const href = link.getAttribute('href');
-      if (href === `#${id}`) {
+      if (href === `#${id}` || href === `/#${id}`) {
         link.classList.add('is-active');
       } else {
         link.classList.remove('is-active');
@@ -137,8 +137,8 @@ const links = [
   }
 
   .nav:not(.is-top) {
-    background: rgba(13, 12, 11, 0.85);
-    border-bottom-color: color-mix(in oklch, var(--c-rule) 60%, transparent);
+    background: color-mix(in oklch, var(--c-pond-850) 90%, transparent);
+    border-bottom-color: color-mix(in oklch, var(--c-water-mint) 18%, transparent);
   }
 
   .nav-inner {
@@ -161,7 +161,7 @@ const links = [
   }
 
   .nav-brand:hover {
-    color: var(--c-accent-soft);
+    color: var(--c-gold);
   }
 
   .nav-links {
@@ -197,7 +197,7 @@ const links = [
   }
 
   .nav-link:hover {
-    color: var(--c-ink);
+    color: var(--c-accent-soft);
   }
 
   .nav-link:hover::after,
@@ -250,7 +250,7 @@ const links = [
     flex-direction: column;
     padding: 0.5rem clamp(1.5rem, 4vw, 3rem) 1.25rem;
     border-top: 1px solid var(--c-rule);
-    background-color: rgba(13, 12, 11, 0.95);
+    background-color: color-mix(in oklch, var(--c-pond-850) 96%, black);
   }
 
   .nav-mobile.is-open {
@@ -303,6 +303,6 @@ const links = [
 
   .nav-link-accent:hover,
   .nav-mobile-link-accent:hover {
-    color: var(--c-accent-soft);
+    color: var(--c-gold);
   }
 </style>

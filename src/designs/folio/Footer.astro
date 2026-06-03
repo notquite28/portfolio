@@ -62,7 +62,7 @@ const footerLinks = [
     transform: translateX(-50%);
     width: clamp(4rem, 10vw, 8rem);
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--c-accent-soft), transparent);
+    background: linear-gradient(90deg, transparent, var(--c-water-mint), var(--c-koi-gold), transparent);
   }
 
   .footer-inner {
@@ -93,7 +93,7 @@ const footerLinks = [
   }
 
   .footer-link:hover {
-    color: var(--c-accent-soft);
+    color: var(--c-gold);
   }
 
 
@@ -118,9 +118,9 @@ const footerLinks = [
     height: 2.5rem;
     border: 1px solid var(--c-card-border);
     border-radius: 50%;
-    background: rgba(13, 12, 11, 0.9);
+    background: color-mix(in oklch, var(--c-pond-850) 92%, transparent);
     backdrop-filter: blur(12px);
-    color: var(--c-muted);
+    color: var(--c-accent-soft);
     cursor: pointer;
     opacity: 0;
     pointer-events: none;
@@ -139,7 +139,7 @@ const footerLinks = [
 
   .back-to-top:hover {
     color: var(--c-ink);
-    border-color: var(--c-accent-soft);
+    border-color: var(--c-gold);
   }
 
   @media (prefers-reduced-motion: reduce) {

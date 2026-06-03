@@ -35,7 +35,7 @@ const isProd = import.meta.env.PROD;
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0d0c0b" />
+  <meta name="theme-color" content="#071414" />
   <meta name="description" content={description} />
   <meta name="author" content="Arnav Panigrahi" />
   {noindex && <meta name="robots" content="noindex, follow" />}
@@ -61,7 +61,7 @@ const isProd = import.meta.env.PROD;
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..900,0..100&family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap"
     rel="stylesheet"
   />
 </head>
@@ -84,33 +84,47 @@ const isProd = import.meta.env.PROD;
 
 <style is:global>
   .folio-theme {
-    --c-surface: #0d0c0b;
-    --c-elevated: #161412;
-    --c-ink: #f0ebe4;
-    --c-body: #b0a89c;
-    --c-muted: #8a8076;
-    --c-rule: #2a2420;
-    --c-accent: #c97b5a;
-    --c-accent-soft: #e4b894;
-    --c-paper: #161412;
-    --c-card-border: #332b26;
-    --c-aura: #7a3a28;
-    --c-gold: #c9a86c;
-    --shadow-soft: 0 1.5rem 4rem rgba(0, 0, 0, 0.28);
+    --c-pond-900: oklch(13.2% 0.028 184);
+    --c-pond-850: oklch(15.5% 0.034 184);
+    --c-pond-800: oklch(18.5% 0.042 184);
+    --c-pond-700: oklch(23% 0.052 184);
+    --c-cream: #fff7e7;
+    --c-cream-muted: #d9cdbb;
+    --c-sage: #b8c4b1;
+    --c-koi-orange: #ff7a4f;
+    --c-koi-red: #d96650;
+    --c-water-mint: #7ed6c6;
+    --c-koi-gold: #f3c77b;
 
-    --font-serif: "Cormorant Garamond", Georgia, serif;
-    --font-body: "Source Serif 4", Georgia, serif;
-    --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --c-surface: var(--c-pond-900);
+    --c-elevated: var(--c-pond-800);
+    --c-ink: var(--c-cream);
+    --c-body: var(--c-cream-muted);
+    --c-muted: var(--c-sage);
+    --c-rule: color-mix(in oklch, var(--c-water-mint) 18%, transparent);
+    --c-accent: var(--c-koi-orange);
+    --c-accent-soft: var(--c-water-mint);
+    --c-paper: var(--c-pond-850);
+    --c-card-border: color-mix(in oklch, var(--c-water-mint) 22%, transparent);
+    --c-aura: var(--c-water-mint);
+    --c-gold: var(--c-koi-gold);
+    --c-proof: var(--c-koi-red);
+    --shadow-soft: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.26);
+
+    --font-serif: "Fraunces", Georgia, serif;
+    --font-body: "Manrope", ui-sans-serif, system-ui, sans-serif;
+    --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
     --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
     --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 
     position: relative;
     isolation: isolate;
     background:
-      radial-gradient(circle at 12% 0%, color-mix(in oklch, var(--c-aura) 14%, transparent), transparent 40rem),
-      radial-gradient(circle at 92% 8%, rgba(201, 168, 108, 0.06), transparent 32rem),
-      radial-gradient(circle at 50% 100%, rgba(122, 58, 40, 0.08), transparent 50rem),
-      linear-gradient(180deg, #12100e 0%, var(--c-surface) 36rem);
+      radial-gradient(circle at 16% 0%, color-mix(in oklch, var(--c-water-mint) 18%, transparent), transparent 40rem),
+      radial-gradient(circle at 92% 8%, color-mix(in oklch, var(--c-koi-orange) 10%, transparent), transparent 32rem),
+      radial-gradient(circle at 50% 100%, color-mix(in oklch, var(--c-koi-gold) 8%, transparent), transparent 50rem),
+      linear-gradient(180deg, var(--c-pond-850) 0%, var(--c-surface) 36rem);
     color: var(--c-ink);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
@@ -125,8 +139,8 @@ const isProd = import.meta.env.PROD;
     z-index: -1;
     pointer-events: none;
     background-image:
-      linear-gradient(rgba(240, 235, 228, 0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(240, 235, 228, 0.015) 1px, transparent 1px);
+      linear-gradient(color-mix(in oklch, var(--c-water-mint) 5%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in oklch, var(--c-water-mint) 3%, transparent) 1px, transparent 1px);
     background-size: 5rem 5rem;
     mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), transparent 80%);
   }
@@ -136,7 +150,7 @@ const isProd = import.meta.env.PROD;
     inset: 0;
     z-index: 9997;
     pointer-events: none;
-    opacity: 0.035;
+    opacity: 0.025;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     background-repeat: repeat;
     background-size: 200px 200px;
@@ -151,7 +165,7 @@ const isProd = import.meta.env.PROD;
     border-radius: 50%;
     pointer-events: none;
     z-index: 9998;
-    background: radial-gradient(circle, rgba(201, 123, 90, 0.06) 0%, transparent 70%);
+    background: radial-gradient(circle, color-mix(in oklch, var(--c-koi-orange) 10%, transparent) 0%, color-mix(in oklch, var(--c-water-mint) 7%, transparent) 38%, transparent 70%);
     transform: translate3d(var(--cursor-x, 0px), var(--cursor-y, 0px), 0);
     left: 0;
     top: 0;
@@ -169,7 +183,7 @@ const isProd = import.meta.env.PROD;
   }
 
   ::selection {
-    background: rgba(201, 123, 90, 0.22);
+    background: color-mix(in oklch, var(--c-koi-orange) 38%, transparent);
     color: var(--c-ink);
   }
 
@@ -251,6 +265,7 @@ const isProd = import.meta.env.PROD;
 <script>
   import gsap from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import Lenis from 'lenis';
 
   gsap.registerPlugin(ScrollTrigger);
 
@@ -262,6 +277,8 @@ const isProd = import.meta.env.PROD;
   ]);
 
   let cursorRafId: number | null = null;
+  let lenis: Lenis | null = null;
+  let lenisTick: ((time: number) => void) | null = null;
 
   const cursorGlow = document.querySelector('.cursor-glow') as HTMLElement | null;
 
@@ -269,7 +286,23 @@ const isProd = import.meta.env.PROD;
     await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
     document.documentElement.classList.remove('js-fonts-pending');
 
-    // Use native browser scrolling. It stays on the compositor path and avoids a permanent Lenis RAF loop.
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const hasHeroScrub = Boolean(document.querySelector('[data-hero-scrub]'));
+
+
+    if (hasHeroScrub && !prefersReducedMotion.matches) {
+      lenis = new Lenis({
+        lerp: 0.08,
+        smoothWheel: true,
+        wheelMultiplier: 1.0,
+      });
+      lenis.on('scroll', ScrollTrigger.update);
+      lenisTick = (time: number) => {
+        lenis?.raf(time * 1000);
+      };
+      gsap.ticker.add(lenisTick);
+      gsap.ticker.lagSmoothing(0);
+    }
 
     // Cursor glow — transform-only (no layout thrashing), pauses RAF when idle
     if (cursorGlow && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
@@ -362,5 +395,7 @@ const isProd = import.meta.env.PROD;
   window.addEventListener('beforeunload', () => {
     ScrollTrigger.killAll();
     if (cursorRafId) cancelAnimationFrame(cursorRafId);
+    if (lenisTick) gsap.ticker.remove(lenisTick);
+    lenis?.destroy();
   });
 </script>

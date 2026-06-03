@@ -221,7 +221,7 @@ function getTheme(title: string, fallbackIndex: number) {
     font-weight: 500;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--c-accent);
+    color: var(--c-gold);
     margin-bottom: 0.75rem;
   }
 
@@ -246,21 +246,23 @@ function getTheme(title: string, fallbackIndex: number) {
   .project-card {
     position: relative;
     overflow: hidden;
-    background-color: var(--c-paper);
+    background:
+      radial-gradient(circle at 18% 0%, color-mix(in oklch, var(--c-water-mint) 7%, transparent), transparent 14rem),
+      linear-gradient(180deg, var(--c-paper), color-mix(in oklch, var(--c-pond-800) 82%, var(--c-surface)));
     border-radius: 1.25rem;
     border: 1px solid var(--c-card-border);
     display: flex;
     flex-direction: column;
     box-shadow: var(--shadow-soft);
-    transition: border-color 600ms var(--ease-expo), box-shadow 600ms var(--ease-expo);
+    transition: border-color 600ms var(--ease-expo), background 600ms var(--ease-expo), box-shadow 600ms var(--ease-expo);
     perspective: 1000px;
     transform-style: preserve-3d;
     will-change: transform;
   }
 
   .project-card:hover {
-    border-color: color-mix(in oklch, var(--c-accent) 25%, var(--c-card-border));
-    box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.28);
+    border-color: color-mix(in oklch, var(--c-water-mint) 42%, var(--c-card-border));
+    box-shadow: 0 0.75rem 1.75rem rgba(0, 0, 0, 0.3), 0 0 0 1px color-mix(in oklch, var(--c-koi-orange) 12%, transparent);
   }
 
   .project-visual {
@@ -344,7 +346,7 @@ function getTheme(title: string, fallbackIndex: number) {
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background-color: var(--c-accent);
+    background-color: var(--c-proof);
   }
 
   .project-meta {
@@ -405,7 +407,7 @@ function getTheme(title: string, fallbackIndex: number) {
   }
 
   .project-link:hover {
-    color: var(--c-accent-soft);
+    color: var(--c-gold);
   }
 
   .project-link::after {
@@ -415,7 +417,7 @@ function getTheme(title: string, fallbackIndex: number) {
     left: 0;
     width: 100%;
     height: 1px;
-    background-color: var(--c-accent);
+    background-color: var(--c-gold);
     transform: scaleX(0);
     transform-origin: right;
     transition: transform 400ms var(--ease-expo);
@@ -432,7 +434,7 @@ function getTheme(title: string, fallbackIndex: number) {
   }
 
   .collapsible-kicker {
-    color: var(--c-muted);
+    color: var(--c-accent-soft);
     margin-bottom: 1rem;
   }
 
@@ -446,8 +448,8 @@ function getTheme(title: string, fallbackIndex: number) {
   }
 
   .collapsible-item:hover {
-    border-color: color-mix(in oklch, var(--c-accent) 20%, var(--c-rule));
-    background: rgba(201, 123, 90, 0.03);
+    border-color: color-mix(in oklch, var(--c-water-mint) 34%, var(--c-rule));
+    background: color-mix(in oklch, var(--c-water-mint) 6%, transparent);
   }
 
   .collapsible-summary {
@@ -469,7 +471,7 @@ function getTheme(title: string, fallbackIndex: number) {
   .collapsible-summary:focus-visible {
     outline: 1px solid var(--c-accent-soft);
     outline-offset: 4px;
-    color: var(--c-accent);
+    color: var(--c-gold);
   }
 
   .collapsible-summary-main {
@@ -494,7 +496,7 @@ function getTheme(title: string, fallbackIndex: number) {
   }
 
   .collapsible-summary:hover {
-    color: var(--c-accent);
+    color: var(--c-accent-soft);
   }
 
   .collapsible-toggle {

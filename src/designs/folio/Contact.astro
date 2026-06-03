@@ -106,12 +106,12 @@ import { profile } from '../../data/content';
     flex-direction: column;
     align-items: center;
     padding: clamp(2.5rem, 6vw, 4rem) clamp(1.5rem, 4vw, 3rem);
-    border: 1px solid color-mix(in oklch, var(--c-accent) 18%, var(--c-card-border));
+    border: 1px solid color-mix(in oklch, var(--c-water-mint) 28%, var(--c-card-border));
     border-radius: 1.5rem;
     background:
-      radial-gradient(ellipse at 50% 0%, color-mix(in oklch, var(--c-accent) 4%, transparent), transparent 60%),
-      var(--c-paper);
-    box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.18), 0 0 6rem color-mix(in oklch, var(--c-accent) 6%, transparent);
+      radial-gradient(ellipse at 50% 0%, color-mix(in oklch, var(--c-koi-orange) 7%, transparent), transparent 58%),
+      linear-gradient(180deg, var(--c-paper), color-mix(in oklch, var(--c-pond-800) 86%, var(--c-surface)));
+    box-shadow: var(--shadow-soft), 0 0 0 1px color-mix(in oklch, var(--c-koi-gold) 10%, transparent);
   }
 
   .kicker {
@@ -120,7 +120,7 @@ import { profile } from '../../data/content';
     font-weight: 500;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--c-accent);
+    color: var(--c-gold);
     margin-bottom: 0.75rem;
   }
 
@@ -183,7 +183,7 @@ import { profile } from '../../data/content';
   }
 
   .contact-link-primary::after {
-    background-color: var(--c-accent);
+    background-color: var(--c-koi-gold);
   }
 
   .contact-link:hover::after {
@@ -196,7 +196,7 @@ import { profile } from '../../data/content';
   }
 
   .contact-link-button[data-copied='true'] .contact-link-label {
-    color: var(--c-accent);
+    color: var(--c-gold);
   }
 
   @media (prefers-reduced-motion: reduce) {

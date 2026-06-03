@@ -86,7 +86,7 @@ import { skillCategories } from '../../data/content';
     font-weight: 500;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--c-accent);
+    color: var(--c-accent-soft);
     margin-bottom: 0.75rem;
   }
 
@@ -121,7 +121,7 @@ import { skillCategories } from '../../data/content';
   }
 
   .skill-group:hover {
-    border-color: color-mix(in oklch, var(--c-accent) 25%, var(--c-rule));
+    border-color: color-mix(in oklch, var(--c-water-mint) 34%, var(--c-rule));
   }
 
   .skill-group-left {
@@ -140,7 +140,7 @@ import { skillCategories } from '../../data/content';
   }
 
   .skill-group:hover .skill-group-title {
-    color: var(--c-accent-soft);
+    color: var(--c-gold);
   }
 
   .skill-group-bar {
@@ -154,7 +154,7 @@ import { skillCategories } from '../../data/content';
   .skill-group-bar-fill {
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, var(--c-accent), var(--c-accent-soft));
+    background: linear-gradient(90deg, var(--c-water-mint), var(--c-koi-gold));
     transform-origin: left;
   }
 
@@ -173,9 +173,9 @@ import { skillCategories } from '../../data/content';
     color: var(--c-body);
     line-height: 1.6;
     padding: 0.35rem 0.85rem;
-    border: 1px solid color-mix(in oklch, var(--c-accent) 15%, var(--c-rule));
+    border: 1px solid color-mix(in oklch, var(--c-water-mint) 18%, var(--c-rule));
     border-radius: 100px;
-    background: color-mix(in oklch, var(--c-accent) 6%, var(--c-elevated));
+    background: color-mix(in oklch, var(--c-water-mint) 6%, var(--c-elevated));
     transition:
       color 300ms var(--ease-expo),
       border-color 300ms var(--ease-expo),
@@ -185,8 +185,8 @@ import { skillCategories } from '../../data/content';
 
   .skill-item:hover {
     color: var(--c-ink);
-    border-color: color-mix(in oklch, var(--c-accent) 40%, var(--c-rule));
-    background: rgba(201, 123, 90, 0.06);
+    border-color: color-mix(in oklch, var(--c-koi-gold) 38%, var(--c-rule));
+    background: color-mix(in oklch, var(--c-koi-gold) 7%, var(--c-elevated));
     transform: translateY(-1px);
   }
 
