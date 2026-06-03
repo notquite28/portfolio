@@ -3,7 +3,6 @@ import type { GetStaticPaths } from 'astro';
 import { getCollection, render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import Layout from '../../designs/folio/Layout.astro';
-import Nav from '../../designs/folio/Nav.astro';
 import Footer from '../../designs/folio/Footer.astro';
 import { buildUrl } from '../../utils/paths';
 
@@ -71,10 +70,10 @@ function formatDate(date: Date) {
   tags={post.data.categories}
   structuredData={structuredData}
 >
-  <Nav />
   <article class="post-page">
     <header class="post-header">
       <a class="back-link" href="/posts/">← Posts</a>
+      <a class="home-link" href="/">← Home</a>
       <p>{formatDate(post.data.published)}</p>
       <h1>{post.data.title}</h1>
     </header>
@@ -108,6 +107,28 @@ function formatDate(date: Date) {
     color: var(--c-ink);
   }
 
+  .home-link {
+    display: inline-flex;
+    width: fit-content;
+    margin-left: 1.25rem;
+    color: var(--c-accent-soft);
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    transition: color 200ms var(--ease-expo);
+  }
+
+  .home-link:hover {
+    color: var(--c-ink);
+  }
+
+  @media (max-width: 640px) {
+    .home-link {
+      display: flex;
+      margin: 0.75rem 0 0;
+    }
+  }
   .post-header p {
     margin: 3rem 0 1rem;
     color: var(--c-accent);

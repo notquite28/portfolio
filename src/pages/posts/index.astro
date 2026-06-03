@@ -2,7 +2,6 @@
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import Layout from '../../designs/folio/Layout.astro';
-import Nav from '../../designs/folio/Nav.astro';
 import Footer from '../../designs/folio/Footer.astro';
 
 const posts: CollectionEntry<'posts'>[] = (await getCollection('posts')).sort(
@@ -22,9 +21,9 @@ function formatDate(date: Date) {
 ---
 
 <Layout title={title} description={description}>
-  <Nav />
   <section class="posts-index">
     <div class="posts-index-inner">
+      <a class="home-link" href="/">← Home</a>
       <p class="kicker">Writing</p>
       <h1>Posts</h1>
       <div class="posts-list">
@@ -61,7 +60,7 @@ function formatDate(date: Date) {
   }
 
   h1 {
-    margin: 0 0 4rem;
+    margin: 1rem 0 4rem;
     color: var(--c-ink);
     font-family: var(--font-serif);
     font-size: clamp(4rem, 12vw, 8rem);
@@ -70,6 +69,21 @@ function formatDate(date: Date) {
     line-height: 0.88;
   }
 
+  .home-link {
+    display: inline-flex;
+    width: fit-content;
+    margin-bottom: 3rem;
+    color: var(--c-accent-soft);
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    transition: color 200ms var(--ease-expo);
+  }
+
+  .home-link:hover {
+    color: var(--c-ink);
+  }
   .posts-list {
     border-top: 1px solid var(--c-rule);
   }
