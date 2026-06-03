@@ -2,25 +2,49 @@
 import Layout from '../designs/folio/Layout.astro';
 import { buildUrl } from '../utils/paths';
 
-const modelUrl = buildUrl("daruma.glb");
-const scriptUrl = buildUrl("js/notfound-model.js");
+const videoWebmUrl = buildUrl("hero_404.webm");
 ---
 
 <Layout title="404 - Page Not Found" description="The page you were looking for could not be found." noindex>
   <section class="notfound">
+    <div class="notfound-video-shell" aria-hidden="true">
+      <video class="notfound-video" muted loop playsinline preload="metadata">
+        <source src={videoWebmUrl} type="video/webm" />
+      </video>
+      <div class="notfound-video-grain"></div>
+    </div>
+
     <div class="notfound-inner">
       <p class="notfound-kicker">404</p>
-      <h1 class="notfound-title">七転び八起き</h1>
-      <p class="notfound-desc">Fall down seven times, stand up eight.</p>
-
-      <div class="notfound-model-shell" data-notfound-model data-model-url={modelUrl} aria-hidden="true">
-        <div class="notfound-model-fallback"></div>
-      </div>
-      <script is:inline type="module" src={scriptUrl}></script>
+      <h1 class="notfound-title">Lost along the way.</h1>
 
       <a href="/" class="notfound-link">Return home</a>
     </div>
   </section>
+
+  <script>
+    const video = document.querySelector('.notfound-video') as HTMLVideoElement | null;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const syncVideoMotion = () => {
+      if (!video) return;
+
+      if (reducedMotion.matches) {
+        video.pause();
+        video.currentTime = 0;
+        return;
+      }
+
+      void video.play();
+    };
+
+    syncVideoMotion();
+    reducedMotion.addEventListener('change', syncVideoMotion);
+    window.addEventListener('pagehide', () => {
+      reducedMotion.removeEventListener('change', syncVideoMotion);
+      video?.pause();
+    }, { once: true });
+  </script>
 </Layout>
 
 <style>
@@ -30,17 +54,26 @@ const scriptUrl = buildUrl("js/notfound-model.js");
     align-items: center;
     justify-content: center;
     padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
   }
 
   .notfound-inner {
+    position: relative;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     gap: 0.75rem;
-    width: 100%;
-    max-width: 64rem;
+    width: min(100%, 42rem);
     margin: 0 auto;
+    padding: clamp(2rem, 5vw, 4rem);
+    border: 1px solid rgba(240, 235, 228, 0.08);
+    border-radius: 2rem;
+    background: rgba(5, 5, 5, 0.18);
+    backdrop-filter: blur(3px);
   }
 
   .notfound-kicker {
@@ -71,33 +104,76 @@ const scriptUrl = buildUrl("js/notfound-model.js");
     margin: 0 auto;
   }
 
-  .notfound-model-shell {
-    position: relative;
-    width: min(100%, 18rem);
-    aspect-ratio: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: visible;
-    background: transparent;
-    touch-action: none;
-    user-select: none;
-    margin: 1rem auto;
-  }
-
-  .notfound-model-shell canvas {
-    display: block;
+  .notfound-video-shell {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
     width: 100%;
     height: 100%;
-    filter: drop-shadow(0 28px 36px rgba(0, 0, 0, 0.34));
+    overflow: hidden;
+    background: #050505;
+    pointer-events: none;
+    user-select: none;
   }
 
-  .notfound-model-fallback {
+  .notfound-video-shell::before {
+    content: '';
     position: absolute;
     inset: 0;
-    border-radius: 50%;
-    background: radial-gradient(circle at 50% 35%, rgba(212, 102, 74, 0.1), transparent 28%),
-                radial-gradient(circle at 50% 75%, rgba(212, 102, 74, 0.08), transparent 38%);
+    z-index: 1;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at 50% 42%, rgba(5, 5, 5, 0.08), rgba(5, 5, 5, 0.58) 78%),
+      linear-gradient(180deg, rgba(5, 5, 5, 0.28), rgba(5, 5, 5, 0.62));
+    mix-blend-mode: soft-light;
+  }
+
+  .notfound-video {
+    position: absolute;
+    inset: -3%;
+    display: block;
+    width: 106%;
+    height: 106%;
+    object-fit: cover;
+    transform: scale(1.04);
+    filter: blur(8px) saturate(0.78) contrast(1.16) brightness(0.58);
+  }
+
+  .notfound-video-grain {
+    position: absolute;
+    inset: -20%;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0.2;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.28) 0 1px, transparent 1px),
+      radial-gradient(circle at 70% 60%, rgba(255, 255, 255, 0.18) 0 1px, transparent 1px),
+      radial-gradient(circle at 40% 80%, rgba(0, 0, 0, 0.28) 0 1px, transparent 1px);
+    background-size: 17px 19px, 23px 29px, 31px 37px;
+    animation: notfoundGrain 0.8s steps(2) infinite;
+    mix-blend-mode: overlay;
+  }
+
+  @keyframes notfoundGrain {
+    0% { transform: translate3d(-1.5%, -1.5%, 0); }
+    50% { transform: translate3d(1.5%, 1%, 0); }
+    100% { transform: translate3d(-1%, 1.5%, 0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .notfound-video-shell {
+      background:
+        radial-gradient(ellipse at 50% 42%, rgba(33, 50, 45, 0.42), transparent 58%),
+        linear-gradient(135deg, #07100e, #050606 62%, #100b09);
+    }
+
+    .notfound-video {
+      visibility: hidden;
+    }
+
+    .notfound-video-grain {
+      animation: none;
+    }
   }
 
   .notfound-link {
