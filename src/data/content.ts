@@ -90,6 +90,20 @@ export const projects: Project[] = [
     githubUrl: "https://github.com/notquite28/sabi-agent",
   },
   {
+    title: "PR Review Agent",
+    subtitle: "Cloudflare GitHub App Review Bot",
+    description:
+      "A Cloudflare-hosted GitHub App that reviews pull requests on demand from PR comments. Verifies GitHub webhooks, exchanges GitHub App installation tokens, fetches bounded PR context, validates typed model output, filters findings, and updates a single review comment in place.",
+    tags: ["TypeScript", "Cloudflare Workers", "GitHub Apps", "Hono", "Valibot", "OpenAI-Compatible APIs"],
+    compactTags: ["Workers", "GitHub Apps", "AI Review"],
+    highlights: [
+      "Webhook-first PR review flow with HMAC verification before parsing",
+      "Bounded diff and file-context collection with typed Valibot review output",
+      "Update-in-place review comments with severity, recommendation, findings, and metadata",
+    ],
+    githubUrl: "https://github.com/notquite28/flue-agent",
+  },
+  {
     title: "Yomiji",
     subtitle: "Offline-First WaniKani Android Client",
     description:
@@ -138,7 +152,7 @@ export const projects: Project[] = [
       "A containerized FastAPI service deployed on Google Cloud Run that emulates authenticated user sessions against RethinkBH endpoints to sync appointment and authorization data in real time, bypassing 24-48-hour API latency for downstream applications.",
     tags: ["System Architecture", "FastAPI", "Cloud Run", "Google Cloud", "DevOps", "Automation"],
     compactTags: ["FastAPI", "Cloud Run", "Automation"],
-    githubUrl: "",
+    githubUrl: "https://github.com/notquite28/rethink-sync",
   },
   {
     title: "LangChain RAG",
@@ -147,15 +161,6 @@ export const projects: Project[] = [
     tags: ["AI/ML", "LangChain", "Vector Search", "RAG", "LLMs"],
     compactTags: ["RAG", "LangChain", "Qdrant"],
     githubUrl: "https://github.com/notquite28/langchain-rag",
-  },
-  {
-    title: "Enterprise ROI System",
-    subtitle: "AI Agent for Document Processing",
-    description:
-      "An LLM agent that automates HIPAA document release workflows, orchestrating authorization checks, compliance validation, and document generation to reduce manual processing time by 60% and deliver $20K in annual savings.",
-    tags: ["AI Agent", "Enterprise", "Automation", "Legal Tech", "Cost Optimization"],
-    compactTags: ["AI Agent", "Automation", "HIPAA"],
-    githubUrl: "",
   },
 ];
 

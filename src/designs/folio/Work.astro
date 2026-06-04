@@ -3,11 +3,12 @@ import { projects } from '../../data/content';
 import { buildUrl } from '../../utils/paths';
 
 const secondary = projects.slice(0, 4);
-const collapsible = projects.slice(4);
+const otherProjects = projects.slice(4);
 
 const projectImages: Record<string, string> = {
   'bedtime.ai': 'bedtime.ai.png',
   'Sabi Agent': 'sabi-agent.png',
+  'PR Review Agent': 'pr-review-agent.webp',
   'Abliteration for LFM2.5': 'abliteration.png',
   'Nier Archive': 'nier.png',
   'Yomiji': 'kanji.png',
@@ -89,11 +90,11 @@ function getTheme(title: string, fallbackIndex: number) {
       ))}
     </div>
 
-    {collapsible.length > 0 && (
+    {otherProjects.length > 0 && (
       <div class="collapsible-list-wrapper">
-        <p class="kicker collapsible-kicker reveal">Earlier Work</p>
+        <p class="kicker collapsible-kicker reveal">Other Projects</p>
       <div class="collapsible-list">
-        {collapsible.map((project) => (
+        {otherProjects.map((project) => (
           <div class="collapsible-item reveal" data-collapsible>
             <div class="collapsible-summary" role="button" tabindex="0" aria-expanded="false">
               <span class="collapsible-summary-main">
