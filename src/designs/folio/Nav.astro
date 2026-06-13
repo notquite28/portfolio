@@ -17,13 +17,13 @@ const links = [
         <a href={link.href} class={`nav-link${link.label === 'Resume' ? ' nav-link-accent' : ''}`} data-nav-link{...link.label === 'Resume' ? { target: '_blank', rel: 'noopener noreferrer' } : {}}>{link.label}</a>
       ))}
     </div>
-    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primary-mobile-menu">
       <span class="nav-toggle-bar"></span>
       <span class="nav-toggle-bar"></span>
       <span class="nav-toggle-bar"></span>
     </button>
   </div>
-  <div class="nav-mobile" aria-hidden="true">
+  <div class="nav-mobile" id="primary-mobile-menu" aria-hidden="true">
     {links.map((link) => (
       <a href={link.href} class={`nav-mobile-link${link.label === 'Resume' ? ' nav-mobile-link-accent' : ''}`} data-nav-link{...link.label === 'Resume' ? { target: '_blank', rel: 'noopener noreferrer' } : {}}>{link.label}</a>
     ))}
@@ -36,19 +36,32 @@ const links = [
   const nav = document.querySelector('[data-nav]') as HTMLElement | null;
 
   if (toggle instanceof HTMLButtonElement && mobile instanceof HTMLElement) {
+    const closeMenu = ({ restoreFocus = false } = {}) => {
+      toggle.setAttribute('aria-expanded', 'false');
+      mobile.setAttribute('aria-hidden', 'true');
+      mobile.classList.remove('is-open');
+      if (restoreFocus) toggle.focus();
+    };
+
+    const setMenuOpen = (isOpen: boolean) => {
+      toggle.setAttribute('aria-expanded', String(isOpen));
+      mobile.setAttribute('aria-hidden', String(!isOpen));
+      mobile.classList.toggle('is-open', isOpen);
+    };
+
     toggle.addEventListener('click', () => {
       const expanded = toggle.getAttribute('aria-expanded') === 'true';
-      toggle.setAttribute('aria-expanded', String(!expanded));
-      mobile.setAttribute('aria-hidden', String(expanded));
-      mobile.classList.toggle('is-open', !expanded);
+      setMenuOpen(!expanded);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+        closeMenu({ restoreFocus: true });
+      }
     });
 
     mobile.querySelectorAll('a').forEach((link) => {
-      link.addEventListener('click', () => {
-        toggle.setAttribute('aria-expanded', 'false');
-        mobile.setAttribute('aria-hidden', 'true');
-        mobile.classList.remove('is-open');
-      });
+      link.addEventListener('click', () => closeMenu());
     });
   }
 
@@ -130,6 +143,7 @@ const links = [
     transition:
       transform 400ms var(--ease-expo),
       background 400ms var(--ease-expo),
+      border-color 400ms var(--ease-expo);
   }
 
   .nav.is-hidden {

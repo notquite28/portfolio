@@ -7,7 +7,6 @@ updated: "2026-06-03T00:00:00.000Z"
 categories: ["ai", "agents", "cloudflare", "github", "typescript"]
 ---
 
-# Building a Cloudflare PR Review Agent
 
 #### Let the clankers fight amongst themselves
 
@@ -19,7 +18,7 @@ Claude claims they had to develop a game-engine just for the TUI flickering, whi
 
 My heart goes out to the senior developer still expected to read a 3,000-line diff before lunch and type `LGTM`, like how they merged the million-line PR translating Bun from Zig to Rust.
 
-![](/posts/images/2026-06-03-building-flue-review-agent/bun.png)
+![Bun test output showing a passing review-agent result](/posts/images/2026-06-03-building-flue-review-agent/bun.png)
 *Looks good to me.*
 
 This is the current AI software development model: write a diff three times longer than necessary, add abstractions for "future extensibility" before which the company will go out of business, shrink the review window, drop a chatbot somewhere in the middle, and hope the house of cards holds. Lay off engineers because AI is cheaper. Spend the entire year's budget on Claude. Rehire people because AI got expensive enough that new grads are suddenly a cost-saving measure. Lay them off again after record-breaking profits so the next budget can go deeper into AI.
@@ -303,12 +302,12 @@ Then I opened three PRs.
 
 The clean PR added recent agent-run listing. The bot approved it.
 
-![](/posts/images/2026-06-03-building-flue-review-agent/low.png)
+![Clean pull request where the review bot found no issue](/posts/images/2026-06-03-building-flue-review-agent/low.png)
 *A clean PR where the bot found nothing worth bothering a human about.*
 
 The bad security PR added an OpenAI diagnostics endpoint. It hardcoded an API-key-looking string and returned the configured OpenAI key from an unauthenticated route. The bot requested changes and called it high severity.
 
-![](/posts/images/2026-06-03-building-flue-review-agent/high.png)
+![Security calibration pull request with a high-severity bot finding](/posts/images/2026-06-03-building-flue-review-agent/high.png)
 *The security calibration PR. Red dot of shame included.*
 
 The bad correctness PR added prompt cache keys but also changed:

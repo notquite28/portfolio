@@ -7,11 +7,10 @@ updated: "2024-11-29T11:09:09.632Z"
 categories: ["computer-science", "mechanical-keyboards", "hhkb", "programming", "tech"]
 ---
 
-# Custom Keyboards and HHKB
 
 ### My Journey with Custom Keyboards
 
-![](/posts/images/1050e29ce6f3/01.jpg)
+![Keyboard collection on a desk](/posts/images/1050e29ce6f3/01.jpg)
 *The keyboard collection that started as a harmless upgrade.*
 
 #### Introduction to the madness…
@@ -42,7 +41,7 @@ I had the chance to go to a keyboard meetup. My parents were surprised that I de
 
 After that trip, I was dejected with Knobby. The typing felt stiff and sounded pretty muted even with long-pole tactiles (Purple Pandas). One night after work, I saw a local seller importing parts from [CannonKeys](https://cannonkeys.com/) personally, essentially bypassing the import taxes. This was my chance. It was 4 a.m., Korone’s stream was in the background, and I placed an order for a Bakeneko60 (thanks [kkatano](https://github.com/kkatano/bakeneko-60)). This was like getting the Black Knight Halberd in Dark Souls for me (I am terrible at that game). And of course, I had to challenge myself. No more hotswap. This was a solder-only build—a rite of passage. It had a custom aluminum plate and PCB with support for the Tsangan layout. This layout has a funny story where someone on GeekHack kept asking designers to support it. Take a look at the bottom row in the image below. There is beauty in symmetry as dictated by nature. The R2 backspace makes so much more sense, and of course the stepped caps lock.
 
-![](/posts/images/1050e29ce6f3/02.png)
+![Tsangan-layout Bakeneko60 keyboard build](/posts/images/1050e29ce6f3/02.png)
 *My Tsangan-layout Bakeneko60 build.*
 
 Cherry held the patent for MX-style switches until the early 90s, when the patent ran out. Cherry switches were often criticized for their “poor” feel and inconsistent housing tolerances. So Chinese manufacturers like Kailh and Gateron started making objectively better Cherry clones with smoother stems and tighter housings.
@@ -69,10 +68,10 @@ Right before I moved to California, I found a rerun group buy of the cult-classi
 
 So, at this point I’d received the Fukuro, and it had been sitting unbuilt in the closet for over 10 months. I’d received the Redux keycap set by now too (it took six months). It was summer 2024, and I had yet another internship and some disposable income. I got some Subuwu Pleiades V2 switches manufactured by Meirun. They were supposed to be MX Black replicas but had some mold issues that led to stem shrinkage, so they were offered for very cheap. This was my first top-mount keyboard, and I was excited. And, as is tradition, I managed to damage the non-standard connector. I had to jerry-rig the cable with some solder and tape. I am never opening the Fukuro again. This was a limited-run board (100 units). The velvety coffee color and the weird greys, blacks, and reds of Redux were an unlikely match, but somehow they worked. This aluminum top-mount keyboard with MX Blacks and Korean proportions was a return to tradition. Top-mount aluminum has ruined all other mounting styles for me. Also, the layout is my beloved Winkeyless.
 
-![](/posts/images/1050e29ce6f3/04.png)
+![Fukuro keyboard with GMK Alter Redux keycaps](/posts/images/1050e29ce6f3/04.png)
 *Fukuro with GMK Alter Redux.*
 
-![](/posts/images/1050e29ce6f3/05.jpg)
+![Engraved back weight on the Fukuro keyboard](/posts/images/1050e29ce6f3/05.jpg)
 *The Fukuro's engraved back weight.*
 
 #### Imminent Relapse
@@ -83,12 +82,12 @@ The Crin was built with the polycarbonate plate because I wanted a softer typing
 
 After this purchase, I thought I could finally step away from the hobby. But no…
 
-![](/posts/images/1050e29ce6f3/07.jpg)
+![Several custom keyboard builds arranged together](/posts/images/1050e29ce6f3/07.jpg)
 *A few of my favorite keyboard builds.*
 
 #### Topre is king
 
-![](/posts/images/1050e29ce6f3/08.jpg)
+![HHKB Pro 2 keyboard](/posts/images/1050e29ce6f3/08.jpg)
 *My HHKB Pro 2, the keyboard that changed my mind about Topre.*
 
 Throughout my journey in the custom keyboard hobby, I’ve often noticed people retiring from the scene after acquiring an HHKB or another Topre keyboard. I always associated the HHKB with membrane keyboards and couldn’t understand the appeal. So, like any sane person, I went on eBay and bought an **HHKB Pro 2** from a Japanese seller clearing out his storeroom—for $130. I had no expectations. Just another keyboard to toss into the closet, right?

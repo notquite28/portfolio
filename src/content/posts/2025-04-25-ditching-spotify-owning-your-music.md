@@ -7,11 +7,10 @@ updated: "2025-08-21T00:43:11.470Z"
 categories: ["audiophile", "audio"]
 ---
 
-# Ditching Spotify: Owning Your Music
 
 #### Creating an offline music library on a budget.
 
-![](/posts/images/dece60da467c/01.jpg)
+![AKG K701 headphones](/posts/images/dece60da467c/01.jpg)
 *The AKG K701: still iconic, still polarizing.*
 
 ### The Streaming Era and Music Discovery
@@ -63,13 +62,13 @@ While you could dive deeper into audio bit rate, sampling rate, THD, noise floor
 - **Bit-depth** affects dynamic range.
 - **Sampling rate** affects frequency response. More isn’t always better—**the quality of the mastering matters most.**
 
-![](/posts/images/dece60da467c/02.jpg)
+![HiBy FC4 portable DAC and amplifier](/posts/images/dece60da467c/02.jpg)
 *HiBy FC4*
 
-![](/posts/images/dece60da467c/03.jpg)
+![HiBy M300 and R3 II music players](/posts/images/dece60da467c/03.jpg)
 *HiBy M300 and the R3 II*
 
-![](/posts/images/dece60da467c/04.jpg)
+![Moondrop Kato in-ear monitors](/posts/images/dece60da467c/04.jpg)
 *Moondrop Katos*
 
 #### The Software: Your Library & Player
@@ -103,7 +102,7 @@ Cheers!
 
 ### Update: HiBy R3 Pro Saber and R4 x Evangelion Impressions
 
-![](/posts/images/dece60da467c/05.jpg)
+![Compact offline music listening setup](/posts/images/dece60da467c/05.jpg)
 *A compact offline setup for rediscovering albums intentionally.*
 
 The **HiBy R3 Pro Saber** absolutely cooks. With its premium glass build and pocket-friendly size, it’s a great little player. The UI is surprisingly decent for a budget DAP, and its battery life with offline playback is rock solid. Streaming, however, is a different story—I saw quick battery drain and stutters. I eventually sold it to get the Android-powered **R4 x Evangelion**, which handles streaming perfectly but has worse battery life.

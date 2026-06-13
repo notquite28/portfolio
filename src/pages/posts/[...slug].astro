@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const posts = await getCollection('posts');
+  const posts = (await getCollection('posts')).filter((post: CollectionEntry<'posts'>) => import.meta.env.DEV || !post.data.draft);
   return posts.map((post: CollectionEntry<'posts'>) => ({
     params: { slug: post.id },
     props: { post },
@@ -54,6 +54,7 @@ const structuredData = {
 
 function formatDate(date: Date) {
   return new Intl.DateTimeFormat('en', {
+    timeZone: 'UTC',
     month: 'long',
     day: 'numeric',
     year: 'numeric',

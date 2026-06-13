@@ -7,7 +7,6 @@ updated: "2026-05-20T00:00:00.000Z"
 categories: ["react-native", "wanikani", "japanese", "mobile", "offline-first"]
 ---
 
-# Building Yomiji: A WaniKani App for Android
 
 #### 七転び八起き: Fall down seven times, stand up eight.
 

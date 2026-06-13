@@ -7,7 +7,6 @@ updated: "2024-11-16T04:07:04.601Z"
 categories: ["nix", "linux", "home-manager-in-nixos", "nixos", "home-manager-nixos"]
 ---
 
-# Installing Zen Browser on NixOS ❄️
 
 ### Introduction
 
@@ -15,7 +14,7 @@ We all know Linux users. We either spend years living comfortably on Debian or j
 
 ### NixOS, flakes and home-manager
 
-![](/posts/images/7ae541f5533f/01.png)
+![The unofficial NixOS mascot](/posts/images/7ae541f5533f/01.png)
 *The unofficial NixOS mascot, because every operating system deserves one.*
 
 NixOS is truly mind-boggling. When I learned that this came from **Eelco Dolstra**’s PhD thesis on “correct software deployment,” I was both intrigued and humbled. NixOS is lauded for its modularity, reproducibility, and declarative approach to system configuration.

@@ -8,12 +8,13 @@ const posts = defineCollection({
     base: './src/content/posts',
   }),
   schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    author: z.string(),
+    title: z.string().min(1).max(70),
+    description: z.string().min(50).max(160),
+    author: z.string().min(1),
     published: z.coerce.date(),
     updated: z.string().datetime().optional(),
-    categories: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+    categories: z.array(z.string().min(1)).default([]),
   }),
 });
 
