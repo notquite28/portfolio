@@ -4,15 +4,18 @@ import type { CollectionEntry } from 'astro:content';
 import Layout from '../../designs/folio/Layout.astro';
 import Footer from '../../designs/folio/Footer.astro';
 
-const posts: CollectionEntry<'posts'>[] = (await getCollection('posts')).sort(
-  (a: CollectionEntry<'posts'>, b: CollectionEntry<'posts'>) => b.data.published.getTime() - a.data.published.getTime()
-);
+const posts: CollectionEntry<'posts'>[] = (await getCollection('posts'))
+  .filter((post: CollectionEntry<'posts'>) => import.meta.env.DEV || !post.data.draft)
+  .sort(
+    (a: CollectionEntry<'posts'>, b: CollectionEntry<'posts'>) => b.data.published.getTime() - a.data.published.getTime()
+  );
 
 const title = 'Posts | Arnav Panigrahi';
 const description = 'Technical notes, project writeups, and personal essays by Arnav Panigrahi.';
 
 function formatDate(date: Date) {
   return new Intl.DateTimeFormat('en', {
+    timeZone: 'UTC',
     month: 'long',
     day: 'numeric',
     year: 'numeric',

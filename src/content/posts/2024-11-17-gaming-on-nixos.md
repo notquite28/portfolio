@@ -7,9 +7,8 @@ updated: "2024-11-17T10:47:07.117Z"
 categories: ["configuration-nixos", "linux", "nvidia", "nixos", "gaming"]
 ---
 
-# Gaming on NixOS! ❄️
 
-![](/posts/images/f98506351a24/01.jpg)
+![A NixOS gaming setup desktop](/posts/images/f98506351a24/01.jpg)
 *A very serious NixOS gaming setup, naturally.*
 
 #### Introduction

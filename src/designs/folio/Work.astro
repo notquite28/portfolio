@@ -14,6 +14,13 @@ const projectImages: Record<string, string> = {
   'Yomiji': 'kanji.png',
 };
 
+const projectImageSizes: Record<string, { width: number; height: number }> = {
+  'bedtime.ai': { width: 1672, height: 941 },
+  'Sabi Agent': { width: 1920, height: 1080 },
+  'PR Review Agent': { width: 1024, height: 1024 },
+  'Abliteration for LFM2.5': { width: 1672, height: 941 },
+};
+
 const projectThemes = [
   'theme-sunset',
   'theme-deep',
@@ -32,9 +39,17 @@ function getImage(title: string) {
   return buildUrl(projectImages[title] ?? '');
 }
 
+function getImageSize(title: string) {
+  return projectImageSizes[title];
+}
+
 function getTheme(title: string, fallbackIndex: number) {
   if (hasImage(title)) return '';
   return projectThemes[fallbackIndex] ?? '';
+}
+
+function getProjectId(title: string) {
+  return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 }
 ---
 
@@ -52,7 +67,10 @@ function getTheme(title: string, fallbackIndex: number) {
                 src={getImage(project.title)}
                 alt={`${project.title} preview`}
                 class="project-image"
+                width={getImageSize(project.title)?.width}
+                height={getImageSize(project.title)?.height}
                 loading="lazy"
+                decoding="async"
               />
             ) : (
               <span class="project-monogram" aria-hidden="true">
@@ -94,9 +112,12 @@ function getTheme(title: string, fallbackIndex: number) {
       <div class="collapsible-list-wrapper">
         <p class="kicker collapsible-kicker reveal">Other Projects</p>
       <div class="collapsible-list">
-        {otherProjects.map((project) => (
+        {otherProjects.map((project) => {
+          const projectId = getProjectId(project.title);
+          const panelId = `project-panel-${projectId}`;
+          return (
           <div class="collapsible-item reveal" data-collapsible>
-            <div class="collapsible-summary" role="button" tabindex="0" aria-expanded="false">
+            <button type="button" class="collapsible-summary" aria-expanded="false" aria-controls={panelId}>
               <span class="collapsible-summary-main">
                 <span class="collapsible-name">{project.title}</span>
                 <span class="collapsible-tags">
@@ -108,11 +129,11 @@ function getTheme(title: string, fallbackIndex: number) {
                   ))}
                 </span>
               </span>
-              <span class="collapsible-toggle">
+              <span class="collapsible-toggle" aria-hidden="true">
                 <span class="chevron"></span>
               </span>
-            </div>
-            <div class="collapsible-body" aria-hidden="true" inert>
+            </button>
+            <div class="collapsible-body" id={panelId} aria-hidden="true" inert>
               <div class="collapsible-body-inner">
                 <p class="collapsible-desc">{project.description}</p>
                 <div class="tags">
@@ -129,9 +150,10 @@ function getTheme(title: string, fallbackIndex: number) {
                   </a>
                 )}
               </div>
-            </div>
           </div>
-        ))}
+          </div>
+          );
+        })}
       </div>
       </div>
     )}
@@ -195,12 +217,6 @@ function getTheme(title: string, fallbackIndex: number) {
     const toggle = () => setOpen(!item.classList.contains('is-open'));
 
     summary.addEventListener('click', toggle, { signal: controller.signal });
-    summary.addEventListener('keydown', (e: Event) => {
-      if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
-        e.preventDefault();
-        toggle();
-      }
-    }, { signal: controller.signal });
   });
 
 </script>
@@ -454,6 +470,10 @@ function getTheme(title: string, fallbackIndex: number) {
   }
 
   .collapsible-summary {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    text-align: left;
     display: flex;
     align-items: center;
     justify-content: space-between;

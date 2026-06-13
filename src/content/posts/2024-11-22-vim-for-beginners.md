@@ -7,9 +7,8 @@ updated: "2024-11-22T09:03:40.173Z"
 categories: ["software-development", "arch-linux", "programming", "vim", "linux"]
 ---
 
-# Vim for Beginners
 
-![](/posts/images/bdbbceb46b19/01.png)
+![A Vim editing screen showing modal editing context](/posts/images/bdbbceb46b19/01.png)
 *Vim motions started making more sense once I stopped reaching for arrow keys.*
 
 #### Introduction
@@ -19,7 +18,7 @@ Alternatively, like me, you might attempt to ditch your overpriced, overengineer
 
 Contrary to what some Vim evangelists claim, Vim (or Vi IMproved) didn’t adopt its strange motion keybindings just so people could keep their hands on the home row for “efficiency.” Instead, these bindings originated from the ADM-3A keyboard layout, where the HJKL keys were literally the arrow keys. Here's what that keyboard looked like (yes, there is a “rub” key…):
 
-![](/posts/images/bdbbceb46b19/02.png)
+![An editor screen using Vim keybindings](/posts/images/bdbbceb46b19/02.png)
 
 But hey, whatever helps r/linux and the RTFM folks sleep at night.
 
@@ -29,7 +28,7 @@ Let’s dive in.
 
 There exists a Vim plugin for any and every IDE. I will be using Cursor because it has become my autocomplete-heavy scratchpad for scripts and system tweaks.
 
-![](/posts/images/bdbbceb46b19/03.png)
+![VS Code extension screen for Vim keybindings](/posts/images/bdbbceb46b19/03.png)
 *Just download the right extension on your IDE*
 
 Type `set number` to show numbered lines, although this might already be the default behavior of the IDE. Many Vim users prefer relative numbering. Use `set relativenumber` to enable it. This helps with some motions we will talk about later.
@@ -82,7 +81,7 @@ You might want to add funny ASCII art to the beginning of your config. To do thi
 
 #### Editing Text
 
-![](/posts/images/bdbbceb46b19/04.png)
+![Cursor position example for Vim insert modes](/posts/images/bdbbceb46b19/04.png)
 *Take note of the cursor position*
 
 - `i`: Insert before the cursor.
@@ -99,7 +98,7 @@ You might want to add funny ASCII art to the beginning of your config. To do thi
 - `u`: Undo the last change.
 - `Ctrl+r`: Redo the undone change.
 
-![](/posts/images/bdbbceb46b19/05.png)
+![Vim buffer example before deleting text](/posts/images/bdbbceb46b19/05.png)
 
 #### Deleting Text
 

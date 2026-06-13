@@ -11,9 +11,7 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
 <section class="hero is-preloading" data-hero-scrub>
   <div class="hero-stage">
     <div class="hero-media" data-hero-media>
-      <video class="hero-video" data-hero-video muted playsinline preload="auto" poster={heroPosterSrc} aria-hidden="true">
-        <source src={heroVideoSrc} type="video/mp4" />
-      </video>
+      <video class="hero-video" data-hero-video data-src={heroVideoSrc} muted playsinline preload="metadata" poster={heroPosterSrc} aria-hidden="true"></video>
       <img class="hero-poster" data-hero-poster src={heroPosterSrc} alt="" aria-hidden="true" fetchpriority="high" decoding="async" />
       <div class="hero-noise" aria-hidden="true"></div>
       <div class="hero-vignette" aria-hidden="true"></div>
@@ -77,6 +75,13 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
     let cancelVideoSeek: (() => void) | null = null;
 
     const getPreferredScrollBehavior = (): ScrollBehavior => (motionMedia.matches ? 'auto' : 'smooth');
+    const ensureVideoSource = () => {
+      if (!video || video.currentSrc || video.src) return;
+      const source = video.dataset.src;
+      if (!source) return;
+      video.src = source;
+      video.load();
+    };
 
     const revealHero = () => {
       section.classList.add('is-ready');
@@ -109,6 +114,10 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
 
       ctx = gsap.context(() => {
         const useStaticHero = mobileMedia.matches || motionMedia.matches || !video;
+
+        if (!useStaticHero) {
+          ensureVideoSource();
+        }
 
         if (useStaticHero) {
           section.classList.add('is-static');
@@ -230,11 +239,11 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
           ScrollTrigger.refresh();
         };
 
-        if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+        if (video.readyState >= HTMLMediaElement.HAVE_METADATA) {
           createScrollTimeline();
         } else {
-          video.addEventListener('canplay', createScrollTimeline, { once: true });
-          removeCanPlayListener = () => video.removeEventListener('canplay', createScrollTimeline);
+          video.addEventListener('loadedmetadata', createScrollTimeline, { once: true });
+          removeCanPlayListener = () => video.removeEventListener('loadedmetadata', createScrollTimeline);
         }
       }, section);
     };

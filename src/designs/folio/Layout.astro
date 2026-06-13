@@ -24,6 +24,7 @@ const {
   tags = [],
   structuredData,
 } = Astro.props;
+const structuredDataJson = structuredData ? JSON.stringify(structuredData).replace(/</g, '\\u003c') : undefined;
 
 const socialImageURL = new URL(buildUrl('og-image.png'), Astro.site ?? 'https://arnavpanigrahi.com/').toString();
 const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://arnavpanigrahi.com/');
@@ -57,7 +58,7 @@ const isProd = import.meta.env.PROD;
   <link rel="alternate" type="application/rss+xml" title="Arnav Panigrahi Posts" href={new URL(buildUrl('rss.xml'), Astro.site ?? 'https://arnavpanigrahi.com/')} />
   <link rel="icon" type="image/svg+xml" href={buildUrl('favicon.svg')} />
   <title>{title}</title>
-  {structuredData && <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />}
+  {structuredDataJson && <script is:inline type="application/ld+json" set:html={structuredDataJson} />}
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -272,7 +273,7 @@ const isProd = import.meta.env.PROD;
   document.documentElement.classList.add('js-fonts-pending');
 
   const fontsReady = Promise.race([
-    document.fonts.ready,
+    document.fonts?.ready ?? Promise.resolve(),
     new Promise<void>((r) => setTimeout(r, 3000)),
   ]);
 
@@ -281,28 +282,29 @@ const isProd = import.meta.env.PROD;
   let lenisTick: ((time: number) => void) | null = null;
 
   const cursorGlow = document.querySelector('.cursor-glow') as HTMLElement | null;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const hasHeroScrub = Boolean(document.querySelector('[data-hero-scrub]'));
+
+  if (hasHeroScrub && !prefersReducedMotion.matches) {
+    lenis = new Lenis({
+      lerp: 0.08,
+      smoothWheel: true,
+      wheelMultiplier: 1.0,
+    });
+    lenis.on('scroll', ScrollTrigger.update);
+    lenisTick = (time: number) => {
+      lenis?.raf(time * 1000);
+    };
+    gsap.ticker.add(lenisTick);
+    gsap.ticker.lagSmoothing(0);
+  }
+
 
   fontsReady.then(async () => {
     await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
     document.documentElement.classList.remove('js-fonts-pending');
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const hasHeroScrub = Boolean(document.querySelector('[data-hero-scrub]'));
 
-
-    if (hasHeroScrub && !prefersReducedMotion.matches) {
-      lenis = new Lenis({
-        lerp: 0.08,
-        smoothWheel: true,
-        wheelMultiplier: 1.0,
-      });
-      lenis.on('scroll', ScrollTrigger.update);
-      lenisTick = (time: number) => {
-        lenis?.raf(time * 1000);
-      };
-      gsap.ticker.add(lenisTick);
-      gsap.ticker.lagSmoothing(0);
-    }
 
     // Cursor glow — transform-only (no layout thrashing), pauses RAF when idle
     if (cursorGlow && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
@@ -342,14 +344,16 @@ const isProd = import.meta.env.PROD;
     // Reveal triggers
     ScrollTrigger.matchMedia({
       "(min-width: 768px)": function () {
-        ScrollTrigger.batch(".reveal", {
+        const triggers: ScrollTrigger[] = [];
+        const batch = ScrollTrigger.batch(".reveal", {
           onEnter: (batch) => {
             gsap.fromTo(batch, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "power3.out", stagger: 0.05, overwrite: "auto" });
           },
           start: "top 88%",
           once: true,
         });
-        return function () { ScrollTrigger.getAll().forEach((t) => t.kill()); };
+        triggers.push(...batch);
+        return function () { triggers.forEach((t) => t.kill()); };
       },
     });
 
