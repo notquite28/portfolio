@@ -14,7 +14,7 @@ const links = [
     <a href="/" class="nav-brand">{profile.name}</a>
     <div class="nav-links">
       {links.map((link) => (
-        <a href={link.href} class={`nav-link${link.label === 'Resume' ? ' nav-link-accent' : ''}`} data-nav-link{...link.label === 'Resume' ? { target: '_blank', rel: 'noopener noreferrer' } : {}}>{link.label}</a>
+        <a href={link.href} class={`nav-link${link.label === 'Resume' ? ' nav-link-accent' : ''}`} data-nav-link {...link.label === 'Resume' ? { target: '_blank', rel: 'noopener noreferrer' } : {}}>{link.label}</a>
       ))}
     </div>
     <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primary-mobile-menu">
@@ -25,7 +25,7 @@ const links = [
   </div>
   <div class="nav-mobile" id="primary-mobile-menu" aria-hidden="true">
     {links.map((link) => (
-      <a href={link.href} class={`nav-mobile-link${link.label === 'Resume' ? ' nav-mobile-link-accent' : ''}`} data-nav-link{...link.label === 'Resume' ? { target: '_blank', rel: 'noopener noreferrer' } : {}}>{link.label}</a>
+      <a href={link.href} class={`nav-mobile-link${link.label === 'Resume' ? ' nav-mobile-link-accent' : ''}`} data-nav-link {...link.label === 'Resume' ? { target: '_blank', rel: 'noopener noreferrer' } : {}}>{link.label}</a>
     ))}
   </div>
 </nav>

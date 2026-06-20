@@ -5,20 +5,13 @@ import { buildUrl } from '../../utils/paths';
 const secondary = projects.slice(0, 4);
 const otherProjects = projects.slice(4);
 
-const projectImages: Record<string, string> = {
-  'bedtime.ai': 'bedtime.ai.png',
-  'Sabi Agent': 'sabi-agent.png',
-  'PR Review Agent': 'pr-review-agent.webp',
-  'Abliteration for LFM2.5': 'abliteration.png',
-  'Nier Archive': 'nier.png',
-  'Yomiji': 'kanji.png',
-};
+type ProjectImage = { src: string; width: number; height: number };
 
-const projectImageSizes: Record<string, { width: number; height: number }> = {
-  'bedtime.ai': { width: 1672, height: 941 },
-  'Sabi Agent': { width: 1920, height: 1080 },
-  'PR Review Agent': { width: 1024, height: 1024 },
-  'Abliteration for LFM2.5': { width: 1672, height: 941 },
+const projectImages: Record<string, ProjectImage> = {
+  'bedtime.ai': { src: 'bedtime.ai.png', width: 1672, height: 941 },
+  'Sabi Agent': { src: 'sabi-agent.png', width: 1920, height: 1080 },
+  'PR Review Agent': { src: 'pr-review-agent.webp', width: 1024, height: 1024 },
+  'Yomiji': { src: 'kanji.png', width: 1672, height: 941 },
 };
 
 const projectThemes = [
@@ -31,20 +24,12 @@ const projectThemes = [
   'theme-bronze',
 ];
 
-function hasImage(title: string) {
-  return projectImages[title] !== undefined;
-}
-
-function getImage(title: string) {
-  return buildUrl(projectImages[title] ?? '');
-}
-
-function getImageSize(title: string) {
-  return projectImageSizes[title];
+function getImage(title: string): ProjectImage | undefined {
+  return projectImages[title];
 }
 
 function getTheme(title: string, fallbackIndex: number) {
-  if (hasImage(title)) return '';
+  if (getImage(title)) return '';
   return projectThemes[fallbackIndex] ?? '';
 }
 
@@ -59,16 +44,18 @@ function getProjectId(title: string) {
     <h2 class="section-title reveal">Projects</h2>
 
     <div class="project-grid">
-      {secondary.map((project, i) => (
+      {secondary.map((project, i) => {
+        const image = getImage(project.title);
+        return (
         <div class="project-card reveal" data-tilt>
           <div class={`project-visual ${getTheme(project.title, i)}`} aria-hidden="true">
-            {hasImage(project.title) ? (
+            {image ? (
               <img
-                src={getImage(project.title)}
+                src={buildUrl(image.src)}
                 alt={`${project.title} preview`}
                 class="project-image"
-                width={getImageSize(project.title)?.width}
-                height={getImageSize(project.title)?.height}
+                width={image.width}
+                height={image.height}
                 loading="lazy"
                 decoding="async"
               />
@@ -105,7 +92,8 @@ function getProjectId(title: string) {
             </div>
           </div>
         </div>
-      ))}
+        );
+      })}
     </div>
 
     {otherProjects.length > 0 && (
