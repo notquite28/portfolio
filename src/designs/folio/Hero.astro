@@ -8,7 +8,30 @@ const heroVideoSrc = buildUrl('hero-video-scrub.mp4');
 const heroPosterSrc = buildUrl('hero-poster.jpg');
 ---
 
-<section class="hero is-preloading" data-hero-scrub>
+<section class="hero" data-hero-scrub>
+  <script is:inline>
+    // Opt INTO the animated intro only when JS works and the scrub will run
+    // (desktop, motion allowed). The default rendered state is the static,
+    // visible hero, so no-JS and failed-JS both render correctly.
+    //   is-scrub      — persistent: tall scroll geometry + video shown.
+    //   is-preloading — transient veil: preloader shown, content hidden.
+    //                   removed by the hero module once it's ready.
+    (() => {
+      const section = document.currentScript && document.currentScript.parentElement;
+      if (!section) return;
+      const animate =
+        window.matchMedia('(min-width: 768px)').matches &&
+        !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!animate) return;
+      section.classList.add('is-scrub', 'is-preloading');
+      // Watchdog: if the hero module never signals ready, fall back to static.
+      window.setTimeout(() => {
+        if (!section.classList.contains('is-ready')) {
+          section.classList.remove('is-scrub', 'is-preloading');
+        }
+      }, 4000);
+    })();
+  </script>
   <div class="hero-stage">
     <div class="hero-media" data-hero-media>
       <video class="hero-video" data-hero-video data-src={heroVideoSrc} muted playsinline preload="metadata" poster={heroPosterSrc} aria-hidden="true"></video>
@@ -120,6 +143,7 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
         }
 
         if (useStaticHero) {
+          section.classList.remove('is-scrub');
           section.classList.add('is-static');
           gsap.set(section, { height: '100svh' });
           gsap.set(media, { autoAlpha: 1 });
@@ -133,6 +157,9 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
         }
 
         section.classList.remove('is-static');
+        // Claim scrub mode (covers mobile→desktop resize, where the inline
+        // bootstrap never added it). The watchdog removes it on timeout.
+        section.classList.add('is-scrub');
 
         const syncHeroHeight = () => {
           const duration = video.duration || 6;
@@ -150,6 +177,12 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
 
         const createScrollTimeline = () => {
           if (!video.duration || Number.isNaN(video.duration)) return;
+          // If the watchdog already fell back to static (metadata arrived after
+          // the timeout), honor it — the video is hidden, so don't scrub it.
+          if (!section.classList.contains('is-scrub')) {
+            revealHero();
+            return;
+          }
 
           syncHeroHeight();
           video.pause();
@@ -263,9 +296,14 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
 <style>
   .hero {
     position: relative;
-    height: 376.5vh;
+    height: 100svh;
     min-height: 100svh;
     background: var(--c-surface);
+  }
+
+  /* Animated intro: JS opts in by adding .is-scrub (desktop + motion-OK). */
+  .hero.is-scrub {
+    height: 376.5vh;
   }
 
   .hero-stage {
@@ -305,7 +343,15 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
     display: block;
   }
 
-  .hero-poster {
+  .hero-video {
+    display: none;
+  }
+
+  .hero.is-scrub .hero-video {
+    display: block;
+  }
+
+  .hero.is-scrub .hero-poster {
     display: none;
   }
 
@@ -342,7 +388,7 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
   .hero-preloader {
     z-index: 5;
     inset: 0;
-    display: grid;
+    display: none;
     place-items: center;
     gap: 1.25rem;
     align-content: center;
@@ -351,6 +397,10 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
       radial-gradient(circle at 50% 48%, color-mix(in oklch, var(--c-water-mint) 10%, transparent), transparent 22rem),
       linear-gradient(180deg, color-mix(in oklch, var(--c-pond-850) 92%, transparent), var(--c-surface));
     opacity: 1;
+  }
+
+  .hero.is-preloading .hero-preloader {
+    display: grid;
   }
 
   .hero-preloader-mark {
@@ -517,22 +567,6 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
   }
 
   @media (max-width: 767px), (prefers-reduced-motion: reduce) {
-    .hero {
-      height: 100svh;
-    }
-
-    .hero-stage {
-      position: relative;
-    }
-
-    .hero-video {
-      display: none;
-    }
-
-    .hero-poster {
-      display: block;
-    }
-
     .hero-scroll-line {
       animation: none;
     }
