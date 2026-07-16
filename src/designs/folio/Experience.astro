@@ -54,41 +54,40 @@ import { experiences } from '../../data/content';
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   if (!prefersReducedMotion) {
-    ScrollTrigger.matchMedia({
-      "(min-width: 768px)": function () {
-        const triggers: ScrollTrigger[] = [];
+    const media = gsap.matchMedia();
+    media.add('(min-width: 768px)', () => {
+      const triggers: ScrollTrigger[] = [];
 
-        // Line-fill: explicit create (uses scrub — cannot batch)
+      // Line-fill: explicit create (uses scrub — cannot batch)
+      triggers.push(ScrollTrigger.create({
+        trigger: ".timeline",
+        start: "top 75%",
+        end: "bottom 60%",
+        scrub: 0.5,
+        animation: gsap.fromTo(".timeline-line-fill", { scaleY: 0 }, { scaleY: 1, ease: "none" }),
+      }));
+
+      // Card triggers: slide-in from left
+      document.querySelectorAll(".experience-card").forEach((card) => {
         triggers.push(ScrollTrigger.create({
-          trigger: ".timeline",
-          start: "top 75%",
-          end: "bottom 60%",
-          scrub: 0.5,
-          animation: gsap.fromTo(".timeline-line-fill", { scaleY: 0 }, { scaleY: 1, ease: "none" }),
+          trigger: card,
+          start: "top 82%",
+          once: true,
+          animation: gsap.fromTo(card, { x: -18, opacity: 0 }, { x: 0, opacity: 1, duration: 0.55, ease: "power3.out" }),
         }));
+      });
 
-        // Card triggers: slide-in from left
-        document.querySelectorAll(".experience-card").forEach((card) => {
-          triggers.push(ScrollTrigger.create({
-            trigger: card,
-            start: "top 82%",
-            once: true,
-            animation: gsap.fromTo(card, { x: -18, opacity: 0 }, { x: 0, opacity: 1, duration: 0.55, ease: "power3.out" }),
-          }));
-        });
+      // Dot triggers: scale pop
+      document.querySelectorAll(".timeline-dot").forEach((dot) => {
+        triggers.push(ScrollTrigger.create({
+          trigger: dot,
+          start: "top 80%",
+          once: true,
+          animation: gsap.fromTo(dot, { scale: 0.72, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.28, ease: "power3.out" }),
+        }));
+      });
 
-        // Dot triggers: scale pop
-        document.querySelectorAll(".timeline-dot").forEach((dot) => {
-          triggers.push(ScrollTrigger.create({
-            trigger: dot,
-            start: "top 80%",
-            once: true,
-            animation: gsap.fromTo(dot, { scale: 0.72, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.28, ease: "power3.out" }),
-          }));
-        });
-
-        return function () { triggers.forEach((t) => t.kill()); };
-      },
+      return () => triggers.forEach((trigger) => trigger.kill());
     });
   }
 </script>

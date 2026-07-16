@@ -8,9 +8,9 @@ categories: ["react-native", "wanikani", "japanese", "mobile", "offline-first"]
 ---
 
 
-#### 七転び八起き: Fall down seven times, stand up eight.
+## 七転び八起き: Fall down seven times, stand up eight.
 
-### Why Japanese
+## Why Japanese
 
 I adore Japan: the crowds of Shinjuku, otaku chaos in Akihabara, indie bands and vintage cafés in Shimokitazawa, quiet Kamakura temples, Kyoto shrines, Hokkaido snow, Okinawa beaches. It is one of the few places where my interests somehow all point in the same direction.
 
@@ -18,7 +18,7 @@ I have also been into anime and manga since I was a kid. Thousands of hours of l
 
 That eventually led me to Heisig's *Remembering the Kanji*, then Anki, then WaniKani. WaniKani stuck. In 160+ days, I learned over 1,000 vocabulary words and kanji, and I can usually recognize them when they ambush me in text.
 
-### Why I Built This
+## Why I Built This
 
 WaniKani is great. Its mobile web experience is... technically usable, in the same way a pair of gas station earbuds are technically usable.
 
@@ -37,7 +37,7 @@ Yomiji, written as **読路**, means something like "reading path", but probably
 
 The product requirement was embarrassingly specific: open phone, do reviews quickly, do not think about the network, the keyboard, or whether a web UI is about to demand precision finger surgery.
 
-### What It Is
+## What It Is
 
 Yomiji is a cross-platform WaniKani study app built with React Native, Expo, TypeScript, NativeWind, Zustand, and SQLite. It *probably* works on iOS too. It is heavily inspired by Tsurukame, but it is not trying to be an Android clone. I mostly wanted the parts that made studying painless: reviews that behave correctly, lessons that do not fight me, search that works locally, and settings for the weird little preferences WaniKani users collect over time.
 
@@ -45,7 +45,7 @@ The app is for me first, but anyone with a WaniKani API token can use it. The im
 
 The README is almost comically long now, which is usually the first sign that a "weekend project" has escaped containment.
 
-### The Shape of the App
+## The Shape of the App
 
 <div class="post-image-row">
   <img src="/posts/images/2026-05-27-building-yomiji/dash_lessons_reviews.jpg" alt="Yomiji dashboard lessons and reviews cards" />
@@ -72,7 +72,7 @@ Zustand has a deliberately small job: app settings and sync UI state. SQLite own
 
 React Native was a good fit, but it did not make the app magically simple. Expo handled a lot of native ceremony, but the app still had to care about secure token storage, AsyncStorage, SQLite behavior, app lifecycle events, notification permissions, badges, audio playback, Android signing, and dev-client builds. The happy path feels like frontend work. The real app is a checklist of platform quirks waiting to ruin your evening.
 
-### Offline-First Is a Trap
+## Offline-First Is a Trap
 
 "Offline-first" sounds wholesome until you implement it. Then you realize you have volunteered to make sync bugs your problem.
 
@@ -88,7 +88,7 @@ The schema stores full API payloads as JSON so the app does not throw away infor
 
 I also wrote a schema mapping document comparing Tsurukame's iOS protobuf storage model with Yomiji's JSON-in-SQLite approach. That was the point where I realized I was no longer "just making a small Android app." I was doing archaeology with a React Native shovel.
 
-### Sync Is the Scary Part
+## Sync Is the Scary Part
 
 The sync service refreshes the user profile, incrementally syncs large collections with `updated_after` cursors, and flushes pending local writes before fetching remote updates. Pending writes cover lesson starts, review submissions, and study-material edits for notes and synonyms.
 
@@ -100,7 +100,7 @@ The unhappy paths took the most thought. A 401 or 403 means the token can no lon
 
 Notifications ended up local-first too: review-threshold alerts, optional daily reminders, badge counts, vacation-mode suppression, and tap-to-review navigation all come from the local database. None of that should require waking the network oni.
 
-### Review Semantics Are Weird
+## Review Semantics Are Weird
 
 A naive flashcard app is easy. WaniKani review behavior is not.
 
@@ -110,7 +110,7 @@ The answer checker handles normalization, synonyms, blacklisted meanings, fuzzy 
 
 This was one of the most satisfying parts to port: no React components, no CSS battles, just domain logic and the creeping suspicion that Japanese learning software is secretly a compiler problem.
 
-### The UI
+## The UI
 
 I wanted Yomiji to be calm and quick. The app has dashboard cards, progress charts, SRS distribution, recent mistakes, leeches, burned item practice, subject browsing, local search, and rich subject detail pages.
 
@@ -127,7 +127,7 @@ The visual goal was not corporate learning app. I wanted calm, readable, and fas
 
 *Browsing and search both run from the local cache, so looking up an item does not mean opening WaniKani.*
 
-### Trust, Tests, Releases
+## Trust, Tests, Releases
 
 Because Yomiji uses a WaniKani API token, I kept the trust model boring. There is no backend. The token lives in platform secure storage. Requests go directly from the device to WaniKani. Diagnostic logs are sanitized so Authorization headers and token-shaped values do not end up in exports. Fewer moving parts, fewer places for secrets to leak, fewer future me problems.
 
@@ -143,13 +143,13 @@ I wrote tests for the parts most likely to hurt users: answer checking, romaji-t
 
 Shipping became its own feature. Yomiji has GitHub Actions for Android releases, typecheck and Jest before builds, EAS local production builds, APK signature verification, release artifacts, signing guards, version-bump tooling, and even a tiny Expo config plugin for Android predictive back support. Mobile releases are not hard in one dramatic way. They are annoyingly frustrating in twelve tiny, annoying ways that would make Sisyphus cry.
 
-### What I Did Not Build
+## What I Did Not Build
 
 I skipped a lot on purpose. I did not add a backend. I did not replace WaniKani's SRS. I did not add AI explanations, social features, streak mechanics, or a second learning system beside WaniKani. I also deferred offline audio downloads, custom font controls, deep links, manual theme selection, and some WaniKani web parity around lesson pools.
 
 The app already had enough complexity hiding in sync, answer checking, local persistence, notifications, and release builds. There is no need to turn a WaniKani client into a dopamine casino just because modern software keeps rewarding that.
 
-### Final Thoughts
+## Final Thoughts
 
 Yomiji started as "I wish Tsurukame existed on Android" and then became much more annoying than that sentence suggests. The hard parts were not the screens. They were deciding when local state wins, when remote state wins, how to recover from failed writes, how much background work is polite, and how to make a review session feel deterministic when the network is absent.
 

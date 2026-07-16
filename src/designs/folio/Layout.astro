@@ -283,9 +283,10 @@ const isProd = import.meta.env.PROD;
 
   const cursorGlow = document.querySelector('.cursor-glow') as HTMLElement | null;
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const hasHeroScrub = Boolean(document.querySelector('[data-hero-scrub]'));
+  const heroScrub = document.querySelector<HTMLElement>('[data-hero-scrub]');
+  const startLenis = () => {
+    if (lenis || prefersReducedMotion.matches) return;
 
-  if (hasHeroScrub && !prefersReducedMotion.matches) {
     lenis = new Lenis({
       lerp: 0.08,
       smoothWheel: true,
@@ -297,7 +298,11 @@ const isProd = import.meta.env.PROD;
     };
     gsap.ticker.add(lenisTick);
     gsap.ticker.lagSmoothing(0);
-  }
+  };
+
+  if (heroScrub?.classList.contains('is-scrub')) startLenis();
+  document.addEventListener('hero-scrub-activated', startLenis);
+  const revealMedia = gsap.matchMedia();
 
 
   fontsReady.then(async () => {
@@ -342,8 +347,7 @@ const isProd = import.meta.env.PROD;
     }
 
     // Reveal triggers
-    ScrollTrigger.matchMedia({
-      "(min-width: 768px)": function () {
+    revealMedia.add("(min-width: 768px)", () => {
         const triggers: ScrollTrigger[] = [];
         const batch = ScrollTrigger.batch(".reveal", {
           onEnter: (batch) => {
@@ -354,12 +358,10 @@ const isProd = import.meta.env.PROD;
         });
         triggers.push(...batch);
         return function () { triggers.forEach((t) => t.kill()); };
-      },
     });
 
     // Staggered group reveals
-    ScrollTrigger.matchMedia({
-      "(min-width: 768px)": function () {
+    revealMedia.add("(min-width: 768px)", () => {
         const triggers: ScrollTrigger[] = [];
         document.querySelectorAll('.reveal-group').forEach((group) => {
           const children = group.querySelectorAll('.reveal-child');
@@ -373,12 +375,10 @@ const isProd = import.meta.env.PROD;
           }));
         });
         return function () { triggers.forEach((t) => t.kill()); };
-      },
     });
 
     // Parallax elements
-    ScrollTrigger.matchMedia({
-      "(min-width: 768px)": function () {
+    revealMedia.add("(min-width: 768px)", () => {
         const triggers: ScrollTrigger[] = [];
         document.querySelectorAll('[data-parallax]').forEach((el) => {
           const speed = parseFloat(el.getAttribute('data-parallax') ?? '0.15');
@@ -391,13 +391,13 @@ const isProd = import.meta.env.PROD;
           }));
         });
         return function () { triggers.forEach((t) => t.kill()); };
-      },
     });
   });
 
   // Centralized cleanup on page unload
   window.addEventListener('beforeunload', () => {
-    ScrollTrigger.killAll();
+    revealMedia.revert();
+    document.removeEventListener('hero-scrub-activated', startLenis);
     if (cursorRafId) cancelAnimationFrame(cursorRafId);
     if (lenisTick) gsap.ticker.remove(lenisTick);
     lenis?.destroy();

@@ -9,29 +9,6 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
 ---
 
 <section class="hero" data-hero-scrub>
-  <script is:inline>
-    // Opt INTO the animated intro only when JS works and the scrub will run
-    // (desktop, motion allowed). The default rendered state is the static,
-    // visible hero, so no-JS and failed-JS both render correctly.
-    //   is-scrub      — persistent: tall scroll geometry + video shown.
-    //   is-preloading — transient veil: preloader shown, content hidden.
-    //                   removed by the hero module once it's ready.
-    (() => {
-      const section = document.currentScript && document.currentScript.parentElement;
-      if (!section) return;
-      const animate =
-        window.matchMedia('(min-width: 768px)').matches &&
-        !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (!animate) return;
-      section.classList.add('is-scrub', 'is-preloading');
-      // Watchdog: if the hero module never signals ready, fall back to static.
-      window.setTimeout(() => {
-        if (!section.classList.contains('is-ready')) {
-          section.classList.remove('is-scrub', 'is-preloading');
-        }
-      }, 4000);
-    })();
-  </script>
   <div class="hero-stage">
     <div class="hero-media" data-hero-media>
       <video class="hero-video" data-hero-video data-src={heroVideoSrc} muted playsinline preload="metadata" poster={heroPosterSrc} aria-hidden="true"></video>
@@ -94,40 +71,71 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
 
     let ctx: gsap.Context | null = null;
     let removeCanPlayListener: (() => void) | null = null;
+    let removeMediaFailureListeners: (() => void) | null = null;
     let removeTopRestoreListener: (() => void) | null = null;
+    let removeActivationListener: (() => void) | null = null;
+    let removeFragmentLinkListeners: (() => void) | null = null;
+    let activateForNavigation: (() => Promise<boolean>) | null = null;
+    let activeFragmentTarget: Element | null = null;
     let cancelVideoSeek: (() => void) | null = null;
+    let scrubLoadTimeout: number | null = null;
 
     const getPreferredScrollBehavior = (): ScrollBehavior => (motionMedia.matches ? 'auto' : 'smooth');
     const ensureVideoSource = () => {
       if (!video || video.currentSrc || video.src) return;
       const source = video.dataset.src;
       if (!source) return;
+      video.preload = 'auto';
       video.src = source;
       video.load();
     };
 
     const revealHero = () => {
+      if (scrubLoadTimeout !== null) {
+        window.clearTimeout(scrubLoadTimeout);
+        scrubLoadTimeout = null;
+      }
       section.classList.add('is-ready');
       section.classList.remove('is-preloading');
     };
 
-    section.querySelectorAll<HTMLAnchorElement>('[data-hero-scroll-link]').forEach((link) => {
-      link.addEventListener('click', (event) => {
-        const id = link.hash;
-        const target = id ? document.querySelector(id) : null;
-        if (!target) return;
-        event.preventDefault();
-        target.scrollIntoView({ behavior: getPreferredScrollBehavior() });
-      });
-    });
+    const fragmentLinkCleanups = Array.from(
+      section.querySelectorAll<HTMLAnchorElement>('[data-hero-scroll-link]'),
+      (link) => {
+        const navigateToFragment = async (event: MouseEvent) => {
+          const id = link.hash;
+          const target = id ? document.querySelector(id) : null;
+          if (!target) return;
+          event.preventDefault();
+          activeFragmentTarget = target;
+          const useInstantScroll = (await activateForNavigation?.()) ?? false;
+          target.scrollIntoView({ behavior: useInstantScroll ? 'auto' : getPreferredScrollBehavior() });
+          if (!useInstantScroll) activeFragmentTarget = null;
+        };
+
+        link.addEventListener('click', navigateToFragment);
+        return () => link.removeEventListener('click', navigateToFragment);
+      },
+    );
+    removeFragmentLinkListeners = () => fragmentLinkCleanups.forEach((removeListener) => removeListener());
 
     const cleanupScrub = () => {
       cancelVideoSeek?.();
       cancelVideoSeek = null;
       removeCanPlayListener?.();
       removeCanPlayListener = null;
+      removeMediaFailureListeners?.();
+      removeMediaFailureListeners = null;
       removeTopRestoreListener?.();
       removeTopRestoreListener = null;
+      removeActivationListener?.();
+      removeActivationListener = null;
+      activateForNavigation = null;
+      activeFragmentTarget = null;
+      if (scrubLoadTimeout !== null) {
+        window.clearTimeout(scrubLoadTimeout);
+        scrubLoadTimeout = null;
+      }
       ctx?.revert();
       ctx = null;
     };
@@ -137,13 +145,12 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
 
       ctx = gsap.context(() => {
         const useStaticHero = mobileMedia.matches || motionMedia.matches || !video;
+        let scrubState: 'idle' | 'loading' | 'ready' | 'failed' = 'idle';
+        let useInstantFragmentScroll = false;
 
-        if (!useStaticHero) {
-          ensureVideoSource();
-        }
 
         if (useStaticHero) {
-          section.classList.remove('is-scrub');
+          section.classList.remove('is-scrub', 'is-preloading');
           section.classList.add('is-static');
           gsap.set(section, { height: '100svh' });
           gsap.set(media, { autoAlpha: 1 });
@@ -152,14 +159,13 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
           gsap.set([eyebrow, name, tagline, cta], { autoAlpha: 1, y: 0 });
           gsap.set([first, last], { xPercent: 0, autoAlpha: 1 });
           gsap.set(scroll, { autoAlpha: 0.5 });
+          activateForNavigation = () => Promise.resolve(false);
           revealHero();
           return;
         }
 
-        section.classList.remove('is-static');
-        // Claim scrub mode (covers mobile→desktop resize, where the inline
-        // bootstrap never added it). The watchdog removes it on timeout.
-        section.classList.add('is-scrub');
+        section.classList.remove('is-static', 'is-ready');
+        gsap.set(section, { height: '100svh' });
 
         const syncHeroHeight = () => {
           const duration = video.duration || 6;
@@ -177,12 +183,16 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
 
         const createScrollTimeline = () => {
           if (!video.duration || Number.isNaN(video.duration)) return;
-          // If the watchdog already fell back to static (metadata arrived after
-          // the timeout), honor it — the video is hidden, so don't scrub it.
-          if (!section.classList.contains('is-scrub')) {
-            revealHero();
-            return;
+          if (scrubState !== 'loading' || !section.classList.contains('is-scrub')) return;
+          scrubState = 'ready';
+          if (scrubLoadTimeout !== null) {
+            window.clearTimeout(scrubLoadTimeout);
+            scrubLoadTimeout = null;
           }
+          removeCanPlayListener?.();
+          removeCanPlayListener = null;
+          removeMediaFailureListeners?.();
+          removeMediaFailureListeners = null;
 
           syncHeroHeight();
           video.pause();
@@ -272,12 +282,78 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
           ScrollTrigger.refresh();
         };
 
-        if (video.readyState >= HTMLMediaElement.HAVE_METADATA) {
-          createScrollTimeline();
-        } else {
-          video.addEventListener('loadedmetadata', createScrollTimeline, { once: true });
-          removeCanPlayListener = () => video.removeEventListener('loadedmetadata', createScrollTimeline);
-        }
+        const refreshScrubGeometry = () => {
+          ScrollTrigger.refresh();
+          return Promise.resolve(useInstantFragmentScroll);
+        };
+
+        const fallBackToStatic = () => {
+          if (scrubState === 'failed') return;
+          const navigationTarget = activeFragmentTarget?.isConnected ? activeFragmentTarget : null;
+          const navigationViewportTop = navigationTarget?.getBoundingClientRect().top ?? null;
+          scrubState = 'failed';
+          removeCanPlayListener?.();
+          removeCanPlayListener = null;
+          removeMediaFailureListeners?.();
+          removeMediaFailureListeners = null;
+          removeActivationListener?.();
+          removeActivationListener = null;
+          section.classList.remove('is-scrub', 'is-preloading');
+          section.classList.add('is-static');
+          gsap.set(section, { height: '100svh' });
+          restoreIntroState();
+          revealHero();
+          ScrollTrigger.refresh();
+          if (navigationTarget && navigationViewportTop !== null) {
+            const shiftedTargetTop = navigationTarget.getBoundingClientRect().top;
+            window.scrollTo({
+              top: window.scrollY + shiftedTargetTop - navigationViewportTop,
+              behavior: 'auto',
+            });
+          }
+        };
+
+        const activateScrub = () => {
+          if (scrubState === 'failed') return Promise.resolve(useInstantFragmentScroll);
+
+          if (scrubState === 'idle') {
+            scrubState = 'loading';
+            section.classList.remove('is-static');
+            section.classList.add('is-scrub', 'is-preloading');
+            gsap.set(section, { clearProps: 'height' });
+            useInstantFragmentScroll = true;
+            document.dispatchEvent(new Event('hero-scrub-activated'));
+
+            const handleMediaFailure = () => fallBackToStatic();
+            video.addEventListener('error', handleMediaFailure, { once: true });
+            removeMediaFailureListeners = () => {
+              video.removeEventListener('error', handleMediaFailure);
+            };
+
+            scrubLoadTimeout = window.setTimeout(fallBackToStatic, 4000);
+            if (video.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) {
+              createScrollTimeline();
+            } else {
+              video.addEventListener('canplaythrough', createScrollTimeline, { once: true });
+              removeCanPlayListener = () => video.removeEventListener('canplaythrough', createScrollTimeline);
+            }
+
+            ensureVideoSource();
+          }
+
+          return refreshScrubGeometry();
+        };
+
+        activateForNavigation = activateScrub;
+
+        const activateOnScroll = () => {
+          if (window.scrollY > 1) activateScrub();
+        };
+
+        window.addEventListener('scroll', activateOnScroll, { passive: true });
+        removeActivationListener = () => window.removeEventListener('scroll', activateOnScroll);
+        restoreIntroState();
+        activateOnScroll();
       }, section);
     };
 
@@ -289,6 +365,8 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
       mobileMedia.removeEventListener('change', init);
       motionMedia.removeEventListener('change', init);
       cleanupScrub();
+      removeFragmentLinkListeners?.();
+      removeFragmentLinkListeners = null;
     });
   }
 </script>

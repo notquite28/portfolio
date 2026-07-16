@@ -32,8 +32,14 @@ function formatDate(date: Date) {
       <div class="posts-list">
         {posts.map((post: CollectionEntry<'posts'>) => (
           <a class="post-link" href={`/posts/${post.id}/`}>
-            <span>{formatDate(post.data.published)}</span>
+            <span class="post-meta">
+              <span class="post-date">{formatDate(post.data.published)}</span>
+              {post.data.categories.length > 0 && (
+                <span class="post-categories">{post.data.categories.slice(0, 3).join(' · ')}</span>
+              )}
+            </span>
             <strong>{post.data.title}</strong>
+            <p class="post-description">{post.data.description}</p>
           </a>
         ))}
       </div>
@@ -101,12 +107,19 @@ function formatDate(date: Date) {
     text-decoration: none;
   }
 
-  .post-link span {
+  .post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.75rem;
     color: var(--c-muted);
     font-family: var(--font-sans);
     font-size: 0.75rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+  }
+
+  .post-categories {
+    color: var(--c-accent-soft);
   }
 
   .post-link strong {
@@ -117,10 +130,21 @@ function formatDate(date: Date) {
     font-weight: 750;
     letter-spacing: -0.024em;
     line-height: 1;
+    text-wrap: balance;
     transition: color 200ms var(--ease-expo);
   }
 
   .post-link:hover strong {
     color: var(--c-accent-soft);
+  }
+
+  .post-description {
+    max-width: 62ch;
+    margin: 0;
+    color: var(--c-body);
+    font-family: var(--font-body);
+    font-size: clamp(0.9375rem, 1.5vw, 1.05rem);
+    line-height: 1.65;
+    text-wrap: pretty;
   }
 </style>

@@ -1,28 +1,33 @@
 Generate a `DESIGN.md` file at the project root that captures the current visual design system, so AI agents generating new screens stay on-brand.
 
-DESIGN.md follows the [official Google Stitch DESIGN.md format](https://stitch.withgoogle.com/docs/design-md/format/): YAML frontmatter carrying machine-readable design tokens, followed by a markdown body with exactly six sections in a fixed order. **Tokens are normative; prose provides context for how to apply them.** Sections may be omitted when not relevant, but **do not reorder them and do not rename them**. Section headers must match the spec character-for-character so the file stays parseable by other DESIGN.md-aware tools (Stitch itself, awesome-design-md, skill-rest, etc.).
+DESIGN.md follows the [official DESIGN.md format spec](https://raw.githubusercontent.com/google-labs-code/design.md/main/docs/spec.md): optional YAML frontmatter carrying machine-readable design tokens, followed by a markdown body whose standard sections have a defined order. **Tokens are normative; prose provides context for how to apply them.** Sections may be omitted when not relevant, but any standard sections that are present must stay in the governing order. Use the canonical section headers below when generating a file; the format also recognizes the aliases noted there.
 
 ## The frontmatter: token schema
 
-The YAML frontmatter is the machine-readable layer. It's what Stitch's linter validates and what the live panel renders tiles from. Keep it tight; every entry should correspond to a token the project actually uses.
+The optional YAML frontmatter is the machine-readable layer. When present, it must start at the beginning of the file, and every entry should correspond to a token the project actually uses.
 
 ```yaml
 ---
+version: alpha
 name: <project title>
 description: <one-line tagline>
 colors:
   primary: "#b8422e"
+  primary-deep: "#8f2f21"
   neutral-bg: "#faf7f2"
   # ...one entry per extracted color; key = descriptive slug
 typography:
   display:
     fontFamily: "Cormorant Garamond, Georgia, serif"
-    fontSize: "clamp(2.5rem, 7vw, 4.5rem)"
+    fontSize: "4.5rem"
     fontWeight: 300
     lineHeight: 1
-    letterSpacing: "normal"
+    letterSpacing: "-0.02em"
   body:
-    # ...
+    fontFamily: "Inter, Arial, sans-serif"
+    fontSize: "1rem"
+    fontWeight: 400
+    lineHeight: 1.5
 rounded:
   sm: "4px"
   md: "8px"
@@ -34,7 +39,7 @@ components:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.neutral-bg}"
     rounded: "{rounded.sm}"
-    padding: "16px 48px"
+    padding: "16px"
   button-primary-hover:
     backgroundColor: "{colors.primary-deep}"
 ---
@@ -42,22 +47,26 @@ components:
 
 Rules that matter:
 
-- **Token refs** use `{path.to.token}` (e.g. `{colors.primary}`, `{rounded.md}`). Components may reference primitives; primitives may not reference each other.
-- **Stitch validates colors as hex sRGB only** (`#RGB` / `#RGBA` / `#RRGGBB` / `#RRGGBBAA`); OKLCH/HSL/P3 trigger a linter warning, not a hard error. YAML accepts the string either way and our own parser is format-agnostic. Choose based on project posture: (a) if the project has an "OKLCH-only" doctrine or uses Display-P3 values that don't round-trip through sRGB, put OKLCH directly in the frontmatter and accept the Stitch linter warning; (b) if the project wants strict Stitch compliance or plans to use their Tailwind/DTCG export pipeline, put hex in the frontmatter and keep OKLCH in prose as the canonical reference. Never split the source of truth without explicit reason.
-- **Component sub-tokens** are limited to 8 props: `backgroundColor`, `textColor`, `typography`, `rounded`, `padding`, `size`, `height`, `width`. Shadows, motion, focus rings, backdrop-filter: none of those fit. Carry them in the sidecar (Step 4b).
+- **Frontmatter is optional.** If present, `name` is required. `version` (currently `alpha`), `description`, and every token group are optional.
+- **Token refs** use `{path.to.token}` (e.g. `{colors.primary}`, `{rounded.md}`) and must resolve to a value in the YAML tree. References normally point to primitive values; component tokens may also reference composite typography values.
+- **Colors accept any valid CSS color string**, including hex, named colors, `rgb()` / `hsl()` / `hwb()`, wide-gamut forms such as `oklch()`, and `color-mix()`. The original notation is preserved, while consumers convert it to sRGB for WCAG contrast checks. Prefer `#RRGGBB` when the project has no canonical format because hex is the spec's recommended default; otherwise preserve the valid CSS format the project actually uses.
+- **Component sub-tokens** have 8 standard props: `backgroundColor`, `textColor`, `typography`, `rounded`, `padding`, `size`, `height`, `width`. Consumers accept unknown component properties with a warning, but generated files should use the standard properties and carry shadows, motion, focus rings, and backdrop-filter in the sidecar (Step 4b).
+- **Dimensions** use `px`, `em`, or `rem`. `spacing` values may instead be unitless numbers; `lineHeight` may be a dimension or a unitless multiplier.
 - **Scale keys are open-ended.** Use whatever names the project already uses (`oxblood-deep`, `surface-container-low`). Don't rename to Material defaults.
 - **Variants are naming convention, not schema.** `button-primary` / `button-primary-hover` / `button-primary-active` as sibling keys.
 
-## The markdown body: six sections (exact order)
+## The markdown body: eight standard sections (governing order)
 
-1. `## Overview`
+1. `## Overview` (recognized alias: `## Brand & Style`)
 2. `## Colors`
 3. `## Typography`
-4. `## Elevation`
-5. `## Components`
-6. `## Do's and Don'ts`
+4. `## Layout` (recognized alias: `## Layout & Spacing`)
+5. `## Elevation & Depth` (recognized alias: `## Elevation`)
+6. `## Shapes`
+7. `## Components`
+8. `## Do's and Don'ts`
 
-Optional evocative subtitles are allowed in the form `## 2. Colors: The [Name] Palette` (Stitch's own outputs do this), but the literal word in each header (Overview, Colors, Typography, Elevation, Components, Do's and Don'ts) must be present. Do NOT add extra top-level sections (Layout Principles, Responsive Behavior, Motion, Agent Prompt Guide). Fold that content into the six spec sections where it naturally belongs.
+Each section is optional when it is not relevant, but present sections must follow this order and use `##` headings. Generate the canonical headers shown above without numbering or subtitles. An optional `#` document title is allowed and is not parsed as a section. Consumers preserve unknown `##` sections rather than failing, but those headings are not recognized as standard sections; duplicate section headings are an error.
 
 ## When to run
 
@@ -66,7 +75,7 @@ Optional evocative subtitles are allowed in the form `## 2. Colors: The [Name] P
 - An existing `DESIGN.md` is stale (the design has drifted).
 - Before a large redesign, to capture the current state as a reference.
 
-If a `DESIGN.md` already exists, **do not silently overwrite it**. Show the user the existing file and ask the user directly to clarify what you cannot infer. whether to refresh, overwrite, or merge.
+If a `DESIGN.md` already exists, **do not silently overwrite it**. Show the user the existing file, ask directly about anything you cannot infer, and obtain explicit confirmation before refreshing, overwriting, or merging it.
 
 ## Two paths
 
@@ -95,9 +104,10 @@ Build a structured draft from the discovered tokens. For each token class:
 
 - **Colors**: Group into Primary / Secondary / Tertiary / Neutral (the Material-derived roles Stitch uses). If the project only has one accent, express it as Primary + Neutral; omit Secondary and Tertiary rather than inventing them.
 - **Typography**: Map observed sizes and weights to the Material hierarchy (display / headline / title / body / label). Note font-family stacks and the scale ratio.
+- **Layout**: Describe the observed grid, content widths, margins, responsive strategy, and spacing rhythm. Stage reusable spacing values under `spacing`.
 - **Elevation**: Catalogue the shadow vocabulary. If the project is flat and uses tonal layering instead, that's a valid answer; state it explicitly.
+- **Shapes**: Catalogue the observed corner-radius and shape language. Stage reusable corner radii under `rounded`.
 - **Components**: For each common component (button, card, input, chip, list item, tooltip, nav), extract shape (radius), color assignment, hover/focus treatment, internal padding.
-- **Spacing + layout**: Fold into Overview or relevant Components. The spec does NOT have a Layout section.
 
 ### Step 2b: Stage the frontmatter
 
@@ -124,7 +134,7 @@ Quote a line from PRODUCT.md when possible so the user sees their own strategic 
 
 ### Step 4: Write DESIGN.md
 
-The file opens with the YAML frontmatter staged in Step 2b (schema documented at the top of this reference), then the markdown body using the structure below. Headers must match character-for-character. Optional evocative subtitles (e.g. `## 2. Colors: The Coastal Palette`) are allowed.
+The file opens with the YAML frontmatter staged in Step 2b (schema documented at the top of this reference), then the markdown body using the structure below. Use the unnumbered canonical headers exactly as shown; omit a section only when it is not relevant.
 
 ```markdown
 ---
@@ -136,13 +146,13 @@ colors:
 
 # Design System: [Project Title]
 
-## 1. Overview
+## Overview
 
 **Creative North Star: "[Named metaphor in quotes]"**
 
 [2-3 paragraph holistic description: personality, density, aesthetic philosophy. Start from the North Star and work outward. State what this system explicitly rejects (pulled from PRODUCT.md's anti-references). End with a short **Key Characteristics:** bullet list.]
 
-## 2. Colors
+## Colors
 
 [Describe the palette character in one sentence.]
 
@@ -162,7 +172,7 @@ colors:
 ### Named Rules (optional, powerful)
 **The [Rule Name] Rule.** [Short, forceful prohibition or doctrine, e.g. "The One Voice Rule. The primary accent is used on ≤10% of any given screen. Its rarity is the point."]
 
-## 3. Typography
+## Typography
 
 **Display Font:** [Family] (with [fallback])
 **Body Font:** [Family] (with [fallback])
@@ -180,7 +190,17 @@ colors:
 ### Named Rules (optional)
 **The [Rule Name] Rule.** [Short doctrine about type use.]
 
-## 4. Elevation
+## Layout
+
+[Describe the grid or layout model, content widths, margins, responsive behavior, and spacing rhythm.]
+
+### Spacing Strategy
+- **[Scale or role]** ([exact value]): [Where and why it is used.]
+
+### Named Rules (optional)
+**The [Rule Name] Rule.** [Short doctrine about layout or spacing.]
+
+## Elevation & Depth
 
 [One paragraph: does this system use shadows, tonal layering, or a hybrid? If "no shadows", say so explicitly and describe how depth is conveyed instead.]
 
@@ -191,7 +211,17 @@ colors:
 ### Named Rules (optional)
 **The [Rule Name] Rule.** [e.g. "The Flat-By-Default Rule. Surfaces are flat at rest. Shadows appear only as a response to state (hover, elevation, focus)."]
 
-## 5. Components
+## Shapes
+
+[Describe the system's shape language and how it supports the visual character.]
+
+### Corner Radius
+- **[Scale or role]** ([exact value]): [Where and why it is used.]
+
+### Named Rules (optional)
+**The [Rule Name] Rule.** [Short doctrine about shape use.]
+
+## Components
 
 For each component, lead with a short character line, then specify shape, color assignment, states, and any distinctive behavior.
 
@@ -208,7 +238,7 @@ For each component, lead with a short character line, then specify shape, color 
 ### Cards / Containers
 - **Corner Style:** [radius]
 - **Background:** [colors used]
-- **Shadow Strategy:** [reference Elevation section]
+- **Shadow Strategy:** [reference Elevation & Depth section]
 - **Border:** [if any]
 - **Internal Padding:** [scale]
 
@@ -223,7 +253,7 @@ For each component, lead with a short character line, then specify shape, color 
 ### [Signature Component] (optional; if the project has a distinctive custom component worth documenting)
 [Description.]
 
-## 6. Do's and Don'ts
+## Do's and Don'ts
 
 Concrete, forceful guardrails. Lead each with "Do" or "Don't". Be specific: include exact colors, pixel values, and named anti-patterns the user mentioned in PRODUCT.md. **Every anti-reference in PRODUCT.md should show up here as a "Don't" with the same language**, so the visual spec carries the strategic line through. Quote PRODUCT.md directly where possible: if PRODUCT.md says *"avoid dark mode with purple gradients, neon accents, glassmorphism"*, the Don'ts here should repeat that by name.
 
@@ -252,8 +282,8 @@ Regenerate the sidecar whenever you regenerate root `DESIGN.md`. If the user onl
   "title": "Design System: [Project Title]",
   "extensions": {
     "colorMeta": {
-      "primary":        { "role": "primary",  "displayName": "Editorial Magenta", "canonical": "oklch(60% 0.25 350)", "tonalRamp": ["...", "...", "..."] },
-      "cool-paper": { "role": "neutral",  "displayName": "Cool Paper",    "canonical": "oklch(96% 0.005 230)", "tonalRamp": ["...", "...", "..."] }
+      "primary":    { "role": "primary", "displayName": "Editorial Magenta", "tonalRamp": ["...", "...", "..."] },
+      "cool-paper": { "role": "neutral", "displayName": "Cool Paper", "tonalRamp": ["...", "...", "..."] }
     },
     "typographyMeta": {
       "display": { "displayName": "Display", "purpose": "Hero headlines only." }
@@ -282,14 +312,14 @@ Regenerate the sidecar whenever you regenerate root `DESIGN.md`. If the user onl
     "northStar": "The Editorial Sanctuary",
     "overview": "2-3 paragraphs of the philosophy, pulled from DESIGN.md Overview section.",
     "keyCharacteristics": ["...", "..."],
-    "rules": [{ "name": "The One Voice Rule", "body": "...", "section": "colors|typography|elevation" }],
+    "rules": [{ "name": "The One Voice Rule", "body": "...", "section": "overview|colors|typography|layout|elevation-and-depth|shapes|components|dos-and-donts" }],
     "dos":   ["Do use ..."],
     "donts": ["Don't use ..."]
   }
 }
 ```
 
-**What changed from schemaVersion 1.** The old sidecar carried token primitive arrays (`tokens.colors[]`, `tokens.typography[]`, etc.). Those values now live in the frontmatter. The sidecar only carries metadata that can't live in the frontmatter (tonal ramps, canonical OKLCH when the hex is an approximation, display names, role hints), keyed by the frontmatter token name (`colorMeta.<token-name>`, `typographyMeta.<token-name>`). Components still carry full HTML/CSS because Stitch's 8-prop set can't hold them.
+**What changed from schemaVersion 1.** The old sidecar carried token primitive arrays (`tokens.colors[]`, `tokens.typography[]`, etc.). Those values now live in the frontmatter. The sidecar only carries metadata that can't live in the frontmatter (tonal ramps, display names, role hints), keyed by the frontmatter token name (`colorMeta.<token-name>`, `typographyMeta.<token-name>`). Components still carry full HTML/CSS because Stitch's standard 8-property component token set can't hold them.
 
 #### Component translation rules
 
@@ -376,9 +406,9 @@ Group into one `AskUserQuestion` interaction. Options must be concrete.
 
 ### Step 3: Write seed DESIGN.md
 
-Use the six-section spec from Scan mode. Populate what the interview answers; leave the rest as honest placeholders. The seed is a scaffold, not a fabricated spec.
+Use the standard section order from Scan mode. Populate what the interview answers and omit sections that are not yet relevant; the seed is a scaffold, not a fabricated spec.
 
-Lead the file with:
+Write the minimal YAML frontmatter first, then place the seed marker immediately after its closing `---` delimiter:
 
 ```markdown
 <!-- SEED: re-run /impeccable document once there's code to capture the actual tokens and components. -->
@@ -389,7 +419,9 @@ Per-section guidance in seed mode:
 - **Overview**: Creative North Star and philosophy phrased from the answers (color strategy + motion energy + references). Reference the user's anti-reference directly.
 - **Colors**: Color strategy as a Named Rule (e.g. *"The Drenched Rule. The surface IS the color."*). Hue family or anchor reference. No hex values; mark as `[to be resolved during implementation]`.
 - **Typography**: the direction the user picked (e.g. "Serif display + sans body"). No font names yet: `[font pairing to be chosen at implementation]`.
-- **Elevation**: inferred from motion energy. Restrained/Responsive → flat by default; Choreographed → layered. One sentence.
+- **Layout**: include only a layout or spacing direction established by the answers; otherwise omit it.
+- **Elevation & Depth**: inferred from motion energy. Restrained/Responsive → flat by default; Choreographed → layered. One sentence.
+- **Shapes**: include only a shape direction established by the answers; otherwise omit it.
 - **Components**: omit entirely; no components exist yet.
 - **Do's and Don'ts**: carry PRODUCT.md's anti-references directly plus the anti-reference named in Q5.
 
@@ -404,9 +436,9 @@ Your own write is the freshest source; no reload needed.
 
 ## Style guidelines
 
-- **Frontmatter first, prose second.** Tokens go in the YAML frontmatter; prose contextualizes them. Don't redefine a token value in two places; the frontmatter is normative.
+- **Frontmatter first, prose second.** When the document has design tokens, put them in YAML frontmatter at the beginning of the file; prose contextualizes them. Don't redefine a token value in two places; the frontmatter is normative.
 - **Cite PRODUCT.md anti-references by name** in the Do's and Don'ts section. If PRODUCT.md lists "SaaS landing-page clichés" or "generic AI tool marketing" as anti-references, the DESIGN.md Don'ts should repeat those phrases verbatim so the visual spec enforces the strategic line.
-- **Match the spec, don't invent new sections.** The six section names are fixed. If you have Layout/Motion/Responsive content to document, fold it into Overview (philosophy-level rules) or Components (per-component behavior).
+- **Match the spec, don't invent replacement sections.** Use the eight standard sections in their governing order, omitting any that are not relevant. Put Motion or Responsive content into Overview, Layout, or Components according to its scope instead of creating rival top-level sections.
 - **Descriptive > technical**: "Gently curved edges (8px radius)" > "rounded-lg". Include the technical value in parens, lead with the description.
 - **Functional > decorative**: for each token, explain WHERE and WHY it's used, not just WHAT it is.
 - **Exact values in parens**: hex codes, px/rem values, font weights; always the number in parens alongside the description.
@@ -423,7 +455,7 @@ Your own write is the freshest source; no reload needed.
 - Don't invent components that don't exist. If the project only has buttons and cards, only document those.
 - Don't overwrite an existing DESIGN.md without asking.
 - Don't duplicate content from PRODUCT.md. DESIGN.md is strictly visual.
-- Don't add a "Layout Principles" or "Motion" or "Responsive Behavior" top-level section. The spec has six, not nine. Fold that content where it belongs.
-- Don't rename sections even slightly. "Colors" not "Color Palette & Roles". "Typography" not "Typography Rules". Tooling parsing depends on exact headers.
+- Don't add a "Motion" or "Responsive Behavior" top-level section. Use the governing standard sections; consumers preserve unknown sections, but they do not recognize them as standard DESIGN.md sections.
+- Don't number or decorate generated standard headings. Use canonical `## Colors`, not `## 2. Colors: The Coastal Palette`; use the spec's recognized aliases only when preserving an existing file.
 - Don't duplicate token values between frontmatter and prose. If a color is in `colors.primary` as hex, the prose can name it and describe its role but should not reassert a different hex. The frontmatter is normative.
-- Don't invent frontmatter token groups outside Stitch's schema (no `motion:`, `breakpoints:`, `shadows:` at the top level). Stitch's Zod schema only accepts `colors`, `typography`, `rounded`, `spacing`, `components`. Anything else belongs in the sidecar's `extensions`.
+- Don't invent frontmatter token groups outside the governing schema (`version`, `name`, `description`, `colors`, `typography`, `rounded`, `spacing`, and `components`). Data such as motion, breakpoints, and shadows belongs in the sidecar's `extensions`, not in a rival DESIGN.md schema.

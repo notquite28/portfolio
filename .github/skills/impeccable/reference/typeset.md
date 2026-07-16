@@ -4,15 +4,54 @@ Typography carries most of the information on the page. Replace generic defaults
 
 ## Register
 
-Brand: run the font selection procedure in [brand.md](brand.md). Fluid `clamp()` scale, ≥1.25 ratio between steps.
+Web brand: run the font selection procedure in [brand.md](brand.md). Fluid `clamp()` scale, ≥1.25 ratio between steps.
 
-Product: system fonts and familiar sans stacks are legitimate here. One well-tuned family typically carries the whole UI. Fixed `rem` scale, 1.125–1.2 ratio between more closely-spaced steps.
+Web product: system fonts and familiar sans stacks are legitimate here. One well-tuned family typically carries the whole UI. Fixed `rem` scale, 1.125–1.2 ratio between more closely-spaced steps.
+
+
+## Platform routing (required)
+
+Resolve `## Platform` from **PRODUCT.md** before either assessment. If it is missing, stop and route through Setup's `/impeccable init` platform capture; absence is unknown, never implicit `web`.
+
+- **Web** (including mobile web): follow the web assessment, detector, CSS/Tailwind searches, implementation guidance, live-mode params, and web reference below exactly as written.
+- **iOS / Android / adaptive**: read [ios.md](ios.md), [android.md](android.md), or both for `adaptive` if Setup has not already loaded them. Follow the native assessment and source pre-scan below. Do **not** run `detect.mjs`, look for HTML/CSS/Tailwind, require Node, apply `rem`/`clamp()`/web-font rules, or use live mode. Platform text roles and user text scaling override the web size and font-stack guidance in this file.
+
+For a monorepo, route by the target surface named by the user, not by the mere presence of web and native code elsewhere in the repository.
+---
+
+## Two isolated assessments (required)
+
+Spawn two parallel sub-agents whenever a sub-agent/Task tool is exposed: one for the typography assessment, one for the platform-appropriate mechanical pre-scan. If the harness needs explicit user permission for sub-agents, stop and ask before proceeding. Isolation is the point: search output anchors visual judgment toward what the scan can see, so neither sub-agent gets the other's output. Each assessment runs in its own sub-agent; running either one in this context when a sub-agent tool exists is not permitted, even when it is faster; the fallback below is only for sessions with no sub-agent tool. Give each a self-contained prompt (target files, register, platform, **DESIGN.md** content when present, and its instructions below); do not assume it can read this file.
+
+**Sub-agent A (typography assessment)**: give it the full applicable web or native branch from [Assess Current Typography](#assess-current-typography), verbatim, in its prompt. It works through every item and returns per-item findings citing file, selector, component/view, text role, or value.
+
+**Sub-agent B (mechanical pre-scan)**: choose exactly one branch:
+
+**Web only** — run the bundled detector scoped to type:
+
+```bash
+node .github/skills/impeccable/scripts/detect.mjs --json --scope type [target files or dirs]
+```
+
+A missing `node` on PATH is not permission to skip: hunt for a runtime (`command -v node`, nvm or Homebrew paths, the harness's own bundled node) and run it by full path. If none exists, halt the scan and report that Node must be installed (the parent relays this to the user); do **not** substitute grep for the detector or proceed unscanned. The scan checks literal font sizes against the **DESIGN.md** ramp but abstains on `em`, `%`, `clamp()`, and line-heights, so also search the web sources for `font-size\s*:`, `fontSize`, `text-\[`, and `leading-\[` and judge those CSS/Tailwind hits against the spec. Return the findings JSON plus the search verdicts.
+
+**iOS / Android / adaptive** — do not run the detector and do not search HTML, CSS, or Tailwind. Search only the target app's native source and return cited hits plus a verdict for every applicable check:
+
+- **iOS**: find hard-coded point-size APIs and fixed custom-font sizes; verify each text instance maps to a semantic Dynamic Type text style or uses a scaling API such as `UIFontMetrics` / `@ScaledMetric`; find opt-outs, restrictive Dynamic Type ranges, truncation, fixed-height text containers, and UIKit labels that fail to enable content-size-category adjustment. A numeric size is a finding only when it bypasses scaling or duplicates a role, not merely because a framework produces a resolved point size.
+- **Android**: find `px` text sizes and screen-local `fontSize`, `lineHeight`, `letterSpacing`, `TextStyle`, XML `textSize`, or imperative `setTextSize` values; verify text maps to the Material 3 Display / Headline / Title / Body / Label scale through theme roles and uses scalable `sp`, not fixed pixels. Flag disabled system font scaling, clipped fixed-height containers, and one-off role definitions; do not flag an `sp` value merely for being numeric when it is the centralized theme role definition.
+- **Adaptive / cross-platform**: run both platform verdicts against the code paths rendered on each OS. In React Native or Flutter, additionally find disabled scaling (`allowFontScaling={false}`, restrictive `maxFontSizeMultiplier`, `TextScaler.noScaling`, or equivalents), raw per-screen font sizes that bypass the shared semantic type theme, and text containers that cannot grow. Verify the app adapts typeface/roles where its platform design language differs; one Material-everywhere design is judged by Android roles but still must honor iOS Dynamic Type accessibility behavior.
+
+**If no sub-agent tool is exposed (or the user declined)**: run both yourself, assessment first, pre-scan second, so the deterministic findings can't anchor the visual judgment. Keep that order even when the scan feels quicker to start with.
+
+**Synthesize** once both are done: merge into a single findings list, noting where they agree and what each caught alone. Fix every finding, or list it as a deliberate exception for the user to accept. A clean pre-scan is a floor, not a verdict: on web, a generic font stack at a flat scale can pass every detector rule; on native, mechanically correct scaling can still produce weak hierarchy. State in your final summary which path ran (parallel sub-agents or single-context fallback).
 
 ---
 
 ## Assess Current Typography
 
-Analyze what's weak or generic about the current type:
+### Web typography assessment
+
+For web targets, analyze what's weak or generic about the current type:
 
 1. **Font choices**:
    - Are we using invisible defaults? (Inter, Roboto, Arial, Open Sans, system defaults)
@@ -41,9 +80,23 @@ Analyze what's weak or generic about the current type:
 
 **CRITICAL**: The goal isn't to make text "fancier." It's to make it clearer, more readable, and more intentional. Good typography is invisible; bad typography is distracting.
 
+### Native typography assessment (required for iOS / Android / adaptive)
+
+For native targets, analyze the same goals through the applicable platform conventions:
+
+1. **Semantic roles**: every text instance maps to an iOS text style or Material 3 type role (or to a documented cross-platform token that resolves to those roles). Same-role text is consistent across screens; hierarchy comes from role, weight, color, and spacing rather than arbitrary local sizes.
+2. **User scaling**: iOS text responds to every supported Dynamic Type category; Android text responds to the system font-scale setting through `sp`; cross-platform frameworks leave scaling enabled and do not cap it without a documented, tested reason.
+3. **Legibility**: iOS respects the 11 pt floor with 17 pt Body as the baseline; Android follows the Material type scale. Brand/display faces stay out of dense body, label, and control text unless they remain clearly legible. Text contrast remains sufficient in light, dark, increased-contrast, and platform color variants.
+4. **Layout resilience**: verify long localized copy and the largest accessibility sizes on representative phone and tablet widths. Text wraps or the container grows; it does not clip, overlap, shrink-to-fit into illegibility, or hide behind a fixed-height control. Scrollable content remains reachable.
+5. **Platform fit**: iOS uses San Francisco for core UI unless a justified brand layer preserves system behavior; Android uses Roboto or a themed Material type scale. For `adaptive`, judge the rendered result on each OS and report platform-specific failures separately.
+
+Evidence must cite the native source symbol and the role/scaling path it uses. Simulator or preview inspection at default size alone is not proof of scaling.
+
 ## Plan Typography Improvements
 
-Consult the [Reference Material](#reference-material) section below for detailed guidance on scales, pairing, and loading strategies.
+**Web**: consult the [Reference Material](#reference-material) section below for detailed guidance on scales, pairing, and loading strategies, then create the systematic plan below.
+
+**iOS / Android / adaptive**: build the plan from the native assessment above and the Typography section of the applicable platform reference. Skip the web-specific plan and implementation sections below; preserve semantic roles, scaling, and layout growth rather than translating their `rem`, `clamp()`, font-loading, or `ch` prescriptions.
 
 Create a systematic plan:
 
@@ -53,6 +106,8 @@ Create a systematic plan:
 - **Spacing**: Line-heights, letter-spacing, and margins between typographic elements
 
 ## Improve Typography Systematically
+
+**Web only.** Native platforms use the native plan and platform reference described above.
 
 ### Font Selection
 
@@ -102,6 +157,8 @@ Build a clear type scale:
 
 ## Verify Typography Improvements
 
+**Web**:
+
 - **Hierarchy**: Can you identify heading vs body vs caption instantly?
 - **Readability**: Is body text comfortable to read in long passages?
 - **Consistency**: Are same-role elements styled identically throughout?
@@ -109,9 +166,22 @@ Build a clear type scale:
 - **Performance**: Are web fonts loading efficiently without layout shift?
 - **Accessibility**: Does text meet WCAG contrast ratios? Is it zoomable to 200%?
 
+Answer each item above by citing the file, selector, or value that satisfies it; never a bare yes. Then re-run the web pre-scan and fix until the count of unresolved items and unaccepted findings is zero.
+
+**iOS / Android / adaptive**:
+
+- Re-run the applicable native source pre-scan and resolve or explicitly accept every finding.
+- Exercise the largest supported accessibility text setting: iOS Dynamic Type (including accessibility categories) and/or Android maximum supported font scale. Verify representative dense, form, navigation, and long-content screens, not just a typography sample.
+- Verify long localized text at compact phone width and one larger or split-window width. No clipping, overlap, illegible shrink-to-fit, or unreachable text is acceptable.
+- Cite the source role/scaling path and the exercised screen/state for hierarchy, readability, consistency, personality, and accessibility. For `adaptive`, provide separate iOS and Android evidence.
+
+Fix until the count of unresolved items and unaccepted findings is zero.
+
 When the type carries the hierarchy on its own, hand off to `/impeccable polish` for the final pass.
 
 ## Live-mode signature params
+
+**Web only.** Native platforms skip live mode.
 
 Each variant MUST declare a `scale` param controlling the hierarchy ratio. Express all font sizes in the variant's scoped CSS through `calc(var(--p-scale, 1) * <base>)` or, better, scale the type ramp via `clamp(min, calc(var(--p-scale, 1) * Npx), max)`. Users slide from subdued to commanding.
 
@@ -127,7 +197,7 @@ See `reference/live.md` for the full params contract.
 
 ## Reference Material
 
-The sections below were previously `typography.md` and live inline now so the typeset flow has its deep typography reference in one place. `bolder.md` also references this section.
+The sections below were previously `typography.md` and live inline now so the web typeset flow has its deep typography reference in one place. `bolder.md` also references this section. Native targets use only generally applicable typography principles from this material; whenever it specifies browser units, CSS, web fonts, zoom, or fluid viewport type, the native platform reference and the native checks above take precedence.
 
 ### Typography
 

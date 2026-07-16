@@ -8,11 +8,69 @@ Brand: asymmetric compositions, fluid spacing with `clamp()`, intentional grid-b
 
 Product: predictable grids, consistent densities, familiar navigation patterns. Responsive behavior is structural (collapse sidebar, responsive table), not fluid typography. Consistency IS an affordance.
 
+## Route by platform before any assessment or command (required)
+
+Resolve the target established by Setup before spawning agents, running scans, or inspecting styling:
+
+- **Web**: continue to [Web: Two isolated assessments](#web-two-isolated-assessments-required). The detector and supplemental CSS/Tailwind searches are mandatory on this route.
+- **iOS**: read [ios.md](ios.md), then run only the iOS checks in [Native source assessment](#native-source-assessment-ios--android--adaptive).
+- **Android**: read [android.md](android.md), then run only the Android checks in the native assessment.
+- **Adaptive native** (a shared React Native, Expo, Flutter, or other native codebase shipping to both platforms): read both platform references, inspect the shared implementation and each platform branch, and apply both sets of checks.
+
+Repository contents do not override the selected target. A native target stays native even when the repository also contains a website, CSS, or Tailwind configuration. On every native route, **do not** spawn the mechanical pre-scan agent, invoke `detect.mjs`, grep for CSS/Tailwind values, or enter any of the web-only sections below. Finish after the native assessment and its source verification.
+
+## Native source assessment (`ios` / `android` / `adaptive`)
+
+Start from the active screen and navigation entry points and follow reachable callsites; a matching API name by itself is not proof. Cite the file and symbol or declaration for every result.
+
+**iOS source checks**
+
+1. Trace the root and nested navigation. When the app has 2–5 top-level sections, confirm they use the platform tab container; confirm hierarchy uses a navigation stack/controller, self-contained tasks use sheets, top-level titles are large and detail titles inline, and no custom overlay disables or intercepts the left-edge back gesture.
+2. Trace each screen's safe-area behavior through scroll, sheet, and keyboard states. In SwiftUI, inspect uses of `NavigationStack`, `TabView`, `safeAreaInset`, and `ignoresSafeArea`; in UIKit, inspect `UINavigationController`, `UITabBarController`, `safeAreaLayoutGuide`, `additionalSafeAreaInsets`, and `interactivePopGestureRecognizer`. In React Native/Expo or Flutter, inspect the equivalent safe-area provider/view or `SafeArea`, native stack/tab navigator, and platform-specific insets. Decorative backgrounds may extend edge-to-edge; controls and readable content may not sit under the notch, Dynamic Island, rounded corners, or home indicator.
+3. Measure every reachable tap target from its frame, padding, `contentShape`, `hitSlop`, or framework minimum-size constraint. Require at least 44×44 pt and breathing room between adjacent targets; do not infer compliance from the visible icon size.
+
+**Android source checks**
+
+1. Trace navigation at compact and expanded widths. When the app has 3–5 top-level destinations, confirm compact layouts use a Material navigation bar and expanded layouts switch to a navigation rail or drawer; confirm screen context uses a top app bar and a FAB—when present—is the single primary action.
+2. Trace edge-to-edge inset consumption for status/navigation bars, display cutouts, and the IME. In Compose, inspect `Scaffold` content padding and `WindowInsets`/inset padding modifiers; in Views, inspect `WindowCompat`/`ViewCompat` inset handling and Material containers. In React Native/Expo or Flutter, inspect the equivalent safe-area/window-inset handling and keyboard avoidance. Content may draw edge-to-edge only when interactive and readable content remains unobscured.
+3. Follow system Back handling from every reachable screen and modal. Confirm the Back button and predictive Back gesture retain their navigation semantics; flag handlers that swallow Back without a state transition.
+4. Measure every reachable touch target from its modifier, minimum-size constraint, padding, or `hitSlop`. Require at least 48×48 dp with at least 8 dp between adjacent targets.
+
+**Additional adaptive source checks**
+
+1. Find the actual size decision: iOS size classes/available width, Android window size classes, React Native `useWindowDimensions`, or Flutter `LayoutBuilder`/`MediaQuery`. Require capability- or width-based adaptation, not device-name checks.
+2. Follow both compact and expanded branches. Confirm Android changes navigation bar → rail/drawer rather than merely stretching the phone layout, while iOS retains its system navigation, safe areas, and edge-swipe behavior at every supported size.
+3. Follow platform branches separately. Shared layout primitives must not erase the iOS 44 pt and Android 48 dp/8 dp target rules, substitute one platform's navigation model for the other, or bypass either platform's inset and Back guarantees.
+
+Verify the native route by answering every applicable item above with a file, symbol, and concrete value or control flow. Exercise the changed screen in the platform preview/simulator when available, but use only native project tooling; do not run the web detector or CSS/Tailwind scans as a substitute.
+
+---
+
+## Web: Two isolated assessments (required)
+
+This section and every section that follows it are for the web route only.
+
+Spawn two parallel sub-agents whenever a sub-agent/Task tool is exposed: one for the layout assessment, one for the mechanical pre-scan. If the harness needs explicit user permission for sub-agents, stop and ask before proceeding. Isolation is the point: detector output anchors visual judgment toward what the scan can see, so neither sub-agent gets the other's output. Each assessment runs in its own sub-agent; running either one in this context when a sub-agent tool exists is not permitted, even when it is faster; the fallback below is only for sessions with no sub-agent tool. Give each a self-contained prompt (target files, register, documented spacing scale when present, and its instructions below); do not assume it can read this file.
+
+**Sub-agent A (layout assessment)**: give it the full [Assess Current Layout](#assess-current-layout) checklist below, verbatim, in its prompt. It works through every item and returns per-item findings citing file, selector, or value.
+
+**Sub-agent B (mechanical pre-scan)**: run the bundled detector scoped to layout:
+
+```bash
+node .github/skills/impeccable/scripts/detect.mjs --json --scope layout [target files or dirs]
+```
+
+A missing `node` on PATH is not permission to skip: hunt for a runtime (`command -v node`, nvm or Homebrew paths, the harness's own bundled node) and run it by full path. If none exists, halt the scan and report that Node must be installed (the parent relays this to the user); do **not** substitute grep for the detector or proceed unscanned. The detector abstains on arbitrary Tailwind spacing (`gap-[13px]`, `p-[7px]`) and ad-hoc `z-index` stacks, so when the project documents a spacing scale, also grep `gap-\[`, `p[trblxy]?-\[`, `m[trblxy]?-\[`, `z-\[` and judge those hits against it. Return the findings JSON plus the grep verdicts.
+
+**If no sub-agent tool is exposed (or the user declined)**: run both yourself, assessment first, pre-scan second, so the deterministic findings can't anchor the visual judgment. Keep that order even when the scan feels quicker to start with.
+
+**Synthesize** once both are done: merge into a single findings list, noting where they agree and what each caught alone. Fix every finding, or list it as a deliberate exception for the user to accept. A clean scan is a floor, not a verdict: a monotone grid with uniform spacing passes every detector rule, which is exactly what the assessment exists to catch. State in your final summary which path ran (parallel sub-agents or single-context fallback).
+
 ---
 
 ## Assess Current Layout
 
-Analyze what's weak about the current spatial design:
+This checklist is sub-agent A's brief (on the fallback path, work through it yourself before the pre-scan). Analyze what's weak about the current spatial design:
 
 1. **Spacing**:
    - Is spacing consistent or arbitrary? (Random padding/margin values)
@@ -137,6 +195,8 @@ Create a systematic plan:
 - **Breathing room**: Does the layout feel comfortable, not cramped or wasteful?
 - **Consistency**: Is the spacing system applied uniformly?
 - **Responsiveness**: Does the layout adapt gracefully across screen sizes?
+
+Answer each item above by citing the file, selector, or value that satisfies it; never a bare yes. Then re-run the pre-scan and fix until the count of unresolved items and unaccepted findings is zero.
 
 When the rhythm and hierarchy land, hand off to `/impeccable polish` for the final pass.
 

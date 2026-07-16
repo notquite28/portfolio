@@ -37,34 +37,33 @@ import { skillCategories } from '../../data/content';
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   if (!prefersReducedMotion) {
-    ScrollTrigger.matchMedia({
-      "(min-width: 768px)": function () {
-        const triggers: ScrollTrigger[] = [];
+    const media = gsap.matchMedia();
+    media.add('(min-width: 768px)', () => {
+      const triggers: ScrollTrigger[] = [];
 
-        const groups = document.querySelectorAll('.skill-group');
-        groups.forEach((group) => {
-          const barFill = group.querySelector('.skill-group-bar-fill') as HTMLElement | null;
-          const items = group.querySelectorAll('.skill-item');
+      const groups = document.querySelectorAll('.skill-group');
+      groups.forEach((group) => {
+        const barFill = group.querySelector('.skill-group-bar-fill') as HTMLElement | null;
+        const items = group.querySelectorAll('.skill-item');
 
-          if (barFill) {
-            triggers.push(ScrollTrigger.create({
-              trigger: group,
-              start: 'top 82%',
-              once: true,
-              animation: gsap.fromTo(barFill, { scaleX: 0 }, { scaleX: 1, duration: 1, ease: 'power3.out' }),
-            }));
-          }
-
+        if (barFill) {
           triggers.push(ScrollTrigger.create({
             trigger: group,
-            start: 'top 78%',
+            start: 'top 82%',
             once: true,
-            animation: gsap.fromTo(items, { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out', stagger: 0.05 }),
+            animation: gsap.fromTo(barFill, { scaleX: 0 }, { scaleX: 1, duration: 1, ease: 'power3.out' }),
           }));
-        });
+        }
 
-        return function () { triggers.forEach((t) => t.kill()); };
-      },
+        triggers.push(ScrollTrigger.create({
+          trigger: group,
+          start: 'top 78%',
+          once: true,
+          animation: gsap.fromTo(items, { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out', stagger: 0.05 }),
+        }));
+      });
+
+      return () => triggers.forEach((trigger) => trigger.kill());
     });
   }
 </script>

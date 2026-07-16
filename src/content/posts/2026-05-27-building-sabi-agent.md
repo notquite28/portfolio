@@ -8,9 +8,9 @@ categories: ["rust", "ai", "agents", "tauri", "cli"]
 ---
 
 
-#### "Can I build this in Rust?"
+## "Can I build this in Rust?"
 
-### Rust-shaped Box
+## Rust-shaped Box
 
 Sabi Agent is a small Rust coding-agent harness. The name comes from **sabi**, or **錆**, which means rust in Japanese. Yes, I could not come up with something more clever.
 
@@ -37,7 +37,7 @@ The questions I cared about were simple:
 * What changed on disk?
 * Can I inspect the session later?
 
-### WabiSabi?
+## WabiSabi?
 
 Sabi is currently an alpha/proof-of-concept coding-agent harness, not an open-source Claude Code clone. The CLI is the part I am actually proud of. The desktop UI is the part that exists because every agent project eventually looks at a terminal and says, “what if this had panes?”
 
@@ -56,7 +56,7 @@ One decision I like: core logic lives behind `src/lib.rs`, while `src/main.rs` s
 
 At the moment, Sabi supports OpenAI-compatible chat completions, project/user/env config, built-in file and shell tools, Exa-backed search, JSONL sessions, slash commands, skills, approval prompts, and a small Tauri shell with project selection, autocomplete, approval cards, compact tool rows, and collapsible diffs.
 
-### The Meat and Bones
+## The Meat and Bones
 
 The heart of Sabi is the agent loop. It sounds more mysterious than it is:
 
@@ -79,7 +79,7 @@ The provider layer is intentionally boring too. It builds an OpenAI-style `/chat
 
 That command is basically emotional support for debugging. When an agent fails, your brain wants to blame the loop, the schema, the serializer, the model, the moon, and maybe your childhood. Sometimes the URL is just wrong.
 
-### Pi as a Reference
+## Pi as a Reference
 
 Pi was useful because it gave me a map, not code to blindly copy. A real terminal harness eventually has to care about the assistant/tool/result rhythm, practical file editing, durable sessions, reusable instructions, provider support, and extension seams.
 
@@ -91,7 +91,7 @@ I did not copy Pi's answers; although I did ask chat gipitty to paraphrase it a 
 
 The Rust version is also honest about cheating. `grep` is `rg`. `find` is `fd`. Diffs use `similar`. Skill discovery uses `ignore::WalkBuilder`. This is the cheating I endorse: small code, sharp boundaries, and battle-tested tools doing battle-tested things. There is no medal for writing a worse `grep` because you wanted everything to be pure Rust.
 
-### The CLI Is the Good Part
+## The CLI Is the Good Part
 
 The CLI is the part I like most. It is simple, direct, and does not pretend to be a full IDE. A little sharp, inspectable, and not trying to upsell me a workspace.
 
@@ -132,7 +132,7 @@ Config is split between secrets and presets because I have met myself before:
 
 The precedence is simple: project config, user config, env vars, then defaults. You can argue about the order, but at least there is one, and it does not require reading tea leaves from five directories named `config`.
 
-### Tools, Approvals, Sessions
+## Tools, Approvals, Sessions
 
 Sabi has a small static tool registry: `read`, `write`, `edit`, `bash`, `ls`, `grep`, `find`, `web_search`, and `exa_search`. I wanted a toolbox, not Kubernetes for `read_file`.
 
@@ -153,7 +153,7 @@ Skills follow an Agent Skills-style convention and load from:
 
 You can invoke them with `/skill:name optional instructions`. Skill summaries go into normal prompts so the model knows what exists. The parser only handles what I need: `name`, `description`, `disable-model-invocation`, and the markdown body. Bad frontmatter gets skipped with a warning instead of detonating startup. Boring failure modes, my beloved.
 
-### The Desktop Shell
+## The Desktop Shell
 
 The Tauri desktop app exists, but it is not the show stealer. I would not call it polished unless I was trying to raise money from YC, and thankfully I am not. The useful decision is architectural: it uses the Rust engine directly instead of shelling out to the CLI.
 
@@ -161,7 +161,7 @@ Right now it has project selection, workspace sessions, file/slash/skill autocom
 
 The cursed part is streaming. Prompt execution still returns a completed event batch, while approvals need to interrupt the same turn live. That is where the actual desktop app begins. The desktop shell is cool, but the CLI is the part I trust.
 
-### What I Learned, Unfortunately
+## What I Learned, Unfortunately
 
 Building Sabi taught me that agent harnesses are mostly careful plumbing:
 
@@ -181,7 +181,7 @@ The annoying realization was that API design is product design here. Tool schema
 
 Small failures are good too. “The exact snippet appears twice” is the harness refusing to guess. “No session resumes from this CWD” prevents cross-repo context poisoning. “`fd` is missing” is clearer than silently implementing a worse finder because I wanted zero dependencies. Sometimes the best agent behavior is not being impressive, but being deterministic.
 
-### Final Thoughts
+## Final Thoughts
 
 Sabi started as “I want to understand coding agents” and became a small real harness with tools, sessions, skills, approvals, and a desktop shell beginning to form around it. This is usually how my projects go.
 

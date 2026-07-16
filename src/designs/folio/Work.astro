@@ -105,7 +105,7 @@ function getProjectId(title: string) {
           const panelId = `project-panel-${projectId}`;
           return (
           <div class="collapsible-item reveal" data-collapsible>
-            <button type="button" class="collapsible-summary" aria-expanded="false" aria-controls={panelId}>
+            <button type="button" class="collapsible-summary" aria-expanded="true" aria-controls={panelId}>
               <span class="collapsible-summary-main">
                 <span class="collapsible-name">{project.title}</span>
                 <span class="collapsible-tags">
@@ -121,7 +121,7 @@ function getProjectId(title: string) {
                 <span class="chevron"></span>
               </span>
             </button>
-            <div class="collapsible-body" id={panelId} aria-hidden="true" inert>
+            <div class="collapsible-body" id={panelId}>
               <div class="collapsible-body-inner">
                 <p class="collapsible-desc">{project.description}</p>
                 <div class="tags">
@@ -201,6 +201,8 @@ function getProjectId(title: string) {
       body.setAttribute('aria-hidden', String(!isOpen));
       body.toggleAttribute('inert', !isOpen);
     };
+    item.classList.add('is-enhanced');
+    setOpen(false);
 
     const toggle = () => setOpen(!item.classList.contains('is-open'));
 
@@ -535,9 +537,9 @@ function getProjectId(title: string) {
 
   .collapsible-body {
     display: grid;
-    grid-template-rows: 0fr;
-    opacity: 0;
-    pointer-events: none;
+    grid-template-rows: 1fr;
+    opacity: 1;
+    pointer-events: auto;
     transition:
       grid-template-rows 300ms var(--ease-out),
       opacity 200ms ease;
@@ -549,17 +551,17 @@ function getProjectId(title: string) {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    padding-bottom: 0;
-  }
-
-  .collapsible-item.is-open .collapsible-body {
-    grid-template-rows: 1fr;
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .collapsible-item.is-open .collapsible-body-inner {
     padding-bottom: 1.5rem;
+  }
+
+  .collapsible-item.is-enhanced:not(.is-open) .collapsible-body {
+    grid-template-rows: 0fr;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .collapsible-item.is-enhanced:not(.is-open) .collapsible-body-inner {
+    padding-bottom: 0;
   }
 
   @media (prefers-reduced-motion: reduce) {

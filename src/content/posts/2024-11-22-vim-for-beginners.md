@@ -11,7 +11,7 @@ categories: ["software-development", "arch-linux", "programming", "vim", "linux"
 ![A Vim editing screen showing modal editing context](/posts/images/bdbbceb46b19/01.png)
 *Vim motions started making more sense once I stopped reaching for arrow keys.*
 
-#### Introduction
+## Introduction
 
 So, you got yourself a shiny new (or old) ThinkPad to put Linux on and flex on r/unixporn and r/thinkpad. You boot into an Arch ISO. Then reality hits—you don’t have internet, and you can’t `sudo pacman -S nano` your way out of editing `locale.conf`. Or maybe you fell for the HHKB hype—the allure of a decade-old Japanese keyboard with worn rubber domes, topre goodness you overpaid for on eBay, and no dedicated arrow keys.
 Alternatively, like me, you might attempt to ditch your overpriced, overengineered mouse for no logical reason and write code with fewer trips away from the keyboard. Regardless of the reason, you’re here to get your hands dirty and learn Vim.
@@ -24,7 +24,7 @@ But hey, whatever helps r/linux and the RTFM folks sleep at night.
 
 Let’s dive in.
 
-#### Setting up Vim in IDE
+## Setting up Vim in IDE
 
 There exists a Vim plugin for any and every IDE. I will be using Cursor because it has become my autocomplete-heavy scratchpad for scripts and system tweaks.
 
@@ -33,9 +33,9 @@ There exists a Vim plugin for any and every IDE. I will be using Cursor because 
 
 Type `set number` to show numbered lines, although this might already be the default behavior of the IDE. Many Vim users prefer relative numbering. Use `set relativenumber` to enable it. This helps with some motions we will talk about later.
 
-### Basic Features
+## Basic Features
 
-#### Vim Motions
+### Vim Motions
 
 Vim has three primary modes:
 
@@ -50,7 +50,7 @@ In NORMAL mode, use `h`, `j`, `k`, and `l` to move the cursor:
 - `h` (left), `j` (down), `k` (up), and `l` (right).
 - Preface these commands with a number to repeat them multiple times. For example: `5j`
 
-#### Word and Line Navigation
+### Word and Line Navigation
 
 - `w`: Jump to the beginning of the next word.
 - `e`: Jump to the end of the current word.
@@ -62,7 +62,7 @@ For lines:
 - `^`: Jump to the first non-empty character in the line.
 - `$`: Jump to the end of the line.
 
-### Advanced Navigation
+## Advanced Navigation
 
 - `gg`: Jump to the beginning of the file.
 - `G`: Jump to the end of the file.
@@ -79,7 +79,7 @@ To scroll:
 
 You might want to add funny ASCII art to the beginning of your config. To do this the Vim way, we use `gg`. To move to the end of the page, we use `G` (`Shift+g`).
 
-#### Editing Text
+## Editing Text
 
 ![Cursor position example for Vim insert modes](/posts/images/bdbbceb46b19/04.png)
 *Take note of the cursor position*
@@ -91,7 +91,7 @@ You might want to add funny ASCII art to the beginning of your config. To do thi
 - `o`: Open a new line below.
 - `O`: Open a new line above.
 
-#### Copy, Paste, and Undo
+## Copy, Paste, and Undo
 
 - `yy`: Copy the current line.
 - `p`: Paste the copied content.
@@ -100,7 +100,7 @@ You might want to add funny ASCII art to the beginning of your config. To do thi
 
 ![Vim buffer example before deleting text](/posts/images/bdbbceb46b19/05.png)
 
-#### Deleting Text
+## Deleting Text
 
 - `d`: Delete.
 - `dw`: Delete the next word.
@@ -112,7 +112,7 @@ You might want to add funny ASCII art to the beginning of your config. To do thi
 
 You will probably need the last one more often than you expect.
 
-#### Changing Text
+## Changing Text
 
 - `c`: Change (delete and enter INSERT mode).
 - `ciw`: Change the current word.
@@ -120,7 +120,7 @@ You will probably need the last one more often than you expect.
 
 Use `.` (dot) to repeat the last change command.
 
-#### Search and Replace
+## Search and Replace
 
 Search by typing `/search_term`. Press `n` for the next match or `N` for the previous one.
 
@@ -130,9 +130,9 @@ For the entire file: `:%s/search_term/replace_term/g`
 
 For confirmation: `:%s/search_term/replace_term/gc`
 
-### Intermediate Motions
+## Intermediate Motions
 
-#### Function Folds
+### Function Folds
 
 To fold (minimize) a function in your editor, use `zc` (close). To unfold, use `zo` (open).
 
@@ -142,7 +142,7 @@ We can select some lines in VISUAL mode and shift them left or right using the `
 
 To add the same prefix to multiple lines, use VISUAL BLOCK mode, select the lines, press `I`, type the prefix, and press `Esc`.
 
-#### Macros
+### Macros
 
 1. Start recording: `qa` (records into register `a`).
 2. Perform your actions.
@@ -150,24 +150,18 @@ To add the same prefix to multiple lines, use VISUAL BLOCK mode, select the line
 4. Replay the macro: `@a`.
 5. Repeat on multiple lines: `15@a` (executes the macro 15 times).
 
-#### **Folding**
 
-- Fold function using `zc`
-- Unfold function using `zo`
-- Fold all functions in file with `zM`
-- Unfold all functions in file with `zR`
-
-#### Case Conversion
+### Case Conversion
 
 - `gUw`: Make a word uppercase.
 - `guw`: Make a word lowercase.
 
-#### Bookmarks
+### Bookmarks
 
 Set a bookmark on a line with `ma` (bookmark `a`). Jump to it with `` `a ``.
 Toggle between the last two locations by pressing the backtick key twice.
 
-#### **Running External Commands**
+### Running External Commands
 
 Running external commands can be done with something like this:
 
@@ -186,7 +180,7 @@ You could also send a block of code, e.g., JSON to a command and parse it.
 
 Now running `!jq .firstname` replaces the block of text with “quiet”.
 
-#### Conclusion
+## Conclusion
 
 Congrats, now you can casually drop `:wq!` into conversations and actually know what it means.
 

@@ -11,7 +11,7 @@ categories: ["configuration-nixos", "linux", "nvidia", "nixos", "gaming"]
 ![A NixOS gaming setup desktop](/posts/images/f98506351a24/01.jpg)
 *A very serious NixOS gaming setup, naturally.*
 
-#### Introduction
+## Introduction
 
 In my last post, I lauded NixOS as I installed Zen Browser from an external flake. And I can already hear you saying, “Enough with the NixOS hype, just let me play some games!” I get you! After all, who wouldn’t want to revisit *NieR: Replicant*, *Persona 5*, or *Yakuza* after a long day and still get to say they did it on NixOS?
 
@@ -44,7 +44,7 @@ For NVIDIA users, you might also need to enable modesetting:
 hardware.nvidia.modesetting.enable = true;
 ```
 
-#### Gaming Laptops
+## Gaming Laptops
 
 But wait—if you’re like me and you bought an NVIDIA hybrid gaming laptop to run Linux on, you’ll need to enable Prime. This allows you to offload graphic tasks to your dedicated GPU (dGPU) or suspend it for power-saving, depending on the workload.
 
@@ -103,7 +103,7 @@ If you are on a gaming laptop and want the vendor-specific defaults to behave co
 }
 ```
 
-#### Installing software
+## Installing software
 
 To make your life easier, enable Steam and add a few essential packages to your system. I recommend **mangohud** (for performance monitoring) and **protonup-qt** (to install custom Proton versions, which can improve game compatibility).
 
@@ -119,7 +119,7 @@ Once that’s done, you can switch between custom Proton versions in the **Steam
 
 If you’re ever stuck, check the community’s recommendation for Steam launch arguments on [protondb](https://www.protondb.com/)!
 
-#### Conclusion
+## Conclusion
 
 And that’s it! With just a bit of configuration, your NixOS system should be ready to game. Now you can bring up that you use NixOS in every conversation you have. Also, big thanks to Vimjoyer for making NixOS easier to understand. A major chunk of this post is based on his [video](https://www.youtube.com/watch?v=qlfm3MEbqYA).
 

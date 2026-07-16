@@ -187,7 +187,7 @@ export const profile = {
   email: "arnav.panigrahi@gmail.com",
   github: "https://github.com/notquite28",
   linkedin: "https://www.linkedin.com/in/arnavpanigrahi/",
-  resume: "https://notquite28.github.io/resume/resumeml.pdf",
+  resume: "https://notquite28.github.io/resume/resumeai.pdf",
   image: "jelly.webp",
   about: [
     "I write backend services and ML systems that run in production. Lately that's been FastAPI microservices, LangChain agents, and multi-modal models. I did my M.S. in CS at UC Riverside and I'm based in California.",

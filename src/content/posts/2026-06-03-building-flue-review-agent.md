@@ -8,9 +8,9 @@ categories: ["ai", "agents", "cloudflare", "github", "typescript"]
 ---
 
 
-#### Let the clankers fight amongst themselves
+## Let the clankers fight amongst themselves
 
-### A world built on vibes
+## A world built on vibes
 
 The year is 2026. People are finessing Meta AI into handing over Instagram accounts by simply saying [please](https://www.bbc.com/news/articles/c98rzr72dpyo). Software engineers are tokenmaxxing so Bay Area dashboards can call them productive. Anthropic keeps telling everyone that if they are not using AI, their career is finished, while also offering very serious money to engineers whose job is stopping Claude Code from combusting after six failed write-tool calls. The same company then has to make sure its "dumb users" cannot break into the Pentagon by pasting a system prompt large enough to qualify as grad-school reading.
 
@@ -39,7 +39,7 @@ So the rule was simple:
 
 The model gets one job: read bounded PR context and return JSON. No GitHub token. No endpoint choices. No posting comments. The Worker validates the JSON, filters it, formats it, and writes to GitHub. I still have to fix the code myself, unfortunately.
 
-### The stack, because every project needs a grocery list
+## The stack, because every project needs a grocery list
 
 I used:
 
@@ -71,7 +71,7 @@ PR comment
 
 Nothing about that is fancy. This is a compliment. Fancy is how you end up paying more money to Greptile than you do to OpenAI.
 
-### Why Cloudflare
+## Why Cloudflare
 
 GitHub needs a public HTTPS URL for webhooks. I did not want to run a Node server just to receive `issue_comment` events, then spend the rest of the afternoon remembering which dashboard owns the deploy button.
 
@@ -92,7 +92,7 @@ Cloudflare also gives this project room to grow. KV for dedupe. D1 for run recor
 
 For now, the Worker is the only place with the GitHub App private key and the model provider key. That boundary matters.
 
-### Why Flue
+## Why Flue
 
 I have a confession. The first reason I looked into Flue is because it is built around Mario Zechner's [Pi](https://pi.dev) agent. I saw that and immediately became the target audience. This is exactly how you rouse interest in the open-source community.
 
@@ -121,7 +121,7 @@ That seam matters because Flue gives me a place to grow without turning one rout
 
 That is the part I care about. Routing, GitHub auth, context fetching, model review, validation, and comment posting should not all become one 900-line `app.ts` file. I have seen that movie. The monster wins.
 
-### GitHub App, not a personal access token
+## GitHub App, not a personal access token
 
 A personal access token would have been easier for exactly five minutes.
 
@@ -153,7 +153,7 @@ The Worker logs said:
 
 Translation: GitHub received the webhook, Cloudflare ran the code, the token existed, and the app still could not post because I had given it the wrong permission. Auth bugs are just riddles written by a committee.
 
-### The webhook route
+## The webhook route
 
 The Worker exposes:
 
@@ -196,7 +196,7 @@ Without it, the UX is just staring at GitHub and wondering if the webhook died, 
 
 Now the bot gives immediate feedback, then replaces that same comment with the final review. No comment spam. No thread full of half-finished robot thoughts.
 
-### What the model actually sees
+## What the model actually sees
 
 The model does not get the entire repo.
 
@@ -230,7 +230,7 @@ changed files
 
 That is closer to how I review code anyway. I read the diff first, then open the files that explain the diff.
 
-### The JSON contract
+## The JSON contract
 
 The model has to return this shape:
 
@@ -255,7 +255,7 @@ Valibot validates it. Low-confidence findings get tossed. Findings below the sev
 
 This is the difference between a review system and a group chat with delusions of architecture. The model can still be wrong, but at least it has to be wrong in a shape the application understands.
 
-### The review comment
+## The review comment
 
 The bot posts one PR conversation comment and updates it in place. It finds its old comment with this marker:
 
@@ -294,7 +294,7 @@ Any high finding makes it red. Any medium finding makes it orange. Otherwise it 
 
 This was not me discovering review agents for the first time and seeing the face of God in a diff. I already use review agents in coding agents and in actual PRs. The curiosity here was more specific: what does it look like when the review agent is not a chat window I babysit, but a GitHub App wired through Cloudflare and a Flue workflow with real webhook auth, scoped tokens, structured output, and boring posting rules?
 
-### Calibration PRs
+## Calibration PRs
 
 I made a private Python backend repo to test this properly. It has FastAPI, LangGraph, OpenAI integration, tools, repositories, services, routes, and tests. Enough structure that the bot cannot win by spotting `console.log("password")` and calling itself an engineer.
 
@@ -326,7 +326,7 @@ That disables tools even when `allow_tools=True`. The bot caught it and explaine
 
 That was the first moment the project felt real instead of cute. It did not just summarize the diff. It found the thing I planted. I love these moments when carefully harnessed models can do something more impressive than "Oh cute! It says it's thinking lol!"
 
-### The parts that broke first
+## The parts that broke first
 
 The first deploy failed because I imported `flue()` from the wrong package path. It needed to come from `@flue/runtime/routing`, not `@flue/runtime/app`.
 
@@ -338,7 +338,7 @@ None of these were glamorous bugs. They were the normal sludge: SDK drift, expor
 
 Each failure paid rent in the README. Runtime imports went into build verification. Workflow exports went into docs. GitHub App permissions got spelled out. Wrangler tail stopped being optional.
 
-### The shape I want to poke at long term
+## The shape I want to poke at long term
 
 This is not me trying to speedrun Greptile or CodeRabbit in a weekend. It does not index whole repos, run tests, post inline comments, remember suppressions, or understand your entire monorepo's emotional baggage.
 
@@ -363,7 +363,7 @@ Richer context goes into the context builder. Greptile-ish code understanding pr
 
 The model stays boxed in. It reviews. It does not operate the machinery. That is the constraint that makes the rest of this fun instead of terrifying.
 
-### What I want to try next
+## What I want to try next
 
 First: richer bounded context. Changed files are good. Changed files plus imports, adjacent tests, root config, and CI signals would be much better. That is where this starts feeling less like a prompt trick and more like an actual GitHub integration.
 
@@ -381,7 +381,7 @@ Third: a calibration suite. Keep private PRs with known outcomes:
 
 Every prompt change and model change should run against those. If the bot gets more talkative but less accurate, that is not improvement. That is ESLint with a gambling addiction.
 
-### Final thoughts
+## Final thoughts
 
 I wanted to build a reviewer with Flue, Cloudflare, and GitHub instead of just prompting a model with a patch file. I wanted to see the seams: where the webhook enters, where the GitHub App token gets minted, where Flue wraps the review unit, where Valibot says "absolutely not," and where the final comment gets posted without the model touching the steering wheel.
 

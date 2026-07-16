@@ -8,11 +8,11 @@ categories: ["nix", "linux", "home-manager-in-nixos", "nixos", "home-manager-nix
 ---
 
 
-### Introduction
+## Introduction
 
 We all know Linux users. We either spend years living comfortably on Debian or jump into more adventurous distros like Arch and Gentoo. I am the latter. Spending days trying to figure out what broke my Arch distro while dealing with work deadlines and grad school projects, I am convinced that I have a very specific tolerance for self-inflicted Linux problems. But lately, I felt Arch has been a bit too stable for me. My last install broke due to a user error where I installed an incompatible kernel and my initramfs was confused. This won’t do! So of course, I did what most normal people would do. I bought a used ThinkPad T480s from eBay for a measly 90$ to dip my toes into the “new Arch” distro, NixOS!
 
-### NixOS, flakes and home-manager
+## NixOS, flakes and home-manager
 
 ![The unofficial NixOS mascot](/posts/images/7ae541f5533f/01.png)
 *The unofficial NixOS mascot, because every operating system deserves one.*
@@ -181,7 +181,7 @@ sudo nixos-rebuild switch
 
 Voila! Now you have a Firefox-based Arc-style browser installed on your NixOS system. I prefer Zen over Arc because it’s based on Firefox and not Chromium.
 
-### Conclusion
+## Conclusion
 
 For the impatient who cannot wait for Zen Browser to be added to the NixOS package set, this lets us install Zen from an external flake on GitHub.
 This is a godsend for folks who don’t want to compile it from source. My ThinkPad took about three hours to compile it, and then it immediately got an update. So thanks to the [maintainer](https://github.com/0xc000022070/zen-browser-flake) who did it for us.
