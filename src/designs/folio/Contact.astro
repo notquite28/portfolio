@@ -4,7 +4,6 @@ import { profile } from '../../data/content';
 
 <section id="contact" class="contact">
   <div class="contact-inner reveal">
-    <p class="kicker">Get in touch</p>
     <h2 class="contact-title">Let's build something together.</h2>
     <p class="contact-desc">Currently seeking software engineering roles focused on backend systems and applied AI.</p>
     <div class="contact-links">
@@ -115,24 +114,15 @@ import { profile } from '../../data/content';
     box-shadow: var(--shadow-soft), 0 0 0 1px color-mix(in oklch, var(--c-koi-gold) 10%, transparent);
   }
 
-  .kicker {
-    font-family: var(--font-sans);
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--c-gold);
-    margin-bottom: 0.75rem;
-  }
-
   .contact-title {
-    font-family: var(--font-serif);
-    font-weight: 300;
-    font-size: clamp(2rem, 4vw, 3.4rem);
-    line-height: 1.1;
-    letter-spacing: -0.02em;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(2.1rem, 4.2vw, 3.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
     color: var(--c-ink);
     margin-bottom: 1rem;
+    text-wrap: balance;
   }
 
   .contact-desc {
@@ -162,12 +152,33 @@ import { profile } from '../../data/content';
     background: none;
     border: 0;
     cursor: pointer;
-    transition: color 300ms var(--ease-expo);
+    transition: color 300ms var(--ease-expo), transform 200ms var(--ease-expo);
     will-change: transform;
   }
 
   .contact-link-primary {
-    color: var(--c-accent);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8rem 1.35rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in oklch, var(--c-koi-orange) 42%, transparent);
+    background:
+      linear-gradient(180deg, color-mix(in oklch, var(--c-koi-orange) 22%, transparent), color-mix(in oklch, var(--c-koi-orange) 8%, transparent)),
+      color-mix(in oklch, var(--c-pond-800) 80%, transparent);
+    color: var(--c-ink);
+    font-weight: 600;
+    box-shadow:
+      inset 0 1px 0 color-mix(in oklch, var(--c-cream) 12%, transparent),
+      0 0.5rem 1.25rem color-mix(in oklch, var(--c-koi-orange) 12%, transparent);
+  }
+
+  .contact-link-primary:hover {
+    color: var(--c-cream);
+  }
+
+  .contact-link-primary::after {
+    display: none;
   }
 
   .contact-link::after {
@@ -183,9 +194,6 @@ import { profile } from '../../data/content';
     transition: transform 400ms var(--ease-expo);
   }
 
-  .contact-link-primary::after {
-    background-color: var(--c-koi-gold);
-  }
 
   .contact-link:hover::after {
     transform: scaleX(1);
@@ -194,6 +202,10 @@ import { profile } from '../../data/content';
 
   .contact-link:hover {
     color: var(--c-accent-soft);
+  }
+
+  .contact-link:active {
+    transform: scale(0.98);
   }
 
   .contact-link-button[data-copied='true'] .contact-link-label {

@@ -62,7 +62,7 @@ const isProd = import.meta.env.PROD;
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..900,0..100&family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet"
   />
 </head>
@@ -110,9 +110,10 @@ const isProd = import.meta.env.PROD;
     --c-aura: var(--c-water-mint);
     --c-gold: var(--c-koi-gold);
     --c-proof: var(--c-koi-red);
-    --shadow-soft: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.26);
+    --shadow-soft: 0 0.75rem 2rem color-mix(in oklch, var(--c-pond-900) 55%, transparent);
 
-    --font-serif: "Fraunces", Georgia, serif;
+    --font-serif: "Outfit", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
     --font-body: "Manrope", ui-sans-serif, system-ui, sans-serif;
     --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
     --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;

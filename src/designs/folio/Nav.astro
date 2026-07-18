@@ -9,7 +9,7 @@ const links = [
 ];
 ---
 
-<nav class="nav" aria-label="Primary navigation" data-nav>
+<nav class="nav is-top" aria-label="Primary navigation" data-nav>
   <div class="nav-inner">
     <a href="/" class="nav-brand">{profile.name}</a>
     <div class="nav-links">
@@ -99,28 +99,34 @@ const links = [
   // Hide/show on scroll
   if (nav) {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let lastScroll = 0;
+    let lastScroll = window.scrollY;
     let ticking = false;
     const threshold = 80;
 
-    if (!prefersReducedMotion) {
+    const syncNavState = (currentScroll: number) => {
+      if (currentScroll < threshold) {
+        nav.classList.remove('is-hidden');
+        nav.classList.add('is-top');
+      } else if (currentScroll > lastScroll && currentScroll > threshold * 2) {
+        nav.classList.add('is-hidden');
+        nav.classList.remove('is-top');
+      } else if (currentScroll < lastScroll) {
+        nav.classList.remove('is-hidden');
+        nav.classList.remove('is-top');
+      }
+      lastScroll = currentScroll;
+    };
+
+    if (prefersReducedMotion) {
+      nav.classList.remove('is-hidden');
+      nav.classList.toggle('is-top', window.scrollY < threshold);
+    } else {
+      syncNavState(window.scrollY);
+
       window.addEventListener('scroll', () => {
         if (!ticking) {
           requestAnimationFrame(() => {
-            const currentScroll = window.scrollY;
-
-            if (currentScroll < threshold) {
-              nav.classList.remove('is-hidden');
-              nav.classList.add('is-top');
-            } else if (currentScroll > lastScroll && currentScroll > threshold * 2) {
-              nav.classList.add('is-hidden');
-              nav.classList.remove('is-top');
-            } else if (currentScroll < lastScroll) {
-              nav.classList.remove('is-hidden');
-              nav.classList.remove('is-top');
-            }
-
-            lastScroll = currentScroll;
+            syncNavState(window.scrollY);
             ticking = false;
           });
           ticking = true;
@@ -133,35 +139,48 @@ const links = [
 <style>
   .nav {
     position: fixed;
-    top: 0;
+    top: 0.85rem;
     left: 0;
     right: 0;
     z-index: 40;
-    background: transparent;
-    border-bottom: 1px solid transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 clamp(0.75rem, 2vw, 1.25rem);
+    pointer-events: none;
     transform: translateY(0);
-    transition:
-      transform 400ms var(--ease-expo),
-      background 400ms var(--ease-expo),
-      border-color 400ms var(--ease-expo);
+    transition: transform 400ms var(--ease-expo);
   }
 
   .nav.is-hidden {
-    transform: translateY(-100%);
-  }
-
-  .nav:not(.is-top) {
-    background: color-mix(in oklch, var(--c-pond-850) 90%, transparent);
-    border-bottom-color: color-mix(in oklch, var(--c-water-mint) 18%, transparent);
+    transform: translateY(calc(-100% - 1.25rem));
   }
 
   .nav-inner {
-    max-width: 72rem;
+    pointer-events: auto;
+    width: min(100%, 48rem);
     margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.875rem clamp(1.5rem, 4vw, 3rem);
+    gap: 1rem;
+    padding: 0.55rem 0.7rem 0.55rem 1.05rem;
+    border: 1px solid color-mix(in oklch, var(--c-water-mint) 18%, transparent);
+    border-radius: 999px;
+    background: color-mix(in oklch, var(--c-pond-850) 78%, transparent);
+    box-shadow:
+      inset 0 1px 0 color-mix(in oklch, var(--c-cream) 8%, transparent),
+      0 0.75rem 1.75rem color-mix(in oklch, var(--c-pond-900) 42%, transparent);
+    backdrop-filter: blur(16px) saturate(140%);
+    transition:
+      background 400ms var(--ease-expo),
+      border-color 400ms var(--ease-expo),
+      box-shadow 400ms var(--ease-expo);
+  }
+
+  .nav:not(.is-top) .nav-inner {
+    background: color-mix(in oklch, var(--c-pond-850) 92%, transparent);
+    border-color: color-mix(in oklch, var(--c-water-mint) 26%, transparent);
   }
 
   .nav-brand {
@@ -181,57 +200,43 @@ const links = [
   .nav-links {
     display: none;
     align-items: center;
-    gap: 1.75rem;
+    gap: 0.35rem;
   }
 
   .nav-link {
     font-family: var(--font-sans);
     font-size: 0.8125rem;
-    font-weight: 400;
+    font-weight: 500;
     color: var(--c-muted);
     text-decoration: none;
     position: relative;
-    transition: color 300ms var(--ease-expo);
-    letter-spacing: 0.03em;
-  }
-
-  .nav-link::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -0.35rem;
-    height: 1px;
-    background-color: var(--c-accent-soft);
-    opacity: 0;
-    transform: scaleX(0.45);
+    padding: 0.45rem 0.7rem;
+    border-radius: 999px;
     transition:
-      opacity 300ms var(--ease-expo),
-      transform 300ms var(--ease-expo);
+      color 300ms var(--ease-expo),
+      background 300ms var(--ease-expo);
+    letter-spacing: 0.01em;
   }
 
   .nav-link:hover {
     color: var(--c-accent-soft);
-  }
-
-  .nav-link:hover::after,
-  .nav-link.is-active::after {
-    opacity: 1;
-    transform: scaleX(1);
+    background: color-mix(in oklch, var(--c-water-mint) 8%, transparent);
   }
 
   .nav-link.is-active {
     color: var(--c-ink);
+    background: color-mix(in oklch, var(--c-water-mint) 12%, transparent);
   }
 
   .nav-toggle {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    background: none;
-    border: none;
+    background: color-mix(in oklch, var(--c-water-mint) 8%, transparent);
+    border: 1px solid color-mix(in oklch, var(--c-water-mint) 16%, transparent);
+    border-radius: 999px;
     cursor: pointer;
-    padding: 4px;
+    padding: 0.55rem 0.65rem;
   }
 
   .nav-toggle-bar {
@@ -260,11 +265,17 @@ const links = [
   }
 
   .nav-mobile {
+    pointer-events: auto;
     display: none;
     flex-direction: column;
-    padding: 0.5rem clamp(1.5rem, 4vw, 3rem) 1.25rem;
-    border-top: 1px solid var(--c-rule);
-    background-color: color-mix(in oklch, var(--c-pond-850) 96%, black);
+    width: min(100%, 48rem);
+    margin: 0.55rem auto 0;
+    padding: 0.55rem;
+    border: 1px solid color-mix(in oklch, var(--c-water-mint) 18%, transparent);
+    border-radius: 1.25rem;
+    background: color-mix(in oklch, var(--c-pond-850) 96%, black);
+    box-shadow: 0 0.75rem 1.75rem color-mix(in oklch, var(--c-pond-900) 42%, transparent);
+    backdrop-filter: blur(16px) saturate(140%);
   }
 
   .nav-mobile.is-open {
@@ -273,21 +284,33 @@ const links = [
 
   .nav-mobile-link {
     font-family: var(--font-sans);
-    font-size: 0.875rem;
+    font-size: 0.9rem;
     font-weight: 500;
     color: var(--c-body);
     text-decoration: none;
-    padding: 0.625rem 0;
-    transition: color 200ms ease;
+    padding: 0.75rem 0.9rem;
+    border-radius: 0.85rem;
+    transition: color 200ms ease, background 200ms ease;
   }
 
   .nav-mobile-link:hover,
   .nav-mobile-link.is-active {
     color: var(--c-ink);
+    background: color-mix(in oklch, var(--c-water-mint) 10%, transparent);
   }
 
   .nav-mobile-link.is-active {
     color: var(--c-accent-soft);
+  }
+
+  .nav-link-accent,
+  .nav-mobile-link-accent {
+    color: var(--c-accent);
+  }
+
+  .nav-link-accent:hover,
+  .nav-mobile-link-accent:hover {
+    color: var(--c-gold);
   }
 
   @media (min-width: 768px) {
@@ -307,16 +330,5 @@ const links = [
   @media (prefers-reduced-motion: reduce) {
     .nav { transition: none; }
     .nav-mobile { transition: none; }
-  }
-
-
-  .nav-link-accent,
-  .nav-mobile-link-accent {
-    color: var(--c-accent);
-  }
-
-  .nav-link-accent:hover,
-  .nav-mobile-link-accent:hover {
-    color: var(--c-gold);
   }
 </style>

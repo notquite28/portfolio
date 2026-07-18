@@ -17,7 +17,7 @@ const footerLinks = [
         <a href={link.href} class="footer-link" target="_blank" rel="noopener noreferrer">{link.label}</a>
       ))}
     </nav>
-    <span class="footer-copy">&copy; {year} &middot; Crafted with care</span>
+    <span class="footer-copy">&copy; {year}</span>
   </div>
 </footer>
 
@@ -72,6 +72,7 @@ const footerLinks = [
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 1rem;
     font-family: var(--font-sans);
     font-size: 0.8rem;
     color: var(--c-muted);

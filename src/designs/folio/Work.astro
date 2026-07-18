@@ -40,8 +40,7 @@ function getProjectId(title: string) {
 
 <section id="work" class="work">
   <div class="work-inner">
-    <p class="kicker reveal">Selected Work</p>
-    <h2 class="section-title reveal">Projects</h2>
+    <h2 class="section-title reveal">Selected work</h2>
 
     <div class="project-grid">
       {secondary.map((project, i) => {
@@ -98,7 +97,6 @@ function getProjectId(title: string) {
 
     {otherProjects.length > 0 && (
       <div class="collapsible-list-wrapper">
-        <p class="kicker collapsible-kicker reveal">Other Projects</p>
       <div class="collapsible-list">
         {otherProjects.map((project) => {
           const projectId = getProjectId(project.title);
@@ -222,24 +220,15 @@ function getProjectId(title: string) {
     margin: 0 auto;
   }
 
-  .kicker {
-    font-family: var(--font-sans);
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--c-gold);
-    margin-bottom: 0.75rem;
-  }
-
   .section-title {
-    font-family: var(--font-serif);
-    font-weight: 300;
-    font-size: clamp(2rem, 4vw, 3.4rem);
-    line-height: 1.1;
-    letter-spacing: -0.02em;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(2.1rem, 4.2vw, 3.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
     color: var(--c-ink);
     margin-bottom: 3rem;
+    text-wrap: balance;
   }
 
   /* Project grid — 4 equal cards */
@@ -256,11 +245,13 @@ function getProjectId(title: string) {
     background:
       radial-gradient(circle at 18% 0%, color-mix(in oklch, var(--c-water-mint) 7%, transparent), transparent 14rem),
       linear-gradient(180deg, var(--c-paper), color-mix(in oklch, var(--c-pond-800) 82%, var(--c-surface)));
-    border-radius: 1.25rem;
+    border-radius: 1.5rem;
     border: 1px solid var(--c-card-border);
     display: flex;
     flex-direction: column;
-    box-shadow: var(--shadow-soft);
+    box-shadow:
+      inset 0 1px 0 color-mix(in oklch, var(--c-cream) 6%, transparent),
+      var(--shadow-soft);
     transition: border-color 600ms var(--ease-expo), background 600ms var(--ease-expo), box-shadow 600ms var(--ease-expo);
     perspective: 1000px;
     transform-style: preserve-3d;
@@ -294,7 +285,7 @@ function getProjectId(title: string) {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: var(--font-serif);
+    font-family: var(--font-display);
     font-size: 4rem;
     font-weight: 300;
     color: color-mix(in oklch, var(--c-ink) 20%, transparent);
@@ -311,8 +302,9 @@ function getProjectId(title: string) {
   }
 
   .project-title {
-    font-family: var(--font-serif);
-    font-weight: 400;
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.02em;
     font-size: 1.4rem;
     line-height: 1.2;
     color: var(--c-ink);
@@ -440,10 +432,6 @@ function getProjectId(title: string) {
     margin-top: 2.5rem;
   }
 
-  .collapsible-kicker {
-    color: var(--c-accent-soft);
-    margin-bottom: 1rem;
-  }
 
   .collapsible-list {
     border-top: 1px solid var(--c-rule);

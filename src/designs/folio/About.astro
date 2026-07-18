@@ -6,20 +6,21 @@ import { buildUrl } from '../../utils/paths';
 <section id="about" class="about">
   <div class="about-inner">
     <div class="about-image-col">
-      <div class="about-image-frame" data-parallax="0.12">
-        <img
-          src={buildUrl(profile.image)}
-          alt="Portrait of Arnav Panigrahi"
-          class="about-portrait"
-          width="1147"
-          height="1147"
-          loading="lazy"
-          decoding="async"
-        />
+      <div class="about-image-shell" data-parallax="0.12">
+        <div class="about-image-frame">
+          <img
+            src={buildUrl(profile.image)}
+            alt="Portrait of Arnav Panigrahi"
+            class="about-portrait"
+            width="1147"
+            height="1147"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
       </div>
     </div>
     <div class="about-text-col">
-      <p class="kicker reveal">Background</p>
       <h2 class="about-title reveal">About</h2>
       <div class="about-body reveal-group">
         {profile.about.map((paragraph) => (
@@ -60,11 +61,26 @@ import { buildUrl } from '../../utils/paths';
     justify-content: center;
   }
 
-  .about-image-frame {
+  .about-image-shell {
     position: relative;
     width: 100%;
-    max-width: 14rem;
+    max-width: 16rem;
+    padding: 0.4rem;
+    border-radius: 1.75rem;
+    border: 1px solid color-mix(in oklch, var(--c-water-mint) 22%, transparent);
+    background: color-mix(in oklch, var(--c-pond-800) 70%, transparent);
+    box-shadow:
+      inset 0 1px 0 color-mix(in oklch, var(--c-cream) 8%, transparent),
+      0 1rem 2.5rem color-mix(in oklch, var(--c-pond-900) 45%, transparent);
     will-change: transform;
+  }
+
+  .about-image-frame {
+    position: relative;
+    overflow: hidden;
+    border-radius: calc(1.75rem - 0.35rem);
+    background: var(--c-elevated);
+    box-shadow: inset 0 1px 1px color-mix(in oklch, var(--c-cream) 10%, transparent);
   }
 
   .about-portrait {
@@ -72,27 +88,18 @@ import { buildUrl } from '../../utils/paths';
     width: 100%;
     aspect-ratio: 1;
     object-fit: cover;
-    border-radius: 50%;
   }
 
-  .kicker {
-    font-family: var(--font-sans);
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--c-accent-soft);
-    margin-bottom: 0.5rem;
-  }
 
   .about-title {
-    font-family: var(--font-serif);
-    font-weight: 300;
-    font-size: clamp(2rem, 4vw, 3.4rem);
-    line-height: 1.1;
-    letter-spacing: -0.02em;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(2.1rem, 4.2vw, 3.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
     color: var(--c-ink);
     margin-bottom: 1.25rem;
+    text-wrap: balance;
   }
 
   .about-body {

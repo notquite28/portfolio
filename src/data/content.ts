@@ -140,7 +140,7 @@ export const projects: Project[] = [
     compactTags: ["PyTorch", "Interpretability", "Research"],
     highlights: [
       "Identified refusal directions in LFM2.5-1.2B residual streams",
-      "Removed refusal behavior via weight orthogonalization — no retraining",
+      "Removed refusal behavior via weight orthogonalization - no retraining",
       "Cut refusal rate from 50% to ~37%",
     ],
     githubUrl: "https://github.com/notquite28/abliteration",
@@ -191,7 +191,7 @@ export const profile = {
   image: "jelly.webp",
   about: [
     "I write backend services and ML systems that run in production. Lately that's been FastAPI microservices, LangChain agents, and multi-modal models. I did my M.S. in CS at UC Riverside and I'm based in California.",
-    "Outside of work, I play guitar, sink hours into JRPGs, and tinker with OSS and agentic harnesses. I collect keyboards — HHKB is the only correct answer — and use Mario Zechner's pi agentic harness. I'm slowly teaching myself Japanese.",
+    "Outside of work, I play guitar, sink hours into JRPGs, and tinker with OSS and agentic harnesses. I collect keyboards - HHKB is the only correct answer - and use Mario Zechner's pi agentic harness. I'm slowly teaching myself Japanese.",
   ],
   proof: [
     { value: "3+", label: "years shipping software" },
