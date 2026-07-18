@@ -105,7 +105,7 @@ The site is configured for static deployment to GitHub Pages:
 - `public/CNAME` configures the custom domain.
 - `public/.nojekyll` disables Jekyll processing.
 - `dist/` is the generated output directory.
-- `.github/workflows/deploy.yml` installs with `pnpm install --frozen-lockfile`, runs `pnpm build`, uploads `dist/`, and deploys on pushes to `main` or manual workflow dispatch.
+- `.github/workflows/deploy.yml` installs with `pnpm install --frozen-lockfile`, runs `pnpm check` then `pnpm build`, uploads `dist/`, and deploys on pushes to `main` or manual workflow dispatch.
 
 There is no `pnpm deploy` script. Use the GitHub Actions workflow for deployment.
 

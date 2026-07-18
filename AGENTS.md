@@ -63,7 +63,7 @@ There is no `test`, `lint`, `format`, or `deploy` script in `package.json`. Trea
 - `astro.config.mjs` — static output, production site URL, sitemap integration, Tailwind Vite plugin, directory build format.
 - `tsconfig.json` — strict TypeScript options and path aliases (`@/*`, `@components/*`, `@utils/*`, `@styles/*`).
 - `.prettierrc` — formatting settings.
-- `.github/workflows/deploy.yml` — GitHub Pages pipeline using Node 22, frozen pnpm install, `pnpm build`, artifact upload, and deploy on push/manual dispatch.
+- `.github/workflows/deploy.yml` — GitHub Pages pipeline using Node 22, frozen pnpm install, `pnpm check`, `pnpm build`, artifact upload, and deploy on push/manual dispatch.
 - `src/designs/folio/Layout.astro` — shared shell, tokens, metadata, global styles/scripts, analytics.
 - `src/pages/index.astro` — homepage composition and Person JSON-LD.
 - `src/data/content.ts` — canonical homepage content source.
@@ -97,6 +97,6 @@ pnpm audit
 
 - `pnpm check` validates Astro, TypeScript, and content collection frontmatter.
 - `pnpm build` validates static routes, RSS, sitemap generation, and deployable output.
-- CI currently runs frozen install and `pnpm build`; it does not run `pnpm check`, audit, lint, or tests.
+- CI currently runs frozen install, `pnpm check`, and `pnpm build`; it does not run audit, lint, or tests.
 - For UI/animation changes, manually verify desktop and mobile homepage, reduced-motion behavior, keyboard navigation, mobile nav/collapsibles, copy-email fallback, and no unexpected hero video work on mobile static fallback.
 - For content/blog changes, verify `/posts/`, one post detail route, draft filtering expectations, RSS output, and image paths under `public/posts/images/`.
