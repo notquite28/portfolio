@@ -79,7 +79,7 @@ const isProd = import.meta.env.PROD;
 
   <Oneko position="bottom-right" />
 
-  {isProd && <script is:inline defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "d82e640ddac84498b86f3aef468f7107"}'></script>}
+  {isProd && <script is:inline type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "d82e640ddac84498b86f3aef468f7107"}'></script>}
 </body>
 </html>
 
