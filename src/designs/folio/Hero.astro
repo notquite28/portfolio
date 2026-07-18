@@ -25,7 +25,6 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
     </div>
 
     <div class="hero-content" aria-label={`${profile.name}: ${profile.tagline}`}>
-      <p class="hero-eyebrow" data-hero-eyebrow>{profile.role}</p>
       <h1 class="hero-name" data-hero-name>
         <span class="hero-name-part" data-hero-first>{firstName}</span>
         {lastName && <span class="hero-name-part" data-hero-last>{lastName}</span>}
@@ -35,8 +34,8 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
         <a href="#work" class="hero-link hero-link-primary" data-hero-scroll-link>
           <span>Selected work</span>
           <span class="hero-link-icon" aria-hidden="true">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </span>
         </a>
@@ -58,7 +57,6 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
     const video = section.querySelector<HTMLVideoElement>('[data-hero-video]');
     const media = section.querySelector<HTMLElement>('[data-hero-media]');
     const fade = section.querySelector<HTMLElement>('[data-hero-fade]');
-    const eyebrow = section.querySelector<HTMLElement>('[data-hero-eyebrow]');
     const name = section.querySelector<HTMLElement>('[data-hero-name]');
     const first = section.querySelector<HTMLElement>('[data-hero-first]');
     const last = section.querySelector<HTMLElement>('[data-hero-last]');
@@ -156,7 +154,7 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
           gsap.set(media, { autoAlpha: 1 });
           gsap.set(fade, { autoAlpha: 0 });
           gsap.set(preloader, { autoAlpha: 0 });
-          gsap.set([eyebrow, name, tagline, cta], { autoAlpha: 1, y: 0 });
+          gsap.set([name, tagline, cta], { autoAlpha: 1, y: 0 });
           gsap.set([first, last], { xPercent: 0, autoAlpha: 1 });
 
           activateForNavigation = () => Promise.resolve(false);
@@ -176,7 +174,7 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
         const restoreIntroState = () => {
           gsap.set(media, { autoAlpha: 1 });
           gsap.set(fade, { autoAlpha: 0 });
-          gsap.set([eyebrow, name, tagline, cta], { autoAlpha: 1, y: 0 });
+          gsap.set([name, tagline, cta], { autoAlpha: 1, y: 0 });
           gsap.set([first, last], { xPercent: 0, autoAlpha: 1 });
 
         };
@@ -248,7 +246,6 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
           const visualTl = gsap.timeline({ paused: true, defaults: { ease: 'none' } });
           visualTl
 
-            .to(eyebrow, { autoAlpha: 0, y: -20, duration: 0.18, ease: 'power2.in' }, 0.12)
             .to(tagline, { autoAlpha: 0, y: -15, duration: 0.18, ease: 'power2.in' }, 0.14)
             .to(cta, { autoAlpha: 0, duration: 0.16, ease: 'power2.in' }, 0.16)
             .to(first, { xPercent: -88, autoAlpha: 0, duration: 0.28, ease: 'power2.inOut' }, 0.34)
@@ -531,23 +528,6 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
     text-align: center;
   }
 
-  .hero-eyebrow {
-    margin: 0 0 1.5rem;
-    border: 1px solid rgba(255, 247, 231, 0.22);
-    border-radius: 999px;
-    padding: 0.45rem 0.9rem;
-    background: rgba(5, 20, 21, 0.54);
-    box-shadow: inset 0 1px 0 rgba(255, 247, 231, 0.08);
-    color: var(--c-ink);
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    font-weight: 500;
-    letter-spacing: 0.14em;
-    line-height: 1;
-    text-transform: uppercase;
-    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(10px);
-  }
 
   .hero-name {
     display: flex;
@@ -592,83 +572,85 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
   .hero-links {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.75rem;
     margin-top: 2rem;
   }
 
   .hero-link {
+    position: relative;
     display: inline-flex;
     align-items: center;
     gap: 0.55rem;
-    border-radius: 999px;
-    padding: 0.75rem 1.15rem;
+    padding: 0.35rem 0;
     color: rgba(255, 247, 231, 0.82);
     font-family: var(--font-sans);
-    font-size: 0.875rem;
+    font-size: 0.9375rem;
     font-weight: 500;
     letter-spacing: 0.01em;
     text-decoration: none;
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
-    transition:
-      color 220ms var(--ease-expo),
-      background 220ms var(--ease-expo),
-      border-color 220ms var(--ease-expo),
-      transform 180ms var(--ease-expo);
+    transition: color 220ms var(--ease-expo);
+  }
+
+  .hero-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 360ms var(--ease-expo);
+    opacity: 0.72;
+  }
+
+  .hero-link:hover {
+    color: var(--c-ink);
+  }
+
+  .hero-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
   }
 
   .hero-link-primary {
-    border: 1px solid color-mix(in oklch, var(--c-water-mint) 34%, transparent);
-    background:
-      linear-gradient(180deg, color-mix(in oklch, var(--c-water-mint) 14%, transparent), color-mix(in oklch, var(--c-pond-850) 70%, transparent)),
-      rgba(5, 20, 21, 0.62);
     color: var(--c-ink);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 247, 231, 0.1),
-      0 0.5rem 1.5rem rgba(0, 0, 0, 0.28);
-    backdrop-filter: blur(12px);
+    font-weight: 600;
+  }
+
+  .hero-link-primary::after {
+    background: color-mix(in oklch, var(--c-koi-gold) 70%, var(--c-ink));
+    opacity: 1;
+    transform: scaleX(1);
+    transform-origin: left;
   }
 
   .hero-link-primary:hover {
     color: var(--c-cream);
-    border-color: color-mix(in oklch, var(--c-koi-gold) 42%, transparent);
   }
 
   .hero-link-primary:hover .hero-link-icon {
-    transform: translateX(2px);
-  }
-
-  .hero-link:not(.hero-link-primary) {
-    border: 1px solid transparent;
-    background: transparent;
-  }
-
-  .hero-link:not(.hero-link-primary):hover {
-    color: var(--c-ink);
-    background: rgba(255, 247, 231, 0.06);
-  }
-
-  .hero-link:active {
-    transform: scale(0.98);
+    transform: translateX(4px);
   }
 
   .hero-link-icon {
     display: inline-grid;
     place-items: center;
-    width: 1.5rem;
-    height: 1.5rem;
-    border-radius: 999px;
-    background: color-mix(in oklch, var(--c-water-mint) 14%, transparent);
+    width: 1rem;
+    height: 1rem;
     transition: transform 220ms var(--ease-expo);
   }
 
   @media (prefers-reduced-motion: reduce) {
     .hero-link,
-    .hero-link-icon {
+    .hero-link-icon,
+    .hero-link::after {
       transition: none;
     }
 
-    .hero-link-primary:hover .hero-link-icon,
-    .hero-link:active {
+    .hero-link-primary:hover .hero-link-icon {
       transform: none;
     }
   }
@@ -680,7 +662,7 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
     }
 
     .hero-links {
-      gap: 0.75rem;
+      gap: 1.1rem;
       flex-wrap: wrap;
       justify-content: center;
     }

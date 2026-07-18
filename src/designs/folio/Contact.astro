@@ -62,14 +62,13 @@ import { profile } from '../../data/content';
     });
   });
 
-  // Magnetic effect
+  // Magnetic effect — keep transforms only via GSAP x/y so underlines stay aligned.
   if (!prefersReducedMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
     const magneticElements = document.querySelectorAll('[data-magnetic]');
     magneticElements.forEach((el) => {
       const strength = 0.3;
-
-      const quickX = gsap.quickTo(el, "x", { duration: 0.6, ease: "power3.out" });
-      const quickY = gsap.quickTo(el, "y", { duration: 0.6, ease: "power3.out" });
+      const quickX = gsap.quickTo(el, 'x', { duration: 0.6, ease: 'power3.out' });
+      const quickY = gsap.quickTo(el, 'y', { duration: 0.6, ease: 'power3.out' });
 
       el.addEventListener('mousemove', (e: Event) => {
         const me = e as MouseEvent;
@@ -82,12 +81,9 @@ import { profile } from '../../data/content';
       });
 
       el.addEventListener('mouseleave', () => {
-        gsap.to(el, {
-          x: 0,
-          y: 0,
-          duration: 0.28,
-          ease: 'power3.out',
-        });
+        // Reset through the same quickTo proxies so re-hover keeps working.
+        quickX(0);
+        quickY(0);
       });
     });
   }
@@ -138,11 +134,16 @@ import { profile } from '../../data/content';
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
     gap: 1.5rem 2.5rem;
   }
 
   .contact-link {
     position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
     text-decoration: none;
     font-family: var(--font-sans);
     font-size: 0.95rem;
@@ -152,60 +153,50 @@ import { profile } from '../../data/content';
     background: none;
     border: 0;
     cursor: pointer;
-    transition: color 300ms var(--ease-expo), transform 200ms var(--ease-expo);
-    will-change: transform;
-  }
-
-  .contact-link-primary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.8rem 1.35rem;
-    border-radius: 999px;
-    border: 1px solid color-mix(in oklch, var(--c-koi-orange) 42%, transparent);
-    background:
-      linear-gradient(180deg, color-mix(in oklch, var(--c-koi-orange) 22%, transparent), color-mix(in oklch, var(--c-koi-orange) 8%, transparent)),
-      color-mix(in oklch, var(--c-pond-800) 80%, transparent);
-    color: var(--c-ink);
-    font-weight: 600;
-    box-shadow:
-      inset 0 1px 0 color-mix(in oklch, var(--c-cream) 12%, transparent),
-      0 0.5rem 1.25rem color-mix(in oklch, var(--c-koi-orange) 12%, transparent);
-  }
-
-  .contact-link-primary:hover {
-    color: var(--c-cream);
-  }
-
-  .contact-link-primary::after {
-    display: none;
+    transition: color 300ms var(--ease-expo);
   }
 
   .contact-link::after {
     content: '';
     position: absolute;
-    bottom: 0.2rem;
+    bottom: 0.35rem;
     left: 0;
     width: 100%;
     height: 1px;
-    background-color: var(--c-ink);
+    background-color: currentColor;
     transform: scaleX(0);
     transform-origin: right;
     transition: transform 400ms var(--ease-expo);
-  }
-
-
-  .contact-link:hover::after {
-    transform: scaleX(1);
-    transform-origin: left;
+    opacity: 0.78;
   }
 
   .contact-link:hover {
     color: var(--c-accent-soft);
   }
 
+  .contact-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .contact-link-primary {
+    font-weight: 600;
+    color: var(--c-ink);
+  }
+
+  .contact-link-primary::after {
+    background: color-mix(in oklch, var(--c-koi-gold) 70%, var(--c-ink));
+    opacity: 1;
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .contact-link-primary:hover {
+    color: var(--c-cream);
+  }
+
   .contact-link:active {
-    transform: scale(0.98);
+    color: var(--c-cream);
   }
 
   .contact-link-button[data-copied='true'] .contact-link-label {
