@@ -159,9 +159,9 @@ function getProjectId(title: string) {
       const controller = new AbortController();
       tiltControllers.push(controller);
 
-      // GSAP's quickTo() cannot target the 3D sub-properties rotateX/rotateY
-      // (its resetTo() can't resolve them, so the tilt silently no-ops); use
-      // gsap.to + overwrite instead.
+      // Tilt via gsap.to + overwrite:'auto' so each mousemove overwrites only
+      // the rotateX/rotateY axes, leaving the card's reveal/parallax transforms
+      // (scale, y, opacity) intact between frames.
       // Cache the rect: under Lenis the card moves every frame during inertial
       // scroll, so reading getBoundingClientRect() per mousemove forces sync layout.
       let rect = card.getBoundingClientRect();

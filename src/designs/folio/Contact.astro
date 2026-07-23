@@ -63,9 +63,12 @@ import { profile } from '../../data/content';
   });
 
   // Magnetic effect — keep transforms only via GSAP x/y so underlines stay aligned.
+  const magneticControllers: AbortController[] = [];
   if (!prefersReducedMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
     const magneticElements = document.querySelectorAll('[data-magnetic]');
     magneticElements.forEach((el) => {
+      const controller = new AbortController();
+      magneticControllers.push(controller);
       const strength = 0.3;
       const quickX = gsap.quickTo(el, 'x', { duration: 0.6, ease: 'power3.out' });
       const quickY = gsap.quickTo(el, 'y', { duration: 0.6, ease: 'power3.out' });
@@ -74,7 +77,7 @@ import { profile } from '../../data/content';
       // scroll, so reading getBoundingClientRect() per mousemove forces sync layout.
       let rect = el.getBoundingClientRect();
 
-      el.addEventListener('mouseenter', () => { rect = el.getBoundingClientRect(); });
+      el.addEventListener('mouseenter', () => { rect = el.getBoundingClientRect(); }, { signal: controller.signal });
       el.addEventListener('mousemove', (e: Event) => {
         const me = e as MouseEvent;
         const x = me.clientX - rect.left - rect.width / 2;
@@ -82,13 +85,13 @@ import { profile } from '../../data/content';
 
         quickX(x * strength);
         quickY(y * strength);
-      });
+      }, { signal: controller.signal });
 
       el.addEventListener('mouseleave', () => {
         // Reset through the same quickTo proxies so re-hover keeps working.
         quickX(0);
         quickY(0);
-      });
+      }, { signal: controller.signal });
     });
   }
 </script>
