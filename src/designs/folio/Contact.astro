@@ -70,9 +70,13 @@ import { profile } from '../../data/content';
       const quickX = gsap.quickTo(el, 'x', { duration: 0.6, ease: 'power3.out' });
       const quickY = gsap.quickTo(el, 'y', { duration: 0.6, ease: 'power3.out' });
 
+      // Cache the rect: under Lenis the element moves every frame during inertial
+      // scroll, so reading getBoundingClientRect() per mousemove forces sync layout.
+      let rect = el.getBoundingClientRect();
+
+      el.addEventListener('mouseenter', () => { rect = el.getBoundingClientRect(); });
       el.addEventListener('mousemove', (e: Event) => {
         const me = e as MouseEvent;
-        const rect = el.getBoundingClientRect();
         const x = me.clientX - rect.left - rect.width / 2;
         const y = me.clientY - rect.top - rect.height / 2;
 

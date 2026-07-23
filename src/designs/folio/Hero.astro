@@ -236,11 +236,9 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
           window.addEventListener('scroll', forceTopState, { passive: true });
           const topStateTicker = () => forceTopState();
           gsap.ticker.add(topStateTicker);
-          const topStateInterval = window.setInterval(forceTopState, 120);
           removeTopRestoreListener = () => {
             window.removeEventListener('scroll', forceTopState);
             gsap.ticker.remove(topStateTicker);
-            window.clearInterval(topStateInterval);
           };
 
           const visualTl = gsap.timeline({ paused: true, defaults: { ease: 'none' } });
@@ -344,7 +342,10 @@ const heroPosterSrc = buildUrl('hero-poster.jpg');
         activateForNavigation = activateScrub;
 
         const activateOnScroll = () => {
-          if (window.scrollY > 1) activateScrub();
+          if (window.scrollY <= 1) return;
+          removeActivationListener?.();
+          removeActivationListener = null;
+          void activateScrub();
         };
 
         window.addEventListener('scroll', activateOnScroll, { passive: true });

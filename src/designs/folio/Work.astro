@@ -159,25 +159,30 @@ function getProjectId(title: string) {
       const controller = new AbortController();
       tiltControllers.push(controller);
 
-      const quickRotateY = gsap.quickTo(card, 'rotateY', { duration: 0.35, ease: 'power2.out' });
-      const quickRotateX = gsap.quickTo(card, 'rotateX', { duration: 0.35, ease: 'power2.out' });
+      // GSAP's quickTo() cannot target the 3D sub-properties rotateX/rotateY
+      // (its resetTo() can't resolve them, so the tilt silently no-ops); use
+      // gsap.to + overwrite instead.
+      // Cache the rect: under Lenis the card moves every frame during inertial
+      // scroll, so reading getBoundingClientRect() per mousemove forces sync layout.
+      let rect = card.getBoundingClientRect();
 
+      const tiltTo = (rotateX: number, rotateY: number) =>
+        gsap.to(card, { rotateX, rotateY, duration: 0.35, ease: 'power2.out', overwrite: 'auto' });
+
+      const onMouseEnter = () => { rect = card.getBoundingClientRect(); };
       const onMouseMove = (e: Event) => {
         const me = e as MouseEvent;
-        const rect = card.getBoundingClientRect();
         const x = (me.clientX - rect.left) / rect.width - 0.5;
         const y = (me.clientY - rect.top) / rect.height - 0.5;
 
-        quickRotateY(x * 2.5);
-        quickRotateX(-y * 2.5);
-
+        tiltTo(-y * 2.5, x * 2.5);
       };
 
       const onMouseLeave = () => {
-        quickRotateY(0);
-        quickRotateX(0);
+        tiltTo(0, 0);
       };
 
+      card.addEventListener('mouseenter', onMouseEnter, { signal: controller.signal });
       card.addEventListener('mousemove', onMouseMove, { signal: controller.signal });
       card.addEventListener('mouseleave', onMouseLeave, { signal: controller.signal });
     });

@@ -69,7 +69,6 @@ const isProd = import.meta.env.PROD;
 <body class="folio-theme">
   <a href="#main-content" class="skip-link">Skip to content</a>
 
-  <div class="noise-overlay" aria-hidden="true"></div>
   <noscript><style>.reveal,.reveal-child{opacity:1;transform:none}</style></noscript>
   <div class="cursor-glow" aria-hidden="true"></div>
 
@@ -147,16 +146,6 @@ const isProd = import.meta.env.PROD;
     mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), transparent 80%);
   }
 
-  .noise-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 9997;
-    pointer-events: none;
-    opacity: 0.025;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-repeat: repeat;
-    background-size: 200px 200px;
-  }
 
   .cursor-glow {
     position: fixed;
@@ -169,6 +158,7 @@ const isProd = import.meta.env.PROD;
     z-index: 9998;
     background: radial-gradient(circle, color-mix(in oklch, var(--c-koi-orange) 10%, transparent) 0%, color-mix(in oklch, var(--c-water-mint) 7%, transparent) 38%, transparent 70%);
     transform: translate3d(var(--cursor-x, 0px), var(--cursor-y, 0px), 0);
+    will-change: transform;
     left: 0;
     top: 0;
     opacity: 0;
@@ -243,14 +233,10 @@ const isProd = import.meta.env.PROD;
     .cursor-glow {
       display: none;
     }
-    .noise-overlay {
-      display: none;
-    }
   }
 
   @media (max-width: 1024px) {
-    .cursor-glow,
-    .noise-overlay {
+    .cursor-glow {
       display: none;
     }
   }
@@ -340,8 +326,7 @@ const isProd = import.meta.env.PROD;
         }
         currentX += (mouseX - currentX) * 0.08;
         currentY += (mouseY - currentY) * 0.08;
-        cursorGlow!.style.setProperty('--cursor-x', `${currentX}px`);
-        cursorGlow!.style.setProperty('--cursor-y', `${currentY}px`);
+        cursorGlow!.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
         cursorRafId = requestAnimationFrame(animateCursor);
       }
       cursorRafId = requestAnimationFrame(animateCursor);
