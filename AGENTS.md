@@ -9,14 +9,14 @@ Static Astro 6 portfolio and blog for `arnavpanigrahi.com`, deployed to GitHub P
 - `src/pages/index.astro` is the homepage composition root. It renders `src/designs/folio/*` sections inside `src/designs/folio/Layout.astro` and provides Person JSON-LD.
 - Homepage content is centralized in `src/data/content.ts` (`profile`, `experiences`, `projects`, `skillCategories`) and imported directly by folio components. Prefer editing this file for portfolio copy/data rather than hard-coding content in sections.
 - `Layout.astro` owns document-shell concerns: metadata, canonical/OG/Twitter tags, RSS discovery, JSON-LD injection, Google fonts, theme tokens, skip link, Oneko, production Cloudflare analytics, global reveal/parallax wiring, Lenis, and GSAP ScrollTrigger setup.
-- Blog data flows from `src/content/posts/*.md` through the schema in `src/content.config.ts`, then into `getCollection('posts')` consumers: `src/pages/posts/index.astro`, `src/pages/posts/[...slug].astro`, and `src/pages/rss.xml.ts`.
+- Blog data flows from `src/content/posts/*.md` through the schema in `src/content.config.ts`, then into `getCollection('posts')` consumers: `src/pages/posts/index.astro`, `src/pages/posts/[...slug].astro`, `src/pages/rss.xml.ts`, and `src/pages/sitemap.xml.ts`.
 - Draft filtering pattern: include drafts only in dev with `import.meta.env.DEV || !post.data.draft`; sort posts newest-first by `published.getTime()`.
 - Public asset URLs in Astro should use `buildUrl()` from `src/utils/paths.ts` so `BASE_URL` is respected. Markdown post images commonly use root-relative `/posts/images/...` paths.
 - Client behavior is progressive enhancement in local `.astro` scripts using `data-*` hooks and direct DOM APIs, not React/Vue islands.
 
 ## Key Directories
 
-- `src/pages/` — file-based Astro routes: homepage, 404, posts index/detail, RSS endpoint.
+- `src/pages/` — file-based Astro routes: homepage, 404, posts index/detail, RSS and sitemap endpoints.
 - `src/designs/folio/` — portfolio layout and homepage sections (`Hero`, `Nav`, `About`, `Experience`, `Capabilities`, `Work`, `Contact`, `Footer`). Keep folio-specific markup, styles, and scripts here.
 - `src/data/` — typed static portfolio content source.
 - `src/content/posts/` — flat Markdown blog posts loaded by Astro Content Collections.
@@ -60,7 +60,7 @@ There is no `test`, `lint`, `format`, or `deploy` script in `package.json`. Trea
 - `package.json` — scripts, dependencies, pnpm version pin (`pnpm@10.33.2`), ESM mode.
 - `pnpm-lock.yaml` — canonical lockfile; do not add npm/yarn lockfiles.
 - `pnpm-workspace.yaml` — dependency overrides (`esbuild`, `yaml`) and allowed built dependencies.
-- `astro.config.mjs` — static output, production site URL, sitemap integration, Tailwind Vite plugin, directory build format.
+- `astro.config.mjs` — static output, production site URL, Tailwind Vite plugin, directory build format.
 - `tsconfig.json` — strict TypeScript options and path aliases (`@/*`, `@components/*`, `@utils/*`, `@styles/*`).
 - `.prettierrc` — formatting settings.
 - `.github/workflows/deploy.yml` — GitHub Pages pipeline using Node 22, frozen pnpm install, `pnpm check`, `pnpm build`, artifact upload, and deploy on push/manual dispatch.
@@ -70,6 +70,7 @@ There is no `test`, `lint`, `format`, or `deploy` script in `package.json`. Trea
 - `src/content.config.ts` — Markdown post collection schema.
 - `src/pages/posts/[...slug].astro` — static post rendering, article metadata, BlogPosting JSON-LD.
 - `src/pages/rss.xml.ts` — RSS feed generation.
+- `src/pages/sitemap.xml.ts` — hand-rolled sitemap with per-page `lastmod` from post frontmatter; `robots.txt` points at `/sitemap.xml`.
 - `src/utils/paths.ts` — base-aware public URL helper.
 - `public/CNAME`, `public/.nojekyll`, `public/robots.txt` — GitHub Pages/custom-domain deployment files.
 
