@@ -44,7 +44,7 @@ After that trip, I was dejected with Knobby. The typing felt stiff and sounded p
 ![Tsangan-layout Bakeneko60 keyboard build](/posts/images/1050e29ce6f3/02.png)
 *My Tsangan-layout Bakeneko60 build.*
 
-Cherry held the patent for MX-style switches until the early 90s, when the patent ran out. Cherry switches were often criticized for their “poor” feel and inconsistent housing tolerances. So Chinese manufacturers like Kailh and Gateron started making objectively better Cherry clones with smoother stems and tighter housings.
+Cherry held the patent for MX-style switches until the early 2000s, when the patent ran out. Cherry switches were often criticized for their "poor" feel and inconsistent housing tolerances. So Chinese manufacturers like Kailh and Gateron started making objectively better Cherry clones with smoother stems and tighter housings.
 
 ### Life is a cycle
 
