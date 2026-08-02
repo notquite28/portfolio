@@ -8,36 +8,29 @@ categories: ["ai", "agents", "cloudflare", "github", "typescript"]
 ---
 
 
-## Let the clankers fight amongst themselves
 
-## A world built on vibes
+## World is Vibes
 
-The year is 2026. People are finessing Meta AI into handing over Instagram accounts by simply saying [please](https://www.bbc.com/news/articles/c98rzr72dpyo). Software engineers are tokenmaxxing so Bay Area dashboards can call them productive. Anthropic keeps telling everyone that if they are not using AI, their career is finished, while also offering very serious money to engineers whose job is stopping Claude Code from combusting after six failed write-tool calls. The same company then has to make sure its "dumb users" cannot break into the Pentagon by pasting a system prompt large enough to qualify as grad-school reading.
+The year is 2026. People are finessing Meta AI into handing over Instagram accounts by simply saying [please](https://www.bbc.com/news/articles/c98rzr72dpyo). Software engineers are tokenmaxxing so Bay Area dashboards can call them productive. Anthropic keeps telling everyone that if they are not using AI, their career is finished, while offering serious money to engineers whose job is stopping Claude Code from combusting after six failed write-tool calls.
 
-Claude claims they had to develop a game-engine just for the TUI flickering, which is AI generated too. Everyone is shipping AI-generated code, AI-generated PR descriptions, and AI-generated test plans. Who knows, this hit piece is probably AI-generated too. I dread the day the ChatGPT servers go down and someone asks me for my name.
-
-My heart goes out to the senior developer still expected to read a 3,000-line diff before lunch and type `LGTM`, like how they merged the million-line PR translating Bun from Zig to Rust.
+Everyone is shipping AI-generated code, PR descriptions, and test plans. My heart goes out to the senior developer still expected to read a 3,000-line diff before lunch and type `LGTM`.
 
 ![Bun test output showing a passing review-agent result](/posts/images/2026-06-03-building-flue-review-agent/bun.png)
 *Looks good to me.*
 
-This is the current AI software development model: write a diff three times longer than necessary, add abstractions for "future extensibility" before which the company will go out of business, shrink the review window, drop a chatbot somewhere in the middle, and hope the house of cards holds. Lay off engineers because AI is cheaper. Spend the entire year's budget on Claude. Rehire people because AI got expensive enough that new grads are suddenly a cost-saving measure. Lay them off again after record-breaking profits so the next budget can go deeper into AI.
-
-Like I said, it is 2026 and everything needs to be AI. My therapist, my friends, my mother, the CEO and CTO of my million-dollar SaaS company that is definitely not vibe-coded. I added "make no mistakes" to the prompt, so legally it is enterprise software. Naturally, the next step was letting AI review my code too.
+More output arrives; less gets read. Naturally, the next step was letting AI review my code too.
 
 ```text
 @agent-review can you review this PR?
 ```
 
-Not a fake review where CI runs tests and adds a green checkmark like it read the code. I wanted the vicarious kind: a GitHub App, a Cloudflare Worker, a bounded model review, and one useful comment back on the PR.
-
-The dangerous part is obvious once you stare at it for more than five seconds. A review bot sees private source code, has GitHub write permissions, holds model provider credentials, and takes webhooks from the internet. That is how "let the agent handle it" becomes "why did the robot post our API key into a public issue?"
+The review needed a GitHub App, a Cloudflare Worker, bounded model context, and one useful comment back on the PR.
 
 So the rule was simple:
 
 > The model can review code. Application code owns every side effect.
 
-The model gets one job: read bounded PR context and return JSON. No GitHub token. No endpoint choices. No posting comments. The Worker validates the JSON, filters it, formats it, and writes to GitHub. I still have to fix the code myself, unfortunately.
+The model gets one job: read bounded PR context and return JSON. It has no GitHub token, endpoint choices, or permission to post comments. The Worker validates the JSON, filters it, formats it, and writes to GitHub. I still have to fix the code myself, unfortunately.
 
 ## The stack, because every project needs a grocery list
 
@@ -54,7 +47,7 @@ I used:
 
 Cloudflare is the public webhook doorbell. GitHub Apps handle repo-scoped auth. Flue keeps the review logic from rotting inside one route handler. Hono handles routing, Valibot keeps the model on a leash, and AveMujicaAPI is the OpenAI-compatible model provider. The model is currently `gpt-5.5`.
 
-The first working loop looked like this:
+The first working loop:
 
 ```text
 PR comment
@@ -96,17 +89,17 @@ For now, the Worker is the only place with the GitHub App private key and the mo
 
 I have a confession. The first reason I looked into Flue is because it is built around Mario Zechner's [Pi](https://pi.dev) agent. I saw that and immediately became the target audience. This is exactly how you rouse interest in the open-source community.
 
-The actual reason it stuck is that Flue describes an agent as a model running inside a harness. The model is not the product. The harness gives it tools, files, sessions, skills, sandboxing, and enough adult supervision to do something useful without wandering into traffic.
+Flue describes an agent as a model running inside a harness with tools, files, sessions, skills, sandboxing, and enough adult supervision to do something useful without wandering into traffic.
 
-A pull request review is not a forever-chat. It is a bounded job:
+A pull request review is a bounded job:
 
 1. collect context,
 2. run a review,
 3. return a result.
 
-That maps cleanly to a Flue workflow. The docs even call out code review and CI-style tasks as finite workflows. Perfect. I do not need an immortal chat agent with memory of every bad decision I have made since freshman year. I need a scoped review unit.
+The docs even call out code review and CI-style tasks as finite workflows. Perfect. A scoped review unit suits the job; memory of every bad decision I have made since freshman year does not.
 
-The other useful bit is that workflows can still be normal TypeScript. Rust users, stop with the egg throwing. Application code can fetch GitHub context, stage files, initialize the agent, ask for a structured result, validate it with a schema, and then decide what happens next. The model does not get to freestyle a GitHub API call because it had a big day. It returns data. The app owns the machinery.
+The other useful bit is that workflows can still be normal TypeScript. Rust users, stop with the egg throwing. Application code can fetch GitHub context, stage files, initialize the agent, ask for a structured result, validate it with a schema, and then decide what happens next. The model returns data; the app owns the machinery and every GitHub API call.
 
 The project currently has:
 
@@ -115,7 +108,7 @@ src/review/engine.ts
 .flue/workflows/review-pr.ts
 ```
 
-The engine is the real logic. The workflow wraps it. The Worker can call the engine directly today, but the project still has a Flue workflow seam for later.
+The engine contains the logic, while the workflow wraps it. The Worker can call the engine directly today, but the project still has a Flue workflow seam for later.
 
 That seam matters because Flue gives me a place to grow without turning one route handler into a haunted object. Workflow runs can have IDs and inspectable events. Agents can get skills or subagents later. The same code can target Node for local work or Cloudflare Workers for deployment. `flue build --target cloudflare` plus `wrangler deploy` is the kind of boring deployment path I can hand to an agent without lighting a candle first.
 
@@ -194,7 +187,7 @@ Review in progress. I’m fetching PR context and checking the diff now.
 
 Without it, the UX is just staring at GitHub and wondering if the webhook died, the permissions are wrong, the model is slow, the model had a seizure, or Cloudflare is reminiscing about that one high-school sweetheart.
 
-Now the bot gives immediate feedback, then replaces that same comment with the final review. No comment spam. No thread full of half-finished robot thoughts.
+Now the bot gives immediate feedback, then replaces that same comment with the final review. The PR contains one updated review comment.
 
 ## What the model actually sees
 
@@ -215,7 +208,6 @@ That sounds small, but it caught more than I expected: secret leaks, direct corr
 
 It will miss things. A changed function can break an unchanged caller three modules away, and the current bot may never see that caller. A config file can matter without being part of the diff. Same for a test that should have been added somewhere else.
 
-The fix is not "send the whole repo." That is how you build a SaaS agent that racks up a five-digit invoice.
 
 The next version should fetch bounded extra context:
 
@@ -253,7 +245,7 @@ type ReviewResult = {
 
 Valibot validates it. Low-confidence findings get tossed. Findings below the severity threshold get tossed too. The result is capped, because the bot does not need to write a novella after someone renames `user` to `account`.
 
-This is the difference between a review system and a group chat with delusions of architecture. The model can still be wrong, but at least it has to be wrong in a shape the application understands.
+Valibot gives the application a result it can validate and act on. The model can still be wrong, but its output has to satisfy the same schema.
 
 ## The review comment
 
@@ -290,9 +282,9 @@ Medium
 High
 ```
 
-Any high finding makes it red. Any medium finding makes it orange. Otherwise it stays green. No separate vibes classifier. No dramatic "risk posture" paragraph. Just read the findings.
+The badge follows finding severity: any high finding is red, any medium finding is orange, and everything else stays green. The comment shows the findings without inventing a separate risk-posture classifier.
 
-This was not me discovering review agents for the first time and seeing the face of God in a diff. I already use review agents in coding agents and in actual PRs. The curiosity here was more specific: what does it look like when the review agent is not a chat window I babysit, but a GitHub App wired through Cloudflare and a Flue workflow with real webhook auth, scoped tokens, structured output, and boring posting rules?
+I already use review agents in coding agents and in actual PRs. My curiosity was more specific. I wanted to see a GitHub App wired through Cloudflare and a Flue workflow with real webhook auth, scoped tokens, structured output, and boring posting rules.
 
 ## Calibration PRs
 
@@ -324,7 +316,7 @@ create_react_agent(model, [])
 
 That disables tools even when `allow_tools=True`. The bot caught it and explained the runtime regression.
 
-That was the first moment the project felt real instead of cute. It did not just summarize the diff. It found the thing I planted. I love these moments when carefully harnessed models can do something more impressive than "Oh cute! It says it's thinking lol!"
+That was the first moment the project felt real. The bot found the tool regression I planted and explained the runtime effect. I love when carefully constrained models do something more impressive than "Oh cute! It says it's thinking lol!"
 
 ## The parts that broke first
 
@@ -334,15 +326,13 @@ The second deploy failed because the workflow exported a default function instea
 
 Then GitHub refused to let the app post comments because I had not approved the right write permission on the installation.
 
-None of these were glamorous bugs. They were the normal sludge: SDK drift, export shape, permissions, config. The kind of bugs that make you briefly consider carpentry before remembering wood also has edge cases.
+None of these were glamorous bugs. The normal sludge was SDK drift, export shape, permissions, and config. The kind of bugs that make you briefly consider carpentry before remembering wood also has edge cases.
 
 Each failure paid rent in the README. Runtime imports went into build verification. Workflow exports went into docs. GitHub App permissions got spelled out. Wrangler tail stopped being optional.
 
 ## The shape I want to poke at long term
 
-This is not me trying to speedrun Greptile or CodeRabbit in a weekend. It does not index whole repos, run tests, post inline comments, remember suppressions, or understand your entire monorepo's emotional baggage.
-
-But the architecture has places for those features to go:
+Right now, the bot reviews bounded PR context and posts one conversation comment. Separate modules handle the webhook, context, review, validation, and publishing paths. That makes room for repo indexing, test runs, inline comments, suppressions, and fuller monorepo context:
 
 ```text
 GitHub App webhook
@@ -357,19 +347,19 @@ GitHub App webhook
   -> output publisher
 ```
 
-The modules are the important part.
+The modules keep new features from spreading through the webhook, review, and publishing code.
 
 Richer context goes into the context builder. Greptile-ish code understanding probably starts with import graph retrieval, then maybe a persistent code index if that ever becomes worth the trouble. Inline comments need a diff mapper and a batch PR review publisher. Check runs can live in a `checks.ts` module with the GitHub App Checks permission. Automatic reviews are just another trigger once `pull_request` events normalize into the same shape as `@agent-review` comments.
 
-The model stays boxed in. It reviews. It does not operate the machinery. That is the constraint that makes the rest of this fun instead of terrifying.
+The model stays boxed in; it reviews while application code operates the machinery. That constraint keeps the rest fun instead of terrifying.
 
 ## What I want to try next
 
-First: richer bounded context. Changed files are good. Changed files plus imports, adjacent tests, root config, and CI signals would be much better. That is where this starts feeling less like a prompt trick and more like an actual GitHub integration.
+First, richer bounded context. Changed files are good. Changed files plus imports, adjacent tests, root config, and CI signals would give the bot a bounded view of the code around the diff.
 
-Second: inline comments, but only after diff anchoring gets boring. A wrong inline comment is worse than a summary finding because it looks precise. Fake precision is worse than honest vagueness.
+Second, inline comments, but only after diff anchoring gets boring. A wrong inline comment is worse than a summary finding because it looks precise. Fake precision is worse than honest vagueness.
 
-Third: a calibration suite. Keep private PRs with known outcomes:
+Third, a calibration suite. Keep private PRs with known outcomes:
 
 * clean PR,
 * secret leak,
@@ -379,16 +369,4 @@ Third: a calibration suite. Keep private PRs with known outcomes:
 * disabled tool calls,
 * noisy refactor.
 
-Every prompt change and model change should run against those. If the bot gets more talkative but less accurate, that is not improvement. That is ESLint with a gambling addiction.
-
-## Final thoughts
-
-I wanted to build a reviewer with Flue, Cloudflare, and GitHub instead of just prompting a model with a patch file. I wanted to see the seams: where the webhook enters, where the GitHub App token gets minted, where Flue wraps the review unit, where Valibot says "absolutely not," and where the final comment gets posted without the model touching the steering wheel.
-
-"LLM reads diff" is the demo. The useful work is around it: verified webhooks, scoped tokens, bounded context, structured output, deterministic posting, and a comment format that gives a human signal without turning the PR into a TED Talk.
-
-I would not trust this bot with everything. Because I built it in a day. But, I want one narrow job widened only when the boring parts keep holding.
-
-Agents are easier to like when they are not allowed to improvise infrastructure.
-
-Cheers!
+Every prompt change and model change should run against those. A more talkative bot that gets less accurate has regressed.
