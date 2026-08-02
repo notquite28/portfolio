@@ -222,6 +222,26 @@ function formatDate(date: Date) {
     box-shadow: var(--shadow-soft);
   }
 
+  .post-body :global(.post-diagram-scroll) {
+    max-width: 100%;
+    margin: 2rem auto 0.5rem;
+    overflow-x: auto;
+    border: 1px solid var(--c-rule);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .post-body :global(.post-diagram-scroll img) {
+    width: 100%;
+    min-width: 62rem;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
   .post-body :global(.post-image-row) {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
