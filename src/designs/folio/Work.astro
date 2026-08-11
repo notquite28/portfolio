@@ -8,6 +8,7 @@ const otherProjects = projects.slice(4);
 type ProjectImage = { src: string; width: number; height: number };
 
 const projectImages: Record<string, ProjectImage> = {
+  'NEATBird': { src: 'neatbird.webp', width: 1672, height: 941 },
   'bedtime.ai': { src: 'bedtime.ai.png', width: 1672, height: 941 },
   'Sabi Agent': { src: 'sabi-agent.png', width: 1920, height: 1080 },
   'PR Review Agent': { src: 'pr-review-agent.webp', width: 1024, height: 1024 },
@@ -84,9 +85,17 @@ function getProjectId(title: string) {
                 ))}
               </div>
               {project.githubUrl && (
-                <a href={project.githubUrl} class="project-link" target="_blank" rel="noopener noreferrer">
-                  View on GitHub
-                </a>
+                <div class="project-links">
+                  <a href={project.githubUrl} class="project-link" target="_blank" rel="noopener noreferrer">
+                    <svg class="project-link-icon" viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        fill="currentColor"
+                        d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.167 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.866-.014-1.7-2.782.604-3.369-1.341-3.369-1.341-.455-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.071 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.091-.646.349-1.087.635-1.337-2.221-.253-4.555-1.111-4.555-4.944 0-1.092.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.832a9.57 9.57 0 0 1 2.504.337c1.909-1.294 2.748-1.025 2.748-1.025.545 1.377.202 2.394.1 2.647.64.699 1.028 1.591 1.028 2.683 0 3.842-2.337 4.687-4.565 4.935.359.309.679.92.679 1.855 0 1.339-.012 2.42-.012 2.749 0 .267.18.578.688.48A10.003 10.003 0 0 0 22 12c0-5.523-4.477-10-10-10Z"
+                      />
+                    </svg>
+                    View on GitHub
+                  </a>
+                </div>
               )}
             </div>
           </div>
@@ -131,9 +140,17 @@ function getProjectId(title: string) {
                   ))}
                 </div>
                 {project.githubUrl && (
-                  <a href={project.githubUrl} class="project-link" target="_blank" rel="noopener noreferrer">
-                    View on GitHub
-                  </a>
+                  <div class="project-links">
+                    <a href={project.githubUrl} class="project-link" target="_blank" rel="noopener noreferrer">
+                      <svg class="project-link-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          fill="currentColor"
+                          d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.167 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.866-.014-1.7-2.782.604-3.369-1.341-3.369-1.341-.455-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.071 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.091-.646.349-1.087.635-1.337-2.221-.253-4.555-1.111-4.555-4.944 0-1.092.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.832a9.57 9.57 0 0 1 2.504.337c1.909-1.294 2.748-1.025 2.748-1.025.545 1.377.202 2.394.1 2.647.64.699 1.028 1.591 1.028 2.683 0 3.842-2.337 4.687-4.565 4.935.359.309.679.92.679 1.855 0 1.339-.012 2.42-.012 2.749 0 .267.18.578.688.48A10.003 10.003 0 0 0 22 12c0-5.523-4.477-10-10-10Z"
+                        />
+                      </svg>
+                      View on GitHub
+                    </a>
+                  </div>
                 )}
               </div>
           </div>
@@ -397,8 +414,16 @@ function getProjectId(title: string) {
     color: var(--c-rule);
   }
 
+  .project-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+  }
+
   .project-link {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
     font-family: var(--font-sans);
     font-size: 0.85rem;
     font-weight: 500;
@@ -408,6 +433,12 @@ function getProjectId(title: string) {
     padding-bottom: 1px;
     transition: color 300ms var(--ease-expo);
     align-self: flex-start;
+  }
+
+  .project-link-icon {
+    width: 1rem;
+    height: 1rem;
+    flex: none;
   }
 
   .project-link:hover {
