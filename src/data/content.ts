@@ -72,7 +72,7 @@ export const projects: Project[] = [
     highlights: [
       "NEAT evolves graph structure while REINFORCE optimizes weights",
       "JAX batches matching DAGs with vmap and simulates episodes with lax.scan",
-      "Generation 9 champion cleared 66 pipes on a repaired randomized schedule",
+      "Seed-0 champion cleared 66 pipes and averaged 20.1 across 100 held-out schedules",
     ],
     link: "/posts/2026-08-01-neatbird",
     githubUrl: "https://github.com/notquite28/backprop-NEAT-flappy",
