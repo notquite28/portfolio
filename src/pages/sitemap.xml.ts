@@ -13,7 +13,10 @@ export const GET: APIRoute = async (context) => {
 
   const modified = (post: CollectionEntry<'posts'>): Date =>
     post.data.updated ? new Date(post.data.updated) : post.data.published;
-  const latestPost = posts[0] ? modified(posts[0]) : undefined;
+  const latestPost = posts.reduce<Date | undefined>((latest, post) => {
+    const postModified = modified(post);
+    return !latest || postModified > latest ? postModified : latest;
+  }, undefined);
 
   const urls: Array<{ loc: string; lastmod?: Date }> = [
     { loc: '/' },

@@ -8,6 +8,7 @@ interface Props {
   description?: string;
   ogType?: 'website' | 'article';
   noindex?: boolean;
+  image?: string;
   publishedTime?: string;
   modifiedTime?: string;
   tags?: string[];
@@ -19,6 +20,7 @@ const {
   description = 'Software developer focused on backend systems, full-stack applications, and AI/ML pipelines. M.S. Computer Science, UC Riverside.',
   ogType = 'website',
   noindex = false,
+  image,
   publishedTime,
   modifiedTime,
   tags = [],
@@ -26,7 +28,7 @@ const {
 } = Astro.props;
 const structuredDataJson = structuredData ? JSON.stringify(structuredData).replace(/</g, '\\u003c') : undefined;
 
-const socialImageURL = new URL(buildUrl('og-image.png'), Astro.site ?? 'https://arnavpanigrahi.com/').toString();
+const socialImageURL = new URL(buildUrl(image ?? 'og-image.png'), Astro.site ?? 'https://arnavpanigrahi.com/').toString();
 const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://arnavpanigrahi.com/');
 const isProd = import.meta.env.PROD;
 ---

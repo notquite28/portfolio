@@ -63,6 +63,21 @@ export const experiences: Experience[] = [
 
 export const projects: Project[] = [
   {
+    title: "NEATBird",
+    subtitle: "GPU-Accelerated Neuroevolution",
+    description:
+      "A feed-forward Backprop NEAT system that evolves Flappy Bird policy topologies in Python, optimizes their weights with REINFORCE, and batches compiled DAGs and game episodes on the GPU with JAX.",
+    tags: ["Python", "JAX", "NEAT", "REINFORCE", "Neuroevolution", "Pygame"],
+    compactTags: ["Python", "JAX", "Neuroevolution"],
+    highlights: [
+      "NEAT evolves graph structure while REINFORCE optimizes weights",
+      "JAX batches matching DAGs with vmap and simulates episodes with lax.scan",
+      "Seed-0 champion cleared 66 pipes and averaged 20.1 across 100 held-out schedules",
+    ],
+    link: "/posts/2026-08-01-neatbird",
+    githubUrl: "https://github.com/notquite28/backprop-NEAT-flappy",
+  },
+  {
     title: "bedtime.ai",
     subtitle: "Multi-Modal AI Storytelling Platform",
     description:
