@@ -2,102 +2,104 @@
 
 ## Project Overview
 
-Static Astro 6 portfolio and blog for `arnavpanigrahi.com`, deployed to GitHub Pages. The homepage presents portfolio sections with GSAP/Lenis motion; blog posts are first-party Markdown content collection entries with RSS and sitemap output.
+Static Astro 6 portfolio and Markdown blog for `arnavpanigrahi.com`, deployed to GitHub Pages. The homepage combines typed portfolio data with GSAP/Lenis motion. The blog generates static article pages, RSS, sitemap, canonical/social metadata, and JSON-LD.
 
 ## Architecture & Data Flow
 
-- `src/pages/index.astro` is the homepage composition root. It renders `src/designs/folio/*` sections inside `src/designs/folio/Layout.astro` and provides Person JSON-LD.
-- Homepage content is centralized in `src/data/content.ts` (`profile`, `experiences`, `projects`, `skillCategories`) and imported directly by folio components. Prefer editing this file for portfolio copy/data rather than hard-coding content in sections.
-- `Layout.astro` owns document-shell concerns: metadata, canonical/OG/Twitter tags, RSS discovery, JSON-LD injection, Google fonts, theme tokens, skip link, Oneko, production Cloudflare analytics, global reveal/parallax wiring, Lenis, and GSAP ScrollTrigger setup.
-- Blog data flows from `src/content/posts/*.md` through the schema in `src/content.config.ts`, then into `getCollection('posts')` consumers: `src/pages/posts/index.astro`, `src/pages/posts/[...slug].astro`, `src/pages/rss.xml.ts`, and `src/pages/sitemap.xml.ts`.
-- Draft filtering pattern: include drafts only in dev with `import.meta.env.DEV || !post.data.draft`; sort posts newest-first by `published.getTime()`.
-- Public asset URLs in Astro should use `buildUrl()` from `src/utils/paths.ts` so `BASE_URL` is respected. Markdown post images commonly use root-relative `/posts/images/...` paths.
-- Client behavior is progressive enhancement in local `.astro` scripts using `data-*` hooks and direct DOM APIs, not React/Vue islands.
+- `src/pages/index.astro` composes `Nav`, `Hero`, `About`, `Experience`, `Capabilities`, `Work`, `Contact`, and `Footer` inside `src/designs/folio/Layout.astro`. Homepage copy and records come from `src/data/content.ts`; do not duplicate them in section components.
+- Blog data flows from `src/content/posts/*.md` through the schema in `src/content.config.ts`, then through `getCollection('posts')` to:
+  - `src/pages/posts/[...slug].astro` for static article pages;
+  - `src/pages/posts/index.astro` for the listing;
+  - `src/pages/rss.xml.ts` for RSS;
+  - `src/pages/sitemap.xml.ts` for sitemap entries.
+- Use the shared publication predicate everywhere: `import.meta.env.DEV || !post.data.draft`. Sort public lists and feeds newest-first with `published.getTime()`.
+- `src/designs/folio/Layout.astro` owns the document shell: canonical, Open Graph, Twitter, RSS discovery, optional article timestamps/tags, JSON-LD injection, fonts, theme tokens, skip link, Oneko, production analytics, Lenis, GSAP, and global reveal/parallax behavior.
+- Article frontmatter drives metadata:
+  - `published` becomes the visible publication date, RSS `pubDate`, article metadata, and `BlogPosting.datePublished`;
+  - optional `updated` becomes the visible updated date, article modified metadata, `BlogPosting.dateModified`, and sitemap `lastmod`; otherwise modified dates fall back to `published`;
+  - optional `image` selects a base-aware article image for OG, Twitter, and `BlogPosting.image`; otherwise pages use `public/og-image.png`.
+- RSS intentionally keeps the original publication date and does not contain article bodies, modification dates, or article images. Sitemap article dates use `updated ?? published`; `/posts/` uses the greatest modified date across all posts.
+- Client behavior is progressive enhancement in colocated `.astro` scripts with direct DOM APIs and `data-*` hooks. There are no React/Vue islands.
 
 ## Key Directories
 
-- `src/pages/` — file-based Astro routes: homepage, 404, posts index/detail, RSS and sitemap endpoints.
-- `src/designs/folio/` — portfolio layout and homepage sections (`Hero`, `Nav`, `About`, `Experience`, `Capabilities`, `Work`, `Contact`, `Footer`). Keep folio-specific markup, styles, and scripts here.
-- `src/data/` — typed static portfolio content source.
-- `src/content/posts/` — flat Markdown blog posts loaded by Astro Content Collections.
-- `src/components/ui/` — small reusable UI widgets; currently `Oneko.astro`.
-- `src/utils/` — shared helpers such as `buildUrl()`.
+- `src/pages/` — file-based routes, including homepage, 404, blog, RSS, and sitemap.
+- `src/designs/folio/` — shared layout and portfolio sections. Keep folio markup, scoped styles, and browser scripts here.
+- `src/content/posts/` — flat Markdown article sources.
+- `src/data/` — typed portfolio content.
+- `src/components/ui/` — small shared UI components; currently `Oneko.astro`.
+- `src/utils/` — shared helpers such as base-aware `buildUrl()`.
 - `src/styles/` — Tailwind import and minimal global CSS.
-- `public/` — deployable static assets, including `CNAME`, `.nojekyll`, `robots.txt`, OG/hero/project assets, `oneko.gif`, and post images.
-- `.github/workflows/` — GitHub Pages build/deploy workflow.
+- `public/` — copied static assets, including social/project media, dated post images, `robots.txt`, `CNAME`, and `.nojekyll`.
+- `.github/workflows/` — GitHub Pages build and deployment.
 
 ## Development Commands
 
 Use pnpm only.
 
 ```bash
-pnpm install --frozen-lockfile  # install exactly from pnpm-lock.yaml
-pnpm dev                        # Astro dev server
+pnpm install --frozen-lockfile  # install the canonical lockfile
+pnpm dev                        # local Astro server
 pnpm check                      # Astro, TypeScript, and content diagnostics
-pnpm build                      # static production build to dist/
-pnpm preview                    # preview built output locally
+pnpm build                      # static build to dist/
+pnpm preview                    # preview the production build
 pnpm audit                      # dependency vulnerability audit
 pnpm verify                     # frozen install + check + build + audit
 ```
 
-There is no `test`, `lint`, `format`, or `deploy` script in `package.json`. Treat README references to `pnpm deploy` as stale unless a script is added.
+There is no `test`, `lint`, `format`, or `deploy` script. Deployment runs through GitHub Actions.
 
 ## Code Conventions & Common Patterns
 
-- TypeScript extends `astro/tsconfigs/strict`; `verbatimModuleSyntax` and `noUncheckedIndexedAccess` are enabled. Use `import type` for type-only imports and guard indexed access.
-- Prettier settings: `printWidth: 120`; `*.astro` uses `printWidth: 999`.
-- Astro components generally follow: frontmatter imports/data constants, semantic markup, component-scoped `<style>`, then local browser `<script>` when needed.
-- Component names are PascalCase; CSS classes are kebab-case and section-scoped (`hero-*`, `project-*`, `contact-*`).
-- Prefer existing `.folio-theme` CSS custom properties from `Layout.astro` (`--c-accent`, `--c-body`, `--font-serif`, `--ease-expo`, etc.) over introducing unrelated tokens.
-- Use `data-*` hooks for interactivity (`data-hero-video`, `data-nav`, `data-tilt`, `data-collapsible`, `data-copy-email`, `data-parallax`).
-- Motion must degrade gracefully: respect `prefers-reduced-motion`, use static/no-JS fallbacks, and gate desktop-only GSAP/ScrollTrigger work with media queries or `matchMedia`.
-- Accessibility patterns already in use: skip link, native buttons/anchors, `aria-expanded`, `aria-hidden`, `aria-controls`, `aria-live`, `inert`, Escape handling, and keyboard-safe collapsibles/menus.
-- SEO metadata belongs in `Layout.astro`; pages pass title/description/article fields/structured data as props. Escape JSON-LD before `set:html` as the layout does.
-- Blog frontmatter must satisfy `src/content.config.ts`: `title`, `description`, `author`, `published`, `categories`; `updated` is optional ISO datetime; `draft: true` hides posts outside dev. Markdown bodies should start at `##`/`###`, not another `#`.
+- TypeScript extends `astro/tsconfigs/strict` with `verbatimModuleSyntax` and `noUncheckedIndexedAccess`. Use `import type` for type-only imports and guard indexed access.
+- Prettier policy is `printWidth: 120`; `*.astro` overrides it to `999`. No repository formatter command is configured.
+- Astro files generally use frontmatter imports/data, semantic markup, component-scoped `<style>`, then a local `<script>` for progressive enhancement.
+- Component names are PascalCase. CSS classes are kebab-case and section-scoped (`hero-*`, `project-*`, `contact-*`).
+- Prefer existing `.folio-theme` custom properties from `Layout.astro` over new unrelated tokens.
+- Use existing `data-*` interaction hooks (`data-nav`, `data-tilt`, `data-collapsible`, `data-copy-email`, `data-parallax`, `data-hero-video`).
+- Preserve accessibility patterns: native controls, skip link, `aria-expanded`, `aria-hidden`, `aria-controls`, `aria-live`, `inert`, Escape handling, and focus restoration.
+- Motion must respect `prefers-reduced-motion`. Gate hover/desktop-only work with media queries, retain static/no-JS fallbacks, and clean up only resources owned by the component.
+- Use `buildUrl()` from `src/utils/paths.ts` for public assets referenced by Astro code. Convert to an absolute `new URL(..., Astro.site)` only for canonical/social/structured metadata. Markdown post-body images commonly use `/posts/images/<dated-slug>/...`.
+- Escape JSON-LD before `set:html` exactly as `Layout.astro` does.
+- Blog frontmatter requires `title`, 50–160-character `description`, `author`, `published`, and `categories`. `updated` must be an ISO datetime; `image` is an optional non-empty public asset path; `draft: true` hides the post in production. Markdown bodies start at `##`/`###`, not another `#`.
 
 ## Important Files
 
-- `package.json` — scripts, dependencies, pnpm version pin (`pnpm@10.33.2`), ESM mode.
+- `package.json` — scripts, ESM mode, and exact `pnpm@11.11.0` pin.
 - `pnpm-lock.yaml` — canonical lockfile; do not add npm/yarn lockfiles.
-- `pnpm-workspace.yaml` — dependency overrides (`esbuild`, `yaml`) and allowed built dependencies.
-- `astro.config.mjs` — static output, production site URL, Tailwind Vite plugin, directory build format.
-- `tsconfig.json` — strict TypeScript options and path aliases (`@/*`, `@components/*`, `@utils/*`, `@styles/*`).
-- `.prettierrc` — formatting settings.
-- `.github/workflows/deploy.yml` — GitHub Pages pipeline using Node 22, frozen pnpm install, `pnpm check`, `pnpm build`, artifact upload, and deploy on push/manual dispatch.
-- `src/designs/folio/Layout.astro` — shared shell, tokens, metadata, global styles/scripts, analytics.
-- `src/pages/index.astro` — homepage composition and Person JSON-LD.
-- `src/data/content.ts` — canonical homepage content source.
-- `src/content.config.ts` — Markdown post collection schema.
-- `src/pages/posts/[...slug].astro` — static post rendering, article metadata, BlogPosting JSON-LD.
-- `src/pages/rss.xml.ts` — RSS feed generation.
-- `src/pages/sitemap.xml.ts` — hand-rolled sitemap with per-page `lastmod` from post frontmatter; `robots.txt` points at `/sitemap.xml`.
+- `pnpm-workspace.yaml` — `esbuild`/`yaml` overrides and install-time build allowlist.
+- `astro.config.mjs` — static output, production site/base, Tailwind Vite plugin, and directory build format.
+- `tsconfig.json`, `.prettierrc`, `tailwind.config.js` — strict typing, formatting policy, and Tailwind source scan.
+- `.github/workflows/deploy.yml` — Node 22 GitHub Pages pipeline with frozen install, check, build, artifact upload, and deploy.
+- `src/designs/folio/Layout.astro` — shared metadata, JSON-LD, global styles, and global browser behavior.
+- `src/pages/index.astro`, `src/data/content.ts` — homepage composition and canonical portfolio data.
+- `src/content.config.ts` — post schema and defaults.
+- `src/pages/posts/[...slug].astro` — article rendering, visible dates, BlogPosting JSON-LD, and article metadata.
+- `src/pages/rss.xml.ts`, `src/pages/sitemap.xml.ts` — generated discovery endpoints.
 - `src/utils/paths.ts` — base-aware public URL helper.
-- `public/CNAME`, `public/.nojekyll`, `public/robots.txt` — GitHub Pages/custom-domain deployment files.
+- `public/robots.txt`, `public/CNAME`, `public/.nojekyll` — crawler and GitHub Pages deployment files.
 
 ## Runtime/Tooling Preferences
 
-- CI target is Node 22. Local Node is not pinned elsewhere; match CI when possible.
-- Package manager is pnpm 10.33.2. Do not introduce npm/yarn lockfiles.
-- Project is ESM (`"type": "module"`). Use ESM syntax in configs/scripts.
-- Framework target is Astro static output (`output: 'static'`) with `build.format: 'directory'` and `trailingSlash: 'ignore'`.
-- Styling uses Tailwind CSS 4 through `@tailwindcss/vite`; Tailwind scans `src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}`.
-- Animation libraries are GSAP, ScrollTrigger, Lenis, and component-local browser scripts. Avoid global cleanup that kills triggers owned by other components.
-- Deployment assumes `https://arnavpanigrahi.com`, `base: '/'`, `dist/` output, `public/CNAME`, and `public/.nojekyll`.
+- Use Node 22.12 or newer within the Node 22 line to match CI and locked dependency requirements.
+- Use the exact pnpm 11.11.0 pin from `package.json`. Preserve `pnpm-lock.yaml`; never introduce npm or Yarn lockfiles.
+- The project is ESM (`"type": "module"`). Use ESM syntax in configs and scripts.
+- Astro output is static with `build.format: 'directory'`, `base: '/'`, and `trailingSlash: 'ignore'`.
+- Tailwind CSS 4 runs through `@tailwindcss/vite`; source scanning is limited to configured `src/**/*` extensions.
+- Preserve the `pnpm-workspace.yaml` overrides and built-dependency allowlist.
+- Deployment assumes `https://arnavpanigrahi.com`, `dist/`, `public/CNAME`, and `public/.nojekyll`.
 
 ## Testing & QA
 
-- No unit/E2E test framework or coverage tooling is configured.
-- Primary validation before deployment:
-
-```bash
-pnpm install --frozen-lockfile
-pnpm check
-pnpm build
-pnpm audit
-```
-
-- `pnpm check` validates Astro, TypeScript, and content collection frontmatter.
-- `pnpm build` validates static routes, RSS, sitemap generation, and deployable output.
-- CI currently runs frozen install, `pnpm check`, and `pnpm build`; it does not run audit, lint, or tests.
-- For UI/animation changes, manually verify desktop and mobile homepage, reduced-motion behavior, keyboard navigation, mobile nav/collapsibles, copy-email fallback, and no unexpected hero video work on mobile static fallback.
-- For content/blog changes, verify `/posts/`, one post detail route, draft filtering expectations, RSS output, and image paths under `public/posts/images/`.
+- No unit, integration, E2E, or coverage framework is configured. CI runs frozen install, `pnpm check`, and `pnpm build`; local `pnpm verify` also runs the dependency audit.
+- For UI or motion changes, inspect desktop and mobile, reduced-motion behavior, keyboard navigation, mobile nav/collapsibles, copy-email fallback, and the mobile static hero fallback.
+- For blog/content changes, build and inspect `/posts/`, one article, draft filtering, public image paths, `/rss.xml`, and `/sitemap.xml`.
+- For SEO/RSS/sitemap changes, verify the generated production output:
+  - canonical and `og:url` are the same absolute article URL;
+  - `og:image`, `twitter:image`, and `BlogPosting.image` use the absolute frontmatter image or the absolute `og-image.png` fallback;
+  - visible published/updated dates match `article:*_time` and `BlogPosting.datePublished/dateModified`;
+  - categories appear as repeated `article:tag` values and JSON-LD keywords;
+  - article and `/posts/` sitemap `lastmod` values reflect the content modification rules above;
+  - RSS retains the original `pubDate`, stable permalink/GUID, description, categories, and author;
+  - homepage uses Person JSON-LD and `src/pages/404.astro` emits `noindex, follow`.
+- `pnpm build` proves route generation, not browser behavior. Use `pnpm preview` and inspect the rendered page at mobile and desktop widths for UI-affecting changes.
