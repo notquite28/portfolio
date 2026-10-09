@@ -64,7 +64,7 @@ const isProd = import.meta.env.PROD;
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Outfit:wght@300;500;600;700&display=swap"
     rel="stylesheet"
   />
 </head>
@@ -113,11 +113,9 @@ const isProd = import.meta.env.PROD;
     --c-proof: var(--c-koi-red);
     --shadow-soft: 0 0.75rem 2rem color-mix(in oklch, var(--c-pond-900) 55%, transparent);
 
-    --font-serif: "Outfit", ui-sans-serif, system-ui, sans-serif;
     --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
     --font-body: "Manrope", ui-sans-serif, system-ui, sans-serif;
     --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
-    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
     --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
     --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 
@@ -224,7 +222,6 @@ const isProd = import.meta.env.PROD;
     transform: translateY(28px);
   }
 
-  .js-fonts-pending [data-split-name] { visibility: hidden; }
 
   @media (prefers-reduced-motion: reduce) {
     .folio-theme .reveal {
@@ -259,12 +256,6 @@ const isProd = import.meta.env.PROD;
 
   gsap.registerPlugin(ScrollTrigger);
 
-  document.documentElement.classList.add('js-fonts-pending');
-
-  const fontsReady = Promise.race([
-    document.fonts?.ready ?? Promise.resolve(),
-    new Promise<void>((r) => setTimeout(r, 3000)),
-  ]);
 
   let cursorRafId: number | null = null;
   let lenis: Lenis | null = null;
@@ -293,13 +284,7 @@ const isProd = import.meta.env.PROD;
   document.addEventListener('hero-scrub-activated', startLenis);
   const revealMedia = gsap.matchMedia();
 
-
-  fontsReady.then(async () => {
-    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
-    document.documentElement.classList.remove('js-fonts-pending');
-
-
-
+  const initPageInteractions = (): void => {
     // Cursor glow — transform-only (no layout thrashing), pauses RAF when idle
     if (cursorGlow && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
       let mouseX = window.innerWidth / 2;
@@ -380,7 +365,11 @@ const isProd = import.meta.env.PROD;
         });
         return function () { triggers.forEach((t) => t.kill()); };
     });
-  });
+  };
+
+  initPageInteractions();
+
+  document.fonts?.ready.then(() => requestAnimationFrame(() => ScrollTrigger.refresh()));
 
   // Centralized cleanup on page unload
   window.addEventListener('beforeunload', () => {

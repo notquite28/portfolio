@@ -49,7 +49,7 @@ src/
 public/
 ├── posts/images/             Blog post images
 ├── og-image.png              Social preview image
-├── hero-video-scrub.mp4      Homepage hero video asset
+├── hero-video-scrub-1280.mp4 Homepage hero video asset
 ├── hero_404.webm             404 background video
 ├── hero-poster.jpg           Hero video poster
 ├── oneko.gif                 Cat mascot sprite sheet
